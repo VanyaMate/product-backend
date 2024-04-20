@@ -17,19 +17,20 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
             assertDomainLoginData(loginData, 'loginData', 'DomainLoginData');
 
             const { login, password } = loginData;
-            const user: User          = await this._prisma.user.findFirst({
-                where: {
-                    login, password,
-                },
+            // HashPassword
+
+            const user: User = await this._prisma.user.findFirst({
+                where: { login, password },
             });
 
+            // getAuthResponse();
             if (user) {
                 return {
                     token: '',
                     user : {
                         id    : user.id,
                         login : user.login,
-                        avatar: '',
+                        avatar: user.avatar,
                     },
                 };
             } else {

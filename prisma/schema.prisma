@@ -16,4 +16,17 @@ model User {
   avatar      String? @default("")
   firstName   String? @default("")
   lastName    String? @default("")
+
+  UserRefreshToken UserRefreshToken[]
+}
+
+model UserRefreshToken {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  creationDate DateTime @default(now())
+  user_login   String
+  ip           String
+  browser      String
+  devise       String
+
+  User User @relation(fields: [user_login], references: [login])
 }
