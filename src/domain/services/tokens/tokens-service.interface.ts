@@ -1,12 +1,12 @@
-import { TokenGenerateData } from '@/domain/services/tokens/types/TokenGenerateData';
+import { DomainTokenGenerateData } from 'product-types';
 
 
 export interface ITokensService {
-    generate (data: TokenGenerateData): Promise<[ string, string ]>;
+    generate (data: DomainTokenGenerateData): Promise<[ string, string ]>;
 
-    refresh (refreshToken: string, data: TokenGenerateData): Promise<[ string, string ]>;
+    refresh (refreshToken: string, data: DomainTokenGenerateData): Promise<[ string, string ]>;
 
-    removeRefreshToken (refreshToken: string, data: TokenGenerateData): Promise<boolean>;
+    removeRefreshToken (refreshToken: string, data: DomainTokenGenerateData): Promise<boolean>;
 
-    removeAllByUserLogin (data: TokenGenerateData): Promise<[ string, string ]>;
+    removeAllByUserLogin (data: DomainTokenGenerateData): Promise<[ string, string ]>;
 }
