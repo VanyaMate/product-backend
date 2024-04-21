@@ -5,6 +5,7 @@ import {
 import {
     AuthenticationService,
 } from '@/modules/api/v1/authentication/authentication.service';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
@@ -14,6 +15,7 @@ import {
     providers  : [
         AuthenticationService,
     ],
+    imports    : [],
 })
 export class AuthenticationModule {
 }

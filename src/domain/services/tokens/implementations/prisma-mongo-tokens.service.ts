@@ -80,8 +80,14 @@ export class PrismaMongoTokensService implements ITokensService {
             },
         });
 
-        const accessToken: string  = this._jwtService.sign({ login: data.login }, { expiresIn: '30m' });
-        const refreshToken: string = this._jwtService.sign({ id: refreshTokenData.id }, { expiresIn: '30d' });
+        const accessToken: string  = this._jwtService.sign(
+            { login: data.login },
+            { expiresIn: '30m' },
+        );
+        const refreshToken: string = this._jwtService.sign(
+            { id: refreshTokenData.id },
+            { expiresIn: '30d' },
+        );
         return [ accessToken, refreshToken ];
     }
 }

@@ -9,18 +9,18 @@ export class AuthenticationController {
     constructor (private readonly _service: AuthenticationService) {
     }
 
-    @Get('/login')
+    @Post('/login')
     public login () {
         return this._service.login();
     }
 
     @Post('/registration')
     public registration () {
-
+        return this._service.registration();
     }
 
     @Post('/refresh')
     public refresh () {
-
+        return this._service.refresh();
     }
 }

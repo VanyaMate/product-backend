@@ -3,7 +3,7 @@ import {
     AuthenticationModule,
 } from '@/modules/api/v1/authentication/authentication.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JWT_SECRET_KEY } from '@/consts/env-names';
 
 
@@ -14,6 +14,7 @@ import { JWT_SECRET_KEY } from '@/consts/env-names';
             isGlobal   : true,
         }),
         JwtModule.registerAsync({
+            global    : true,
             imports   : [ ConfigModule ],
             inject    : [ ConfigService ],
             useFactory: async (config: ConfigService) => ({
@@ -25,6 +26,7 @@ import { JWT_SECRET_KEY } from '@/consts/env-names';
     ],
     controllers: [],
     providers  : [],
+    exports    : [],
 })
 export class AppModule {
 }

@@ -45,6 +45,7 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
                 throw new Error('User not found');
             }
         } catch (e) {
+            console.log(e);
             throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 403);
         }
     }

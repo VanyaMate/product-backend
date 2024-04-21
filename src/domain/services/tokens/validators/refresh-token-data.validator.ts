@@ -1,10 +1,10 @@
-import { TokenGenerateData } from '@/domain/services/tokens/types/TokenGenerateData';
 import { UserRefreshToken } from '@prisma/client';
+import { DomainTokenGenerateData } from 'product-types';
 
 
-export const refreshTokenDataValidator = function (requestData: TokenGenerateData, storeData: UserRefreshToken): boolean {
+export const refreshTokenDataValidator = function (requestData: DomainTokenGenerateData, storeData: UserRefreshToken): boolean {
     return requestData.login === storeData.user_login &&
-        requestData.device === storeData.devise &&
-        requestData.ip === storeData.ip &&
-        requestData.browser === storeData.browser;
+        requestData.fingerprint.device === storeData.devise &&
+        requestData.fingerprint.ip === storeData.ip &&
+        requestData.fingerprint.browser === storeData.browser;
 };
