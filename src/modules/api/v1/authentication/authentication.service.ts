@@ -13,6 +13,15 @@ import { JwtService } from '@nestjs/jwt';
 import {
     BcryptHashService,
 } from '@/domain/services/hash/implementations/bcrypt-hash.service';
+import {
+    DomainLoginDataDto,
+} from '@/modules/api/v1/authentication/dto/domain-login-data.dto';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    DomainRegistrationDataDto,
+} from '@/modules/api/v1/authentication/dto/domain-registration-data.dto';
+import { DomainLoginData, DomainRegistrationData } from 'product-types';
+import { DomainServiceErrorException } from '@/exceptions/domain-service-error.exception';
 
 
 @Injectable()
@@ -34,44 +43,23 @@ export class AuthenticationService {
         );
     }
 
-    async login () {
+    async login (loginData: DomainLoginData, fingerprint: DomainFingerprint) {
         try {
-            return await this._service.login({
-                login   : 'admin',
-                password: '123',
-                remember: false,
-            }, {
-                browser: 'chrome 123',
-                ip     : '',
-                device : 'Desktop',
-            });
+            return await this._service.login(loginData, fingerprint);
         } catch (e) {
-            return e;
+            throw new DomainServiceErrorException(e);
         }
     }
 
-    async registration () {
+    async registration (registrationData: DomainRegistrationData, fingerprint: DomainFingerprint) {
         try {
-            return await this._service.registration({
-                login   : 'admin',
-                password: '123',
-                email   : 'admin@admin.ru',
-                remember: false,
-            }, {
-                browser: 'chrome 123',
-                ip     : '',
-                device : 'Desktop',
-            });
+            return await this._service.registration(registrationData, fingerprint);
         } catch (e) {
-            return e;
+            throw new DomainServiceErrorException(e);
         }
     }
 
-    refresh () {
-        return this._service.refresh('token', {
-            browser: 'chrome 123',
-            ip     : '',
-            device : 'Desktop',
-        });
+    refresh (refreshToken: string, fingerprint: DomainFingerprint) {
+        return this._service.refresh(refreshToken, fingerprint);
     }
 }

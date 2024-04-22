@@ -1,7 +1,17 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import {
     AuthenticationService,
 } from '@/modules/api/v1/authentication/authentication.service';
+import {
+    DomainRegistrationDataDto,
+} from '@/modules/api/v1/authentication/dto/domain-registration-data.dto';
+import { Request } from 'express';
+import { Fingerprint } from '@/decorators/finger-print.decorator';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    DomainLoginDataDto,
+} from '@/modules/api/v1/authentication/dto/domain-login-data.dto';
+import { DomainRegistrationData } from 'product-types';
 
 
 @Controller('/api/v1/authentication')
@@ -10,17 +20,26 @@ export class AuthenticationController {
     }
 
     @Post('/login')
-    public login () {
-        return this._service.login();
+    public login (
+        @Body() loginData: DomainLoginDataDto,
+        @Fingerprint() fingerprint: DomainFingerprint,
+    ) {
+        return this._service.login(loginData, fingerprint);
     }
 
     @Post('/registration')
-    public registration () {
-        return this._service.registration();
+    public registration (
+        @Body() registrationData: DomainRegistrationDataDto,
+        @Fingerprint() fingerprint: DomainFingerprint,
+    ) {
+        return this._service.registration(registrationData, fingerprint);
     }
 
     @Post('/refresh')
-    public refresh () {
-        return this._service.refresh();
+    public refresh (
+        @Body() refreshToken: string,
+        @Fingerprint() fingerprint: DomainFingerprint,
+    ) {
+        return this._service.refresh(refreshToken, fingerprint);
     }
 }

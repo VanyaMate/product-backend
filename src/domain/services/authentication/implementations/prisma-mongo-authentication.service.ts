@@ -41,12 +41,11 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
                         },
                     };
                 }
-            } else {
-                throw new Error('User not found');
             }
+
+            throw new Error('User not found');
         } catch (e) {
-            console.log(e);
-            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 403);
+            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 403, 'Bad login');
         }
     }
 
@@ -80,7 +79,7 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
                 throw new Error('This login is already taken');
             }
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 400);
+            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 400, 'Bad registration');
         }
     }
 

@@ -24,7 +24,7 @@ export class PrismaMongoTokensService implements ITokensService {
             assertDomainTokenGenerateData(data, 'data', 'DomainTokenGenerateData');
             return await this._generateTokens(data);
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 403);
+            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant generate tokens');
         }
     }
 
@@ -33,7 +33,7 @@ export class PrismaMongoTokensService implements ITokensService {
             await this._useRefreshToken(refreshToken, data);
             return await this._generateTokens(data);
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 403);
+            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant refresh tokens');
         }
     }
 
@@ -42,7 +42,7 @@ export class PrismaMongoTokensService implements ITokensService {
             await this._useRefreshToken(refreshToken, data);
             return true;
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 403);
+            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant remove refresh token');
         }
     }
 
@@ -52,7 +52,7 @@ export class PrismaMongoTokensService implements ITokensService {
             await this._prisma.userRefreshToken.deleteMany({ where: { user_login: data.login } });
             return await this._generateTokens(data);
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400);
+            throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant remove all refresh tokens');
         }
     }
 

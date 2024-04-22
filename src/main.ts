@@ -1,9 +1,11 @@
 import { ConfigService } from '@nestjs/config';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import * as cookieParser from 'cookie-parser';
 import { PORT } from '@/consts/env-names';
+import { HttpExceptionFilter } from '@/filters/http-exception.filter';
+import { DomainHttpExceptionFilter } from '@/filters/domain-http-exception.filter';
 
 
 async function bootstrap () {
@@ -21,6 +23,10 @@ async function bootstrap () {
 
     const configService: ConfigService = app.get<ConfigService>(ConfigService);
     const port: string                 = configService.get<string>(PORT);
+
+    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalFilters(new DomainHttpExceptionFilter());
 
     app.use(cookieParser());
     await app.listen(port, () => console.log(`server started on: ${ port }`));
