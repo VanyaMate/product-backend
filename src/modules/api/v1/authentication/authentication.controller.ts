@@ -12,6 +12,7 @@ import {
     DomainLoginDataDto,
 } from '@/modules/api/v1/authentication/dto/domain-login-data.dto';
 import { DomainRegistrationData } from 'product-types';
+import { RefreshTokenDto } from '@/modules/api/v1/authentication/dto/refresh-token.dto';
 
 
 @Controller('/api/v1/authentication')
@@ -37,9 +38,9 @@ export class AuthenticationController {
 
     @Post('/refresh')
     public refresh (
-        @Body() refreshToken: string,
+        @Body() refreshToken: RefreshTokenDto,
         @Fingerprint() fingerprint: DomainFingerprint,
     ) {
-        return this._service.refresh(refreshToken, fingerprint);
+        return this._service.refresh(refreshToken.token, fingerprint);
     }
 }

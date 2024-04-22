@@ -59,7 +59,11 @@ export class AuthenticationService {
         }
     }
 
-    refresh (refreshToken: string, fingerprint: DomainFingerprint) {
-        return this._service.refresh(refreshToken, fingerprint);
+    async refresh (refreshToken: string, fingerprint: DomainFingerprint) {
+        try {
+            return await this._service.refresh(refreshToken, fingerprint);
+        } catch (e) {
+            throw new DomainServiceErrorException(e);
+        }
     }
 }

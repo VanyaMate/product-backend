@@ -1,12 +1,12 @@
-import { DomainTokenGenerateData } from 'product-types';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 
 
 export interface ITokensService {
-    generate (data: DomainTokenGenerateData): Promise<[ string, string ]>;
+    generateForUser (login: string, fingerprint: DomainFingerprint): Promise<[ string, string ]>;
 
-    refresh (refreshToken: string, data: DomainTokenGenerateData): Promise<[ string, string ]>;
+    refreshTokensByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<[ string, string ]>;
 
-    removeRefreshToken (refreshToken: string, data: DomainTokenGenerateData): Promise<boolean>;
+    removeTokensByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<boolean>;
 
-    removeAllByUserLogin (data: DomainTokenGenerateData): Promise<[ string, string ]>;
+    removeAllTokensForUserByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<[ string, string ]>;
 }

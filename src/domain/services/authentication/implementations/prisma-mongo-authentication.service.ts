@@ -1,14 +1,19 @@
 import { IAuthenticationService } from '../authentication-service.interface';
 import { PrismaClient, User } from '@prisma/client';
 import {
-    assertDomainLoginData, assertDomainRegistrationData,
+    assertDomainLoginData,
+    assertDomainRegistrationData,
     DomainAuthResponse,
     DomainLoginData,
-    DomainRegistrationData, serviceErrorResponse,
+    DomainRegistrationData,
+    serviceErrorResponse,
 } from 'product-types';
 import { IHashService } from '@/domain/services/hash/hash-service.interface';
 import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
 import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    userPrismaToDomain,
+} from '@/domain/services/user/prisma-mongo/converters/userPrismaToDomain';
 
 
 export class PrismaMongoAuthenticationService implements IAuthenticationService {
@@ -29,16 +34,10 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
             if (user) {
                 const isUserPassword = await this._hashService.compare(user.password, password);
                 if (isUserPassword) {
-                    const tokens = await this._tokensService.generate({
-                        login, fingerprint,
-                    });
+                    const tokens = await this._tokensService.generateForUser(user.login, fingerprint);
                     return {
                         tokens,
-                        user: {
-                            id    : user.id,
-                            login : user.login,
-                            avatar: user.avatar,
-                        },
+                        user: userPrismaToDomain(user),
                     };
                 }
             }
@@ -58,22 +57,12 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
             if (!user) {
                 const passwordHash  = await this._hashService.hash(password);
                 const newUser: User = await this._prisma.user.create({
-                    data: {
-                        login,
-                        email,
-                        password: passwordHash,
-                    },
+                    data: { login, email, password: passwordHash },
                 });
-                const tokens        = await this._tokensService.generate({
-                    login, fingerprint,
-                });
+                const tokens        = await this._tokensService.generateForUser(login, fingerprint);
                 return {
                     tokens,
-                    user: {
-                        id    : newUser.id,
-                        login : newUser.login,
-                        avatar: newUser.avatar,
-                    },
+                    user: userPrismaToDomain(newUser),
                 };
             } else {
                 throw new Error('This login is already taken');
@@ -83,7 +72,19 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
         }
     }
 
-    async refresh (token: string, fingerprint: DomainFingerprint): Promise<DomainAuthResponse> {
-        throw new Error('Method not implemented.');
+    async refresh (refreshToken: string, fingerprint: DomainFingerprint): Promise<[ string, string ]> {
+        try {
+            return await this._tokensService.refreshTokensByRefreshToken(refreshToken, fingerprint);
+        } catch (e) {
+            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 400, 'Bad logout');
+        }
+    }
+
+    async logout (refreshToken: string, fingerprint: DomainFingerprint): Promise<boolean> {
+        try {
+            return await this._tokensService.removeTokensByRefreshToken(refreshToken, fingerprint);
+        } catch (e) {
+            throw serviceErrorResponse(e, PrismaMongoAuthenticationService.name, 400, 'Bad logout');
+        }
     }
 }

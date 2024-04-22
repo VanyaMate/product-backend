@@ -10,6 +10,10 @@ import { JwtService } from '@nestjs/jwt';
 import {
     refreshTokenDataValidator,
 } from '@/domain/services/tokens/validators/refresh-token-data.validator';
+import {
+    assertDomainFingerprint,
+    DomainFingerprint,
+} from 'product-types/dist/fingerprint/DomainFingerprint';
 
 
 export class PrismaMongoTokensService implements ITokensService {
@@ -19,51 +23,65 @@ export class PrismaMongoTokensService implements ITokensService {
     ) {
     }
 
-    async generate (data: DomainTokenGenerateData): Promise<[ string, string ]> {
+    async generateForUser (login: string, fingerprint: DomainFingerprint): Promise<[ string, string ]> {
         try {
-            assertDomainTokenGenerateData(data, 'data', 'DomainTokenGenerateData');
-            return await this._generateTokens(data);
+            assertDomainFingerprint(fingerprint, 'fingerprint', 'DomainFingerprint');
+            return await this._generateTokens({ login, fingerprint });
         } catch (e) {
             throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant generate tokens');
         }
     }
 
-    async refresh (refreshToken: string, data: DomainTokenGenerateData): Promise<[ string, string ]> {
+    async refreshTokensByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<[ string, string ]> {
         try {
-            await this._useRefreshToken(refreshToken, data);
-            return await this._generateTokens(data);
+            await this._useRefreshToken(refreshToken, fingerprint);
+            const refreshTokenPayload = this._jwtService.verify<DomainRefreshTokenPayload>(refreshToken);
+            assertDomainRefreshTokenPayload(refreshTokenPayload, 'refreshTokenPayload', 'DomainRefreshTokenPayload');
+            return await this._generateTokens({
+                login: refreshTokenPayload.login, fingerprint,
+            });
         } catch (e) {
             throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant refresh tokens');
         }
     }
 
-    async removeRefreshToken (refreshToken: string, data: DomainTokenGenerateData): Promise<boolean> {
+    async removeTokensByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<boolean> {
         try {
-            await this._useRefreshToken(refreshToken, data);
+            await this._useRefreshToken(refreshToken, fingerprint);
             return true;
         } catch (e) {
             throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant remove refresh token');
         }
     }
 
-    async removeAllByUserLogin (data: DomainTokenGenerateData): Promise<[ string, string ]> {
+    async removeAllTokensForUserByRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<[ string, string ]> {
         try {
-            assertDomainTokenGenerateData(data, 'data', 'DomainTokenGenerateData');
-            await this._prisma.userRefreshToken.deleteMany({ where: { user_login: data.login } });
-            return await this._generateTokens(data);
+            assertDomainFingerprint(fingerprint, 'fingerprint', 'DomainFingerprint');
+            const refreshTokenPayload = this._jwtService.verify<DomainRefreshTokenPayload>(refreshToken);
+            assertDomainRefreshTokenPayload(refreshTokenPayload, 'refreshTokenPayload', 'DomainRefreshTokenPayload');
+            await this._prisma.userRefreshToken.deleteMany({ where: { user_login: refreshTokenPayload.login } });
+            return await this._generateTokens({
+                login: refreshTokenPayload.login, fingerprint,
+            });
         } catch (e) {
             throw serviceErrorResponse(e, PrismaMongoTokensService.name, 400, 'Cant remove all refresh tokens');
         }
     }
 
-    private async _useRefreshToken (refreshToken: string, data: DomainTokenGenerateData): Promise<void> {
-        assertDomainTokenGenerateData(data, 'data', 'DomainTokenGenerateData');
+    private async _useRefreshToken (refreshToken: string, fingerprint: DomainFingerprint): Promise<void> {
+        assertDomainFingerprint(fingerprint, 'fingerprint', 'DomainFingerprint');
         const refreshTokenPayload = this._jwtService.verify<DomainRefreshTokenPayload>(refreshToken);
         assertDomainRefreshTokenPayload(refreshTokenPayload, 'refreshTokenPayload', 'DomainRefreshTokenPayload');
         const refreshTokenData = await this._prisma.userRefreshToken.findFirst({
             where: { id: refreshTokenPayload.id },
         });
-        if (refreshTokenData && refreshTokenDataValidator(data, refreshTokenData)) {
+
+        if (
+            refreshTokenData &&
+            refreshTokenDataValidator({
+                login: refreshTokenPayload.login, fingerprint,
+            }, refreshTokenData)
+        ) {
             await this._prisma.userRefreshToken.delete({ where: { id: refreshTokenPayload.id } });
         } else {
             throw new Error('Refresh token not valid');
@@ -81,11 +99,11 @@ export class PrismaMongoTokensService implements ITokensService {
         });
 
         const accessToken: string  = this._jwtService.sign(
-            { login: data.login },
+            { id: refreshTokenData.id, login: data.login },
             { expiresIn: '30m' },
         );
         const refreshToken: string = this._jwtService.sign(
-            { id: refreshTokenData.id },
+            { id: refreshTokenData.id, login: data.login },
             { expiresIn: '30d' },
         );
         return [ accessToken, refreshToken ];
