@@ -6,6 +6,8 @@ import {
     AuthenticationService,
 } from '@/modules/api/v1/authentication/authentication.service';
 import { JwtModule } from '@nestjs/jwt';
+import { ServicesModule } from '@/modules/services/services.module';
+import { TokenModule } from '@/modules/api/v1/token/token.module';
 
 
 @Module({
@@ -15,7 +17,10 @@ import { JwtModule } from '@nestjs/jwt';
     providers  : [
         AuthenticationService,
     ],
-    imports    : [],
+    imports    : [
+        ServicesModule,
+        TokenModule,
+    ],
 })
 export class AuthenticationModule {
 }

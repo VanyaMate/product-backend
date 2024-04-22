@@ -34,7 +34,7 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
             if (user) {
                 const isUserPassword = await this._hashService.compare(user.password, password);
                 if (isUserPassword) {
-                    const tokens = await this._tokensService.generateForUser(user.login, fingerprint);
+                    const tokens = await this._tokensService.generateForUser(user.id, fingerprint);
                     return {
                         tokens,
                         user: userPrismaToDomain(user),
@@ -59,7 +59,7 @@ export class PrismaMongoAuthenticationService implements IAuthenticationService 
                 const newUser: User = await this._prisma.user.create({
                     data: { login, email, password: passwordHash },
                 });
-                const tokens        = await this._tokensService.generateForUser(login, fingerprint);
+                const tokens        = await this._tokensService.generateForUser(newUser.id, fingerprint);
                 return {
                     tokens,
                     user: userPrismaToDomain(newUser),

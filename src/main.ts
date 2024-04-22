@@ -6,6 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import { PORT } from '@/consts/env-names';
 import { HttpExceptionFilter } from '@/filters/http-exception.filter';
 import { DomainHttpExceptionFilter } from '@/filters/domain-http-exception.filter';
+import { ResponseInterceptor } from '@/interceptors/respose.interceptor';
 
 
 async function bootstrap () {
@@ -26,6 +27,7 @@ async function bootstrap () {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalInterceptors(new ResponseInterceptor());
     app.useGlobalFilters(new DomainHttpExceptionFilter());
 
     app.use(cookieParser());

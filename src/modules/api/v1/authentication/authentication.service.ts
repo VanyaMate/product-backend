@@ -22,6 +22,8 @@ import {
 } from '@/modules/api/v1/authentication/dto/domain-registration-data.dto';
 import { DomainLoginData, DomainRegistrationData } from 'product-types';
 import { DomainServiceErrorException } from '@/exceptions/domain-service-error.exception';
+import { TokenService } from '@/modules/api/v1/token/token.service';
+import { PrismaService } from '@/modules/services/prisma/prisma.service';
 
 
 @Injectable()
@@ -29,16 +31,12 @@ export class AuthenticationService {
     private _service: IAuthenticationService;
 
     constructor (
-        private readonly _jwtService: JwtService,
+        private readonly _prisma: PrismaService,
+        private readonly _tokenService: TokenService,
     ) {
-        const prismaClient = new PrismaClient();
-
         this._service = new PrismaMongoAuthenticationService(
-            prismaClient,
-            new PrismaMongoTokensService(
-                prismaClient,
-                this._jwtService,
-            ),
+            this._prisma,
+            this._tokenService,
             new BcryptHashService(),
         );
     }

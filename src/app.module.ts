@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import {
-    AuthenticationModule,
-} from '@/modules/api/v1/authentication/authentication.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { JWT_SECRET_KEY } from '@/consts/env-names';
+import { ApiV1Module } from '@/modules/api/v1/api-v1.module';
+import { ServicesModule } from '@/modules/services/services.module';
 
 
 @Module({
-    imports    : [
+    imports: [
         ConfigModule.forRoot({
             envFilePath: `.env.${ process.env.NODE_ENV }`,
             isGlobal   : true,
@@ -22,11 +21,9 @@ import { JWT_SECRET_KEY } from '@/consts/env-names';
                 secret: config.get<string>(JWT_SECRET_KEY),
             }),
         }),
-        AuthenticationModule,
+        ApiV1Module,
+        ServicesModule,
     ],
-    controllers: [],
-    providers  : [],
-    exports    : [],
 })
 export class AppModule {
 }
