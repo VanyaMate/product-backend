@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import {
     REQUEST_ACCESS_TOKEN_HEADER, REQUEST_REFRESH_TOKEN_HEADER,
     REQUEST_USER_ID, RESPONSE_ADDITIONAL_DATA,
-} from '@/domain/services/consts/request-response';
+} from '@/domain/consts/request-response';
 import {
     assertDomainAccessTokenPayload,
     DomainAccessTokenPayload,

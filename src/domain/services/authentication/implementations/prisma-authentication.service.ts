@@ -13,7 +13,7 @@ import { ITokensService } from '@/domain/services/tokens/tokens-service.interfac
 import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
     userPrismaToDomain,
-} from '@/domain/services/user/prisma/converters/userPrismaToDomain';
+} from '@/domain/services/user/converters/userPrismaToDomain';
 
 
 export class PrismaAuthenticationService implements IAuthenticationService {

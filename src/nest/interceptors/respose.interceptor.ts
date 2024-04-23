@@ -8,7 +8,7 @@ import {
     isDomainResponse,
 } from 'product-types/dist/response/DomainResponse';
 import { Request } from 'express';
-import { RESPONSE_ADDITIONAL_DATA } from '@/domain/services/consts/request-response';
+import { RESPONSE_ADDITIONAL_DATA } from '@/domain/consts/request-response';
 
 
 export class ResponseInterceptor implements NestInterceptor {

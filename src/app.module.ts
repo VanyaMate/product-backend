@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { JWT_SECRET_KEY } from '@/domain/services/consts/env';
+import { JWT_SECRET_KEY } from '@/domain/consts/env';
 import { ApiV1Module } from '@/nest/modules/api/v1/api-v1.module';
 import { ServicesModule } from '@/nest/modules/services/services.module';
 

@@ -3,7 +3,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import * as cookieParser from 'cookie-parser';
-import { PORT } from '@/domain/services/consts/env';
+import { PORT } from '@/domain/consts/env';
 import { HttpExceptionFilter } from '@/nest/filters/http-exception.filter';
 import { DomainHttpExceptionFilter } from '@/nest/filters/domain-http-exception.filter';
 import { ResponseInterceptor } from '@/nest/interceptors/respose.interceptor';
