@@ -1,6 +1,5 @@
 import { UserRefreshToken } from '@prisma/client';
-import { DomainTokenGenerateData } from 'product-types';
-import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import { DomainFingerprint } from 'product-types';
 
 
 export const validateRefreshTokenByFingerprint = function (fingerprint: DomainFingerprint, storeData: UserRefreshToken): boolean {

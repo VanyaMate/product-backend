@@ -7,16 +7,19 @@
 - Prisma
 - MongoDB
 
-** AuthenticationService **
+## Structure
 
-- [ LogData ] =>
-- [ ValidateType ] =>
-- [ GetUser ] => User
-- [ Check: LogData === User ]
-    - [ HashLogDataPassword ]
-    - [ CheckPassword ]
-- [ GenerateToken ] => Token
-    - [ GetFingerPrint] => FingerPrint
-    - [ GenerateRefreshToken ] => RefreshToken
-    - [ GenerateAccessToken {User.login, RefreshToken} ]
-- [ Return: AuthResponse {User, AccessToken, RefreshToken} ]
+- src
+    - domain - `domain modules`
+        - services - `любые сервисы`
+        - lib - `библиотека функций`
+        - types - `типы`
+    - nest - `nest deps`
+        - modules - `nest modules`
+            - api - `модули относящиеся к api`
+            - services - `любые другое модули`
+        - pipes - `nest pipes`
+        - guards - `nest guards`
+        - decorators - `nest decorators`
+        - filters - `nest filters`
+        - interceptors - `nest interceptors`
