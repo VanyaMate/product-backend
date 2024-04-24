@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { serviceErrorResponse } from 'product-types';
-import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
 import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
@@ -11,6 +7,9 @@ import { IUserService } from '@/domain/services/user/user-service.interface';
 import {
     PrismaUserService,
 } from '@/domain/services/user/implementations/prisma-user.service';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 
 
 @Injectable()

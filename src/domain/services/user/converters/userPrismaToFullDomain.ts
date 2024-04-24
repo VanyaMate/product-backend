@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { DomainUserFull } from 'product-types';
+import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 
 
 export const userPrismaToFullDomain = function (user: User): DomainUserFull {

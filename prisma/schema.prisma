@@ -8,12 +8,13 @@ datasource db {
 }
 
 enum NotificationType {
-  MESSAGE
-  MESSAGE_DELETED
-  MESSAGE_REDACTED
-  FRIEND_REQUEST
-  FRIEND_REQUEST_ACCEPTED
-  FRIEND_REQUEST_CANCELED
+  MESSAGE                 @map("msg")
+  MESSAGE_DELETED         @map("msg_d")
+  MESSAGE_REDACTED        @map("msg_r")
+  MESSAGE_READ            @map("msg_read")
+  FRIEND_REQUEST          @map("fr_r")
+  FRIEND_REQUEST_ACCEPTED @map("fr_ra")
+  FRIEND_REQUEST_CANCELED @map("fr_rc")
 }
 
 model User {

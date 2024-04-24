@@ -1,5 +1,7 @@
-import { DomainRegistrationData } from 'product-types';
 import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import {
+    DomainRegistrationData
+} from 'product-types/dist/authorization/DomainRegistrationData';
 
 
 export class DomainRegistrationDataDto implements DomainRegistrationData {

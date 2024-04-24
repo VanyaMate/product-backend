@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
-import { DomainFingerprint, DomainTokens, serviceErrorResponse } from 'product-types';
 import {
     PrismaTokensService,
 } from '@/domain/services/tokens/implementations/prisma-tokens.service';
 import { JwtService } from '@nestjs/jwt';
 import { DomainServiceErrorException } from '@/nest/exceptions/domain-service-error.exception';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import { DomainTokens } from 'product-types/dist/token/DomainTokens';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 
 
 @Injectable()

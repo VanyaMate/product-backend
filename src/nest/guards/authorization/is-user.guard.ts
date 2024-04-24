@@ -8,23 +8,27 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import {
     REQUEST_ACCESS_TOKEN_HEADER, REQUEST_REFRESH_TOKEN_HEADER,
-    REQUEST_USER_ID, RESPONSE_ADDITIONAL_DATA,
+    REQUEST_USER_ID, RESPONSE_ADDITIONAL_DATA, RESPONSE_UPDATED_TOKENS,
 } from '@/domain/consts/request-response';
 import {
     assertDomainAccessTokenPayload,
     DomainAccessTokenPayload,
 } from 'product-types/dist/token/DomainAccessTokenPayload';
 import {
-    assertDomainRefreshTokenPayload,
-    DomainRefreshTokenPayload, DomainTokens,
-    isDomainSimpleError, serviceErrorResponse,
-} from 'product-types';
-import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
 import { Request } from 'express';
 import { TokenService } from '@/nest/modules/api/v1/token/token.service';
 import { getFingerprint } from '@/domain/lib/request/fingerprint/getFingerprint';
+import { isDomainSimpleError } from 'product-types/dist/error/DomainSimpleError';
+import {
+    assertDomainRefreshTokenPayload,
+    DomainRefreshTokenPayload,
+} from 'product-types/dist/token/DomainRefreshTokenPayload';
+import { DomainTokens } from 'product-types/dist/token/DomainTokens';
+import {
+    serviceErrorResponse,
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 
 
 @Injectable()
@@ -67,9 +71,9 @@ export class IsUserGuard implements CanActivate {
 
                         // set params
                         request[RESPONSE_ADDITIONAL_DATA] = { tokens };
+                        request[RESPONSE_UPDATED_TOKENS]  = tokens;
                         request[REQUEST_USER_ID]          = accessTokenPayload.user_id;
 
-                        console.log(request[RESPONSE_ADDITIONAL_DATA]);
                         return true;
                     }
                 }

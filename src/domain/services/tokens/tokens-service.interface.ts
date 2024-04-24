@@ -1,4 +1,5 @@
-import { DomainFingerprint, DomainTokens } from 'product-types';
+import { DomainTokens } from 'product-types/dist/token/DomainTokens';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 
 
 export interface ITokensService {

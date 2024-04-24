@@ -1,4 +1,4 @@
-import { TypeGuard } from 'product-types';
+import { TypeGuard } from 'product-types/dist/_helpers/types/guard.types';
 
 
 export type Error = {

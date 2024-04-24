@@ -1,4 +1,5 @@
-import { DomainUser, DomainUserFull } from 'product-types';
+import { DomainUser } from 'product-types/dist/user/DomainUser';
+import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 
 
 export interface IUserService {

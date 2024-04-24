@@ -1,5 +1,10 @@
-import { DomainServiceResponseError, serviceErrorResponse } from 'product-types';
 import { isValidationPipeError } from '@/domain/types/guards/validationPipeError';
+import {
+    DomainServiceResponseError
+} from 'product-types/dist/error/DomainServiceResponseError';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 
 
 export const globalExceptionServiceErrorResponse = function (error: unknown): DomainServiceResponseError {

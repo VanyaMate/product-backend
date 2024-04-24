@@ -1,10 +1,4 @@
 import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
-import {
-    assertDomainRefreshTokenPayload,
-    DomainRefreshTokenPayload,
-    DomainTokenGenerateData, DomainTokens,
-    serviceErrorResponse,
-} from 'product-types';
 import { PrismaClient, UserRefreshToken } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -14,6 +8,17 @@ import {
     assertDomainFingerprint,
     DomainFingerprint,
 } from 'product-types/dist/fingerprint/DomainFingerprint';
+import { DomainTokens } from 'product-types/dist/token/DomainTokens';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    assertDomainRefreshTokenPayload,
+    DomainRefreshTokenPayload,
+} from 'product-types/dist/token/DomainRefreshTokenPayload';
+import {
+    DomainTokenGenerateData
+} from 'product-types/dist/token/DomainTokenGenerateData';
 
 
 export class PrismaTokensService implements ITokensService {

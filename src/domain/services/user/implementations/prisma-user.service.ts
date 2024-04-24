@@ -1,10 +1,14 @@
 import { IUserService } from '@/domain/services/user/user-service.interface';
 import { PrismaClient, User } from '@prisma/client';
-import { DomainUser, DomainUserFull, serviceErrorResponse } from 'product-types';
 import { userPrismaToDomain } from '@/domain/services/user/converters/userPrismaToDomain';
 import {
     userPrismaToFullDomain,
 } from '@/domain/services/user/converters/userPrismaToFullDomain';
+import { DomainUser } from 'product-types/dist/user/DomainUser';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 
 
 export class PrismaUserService implements IUserService {

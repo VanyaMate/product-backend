@@ -4,6 +4,10 @@ import {
 import { Request, Response } from 'express';
 import { REQUEST_ID_HEADER } from '@/domain/consts/request-response';
 import { PrismaClient } from '@prisma/client';
+import {
+    DomainNotification,
+    NotificationType,
+} from 'product-types/dist/notification/DomainNotification';
 
 
 export type Connect = {
@@ -20,7 +24,6 @@ export class PrismaExpressConnectionsService implements IConnectionsService<Requ
 
     async add (userId: string, request: Request, response: Response): Promise<void> {
         const requestId: string | undefined = request.header(REQUEST_ID_HEADER);
-        console.log('requestId', requestId);
         if (requestId) {
             let connectionsByUserId = this._connectionsMap.get(userId);
 
@@ -30,7 +33,6 @@ export class PrismaExpressConnectionsService implements IConnectionsService<Requ
             }
 
             const connectByRequest = connectionsByUserId.get(requestId);
-            console.log('connectByRequest', connectByRequest);
             if (!connectByRequest) {
                 this._addToConnection(connectionsByUserId, userId, requestId, request, response);
                 await this._prisma.connection.create({
@@ -39,17 +41,19 @@ export class PrismaExpressConnectionsService implements IConnectionsService<Requ
                         connection_id: requestId,
                     },
                 }).catch();
-                console.log('added', connectByRequest);
             } else {
                 clearTimeout(connectByRequest.$__timer);
                 this._addToConnection(connectionsByUserId, userId, requestId, request, response);
             }
         }
-        console.log(this._connectionsMap);
     }
 
     async remove (userId: string, request: Request): Promise<void> {
-        throw new Error('Method not implemented.');
+        const userConnectionsMap            = this._connectionsMap.get(userId);
+        const requestId: string | undefined = request.header(REQUEST_ID_HEADER);
+        if (userConnectionsMap && requestId) {
+            return this._deleteConnection(userConnectionsMap, userId, requestId).then();
+        }
     }
 
     getAllByUserId (userId: string): Response[] {
@@ -59,35 +63,35 @@ export class PrismaExpressConnectionsService implements IConnectionsService<Requ
     }
 
     private _addToConnection (userConnectionsMap: Map<string, Connect>, userId: string, requestId: string, request: Request, response: Response) {
-        let closed: boolean = false;
-        response.on('close', () => {
+        let closed: boolean   = false;
+        const closeConnection = async () => {
             if (!closed) {
                 closed = true;
-                userConnectionsMap.delete(requestId);
-                this._prisma.connection.delete({
-                    where: {
-                        user_id      : userId,
-                        connection_id: requestId,
-                    },
-                }).catch();
+                return this._deleteConnection(userConnectionsMap, userId, requestId);
             }
-        });
+        };
+
+        response.on('close', closeConnection.bind(this));
         userConnectionsMap.set(requestId, {
             request,
             response,
             $__timer: setTimeout(() => {
-                if (!closed) {
-                    closed = true;
-                    response.end();
-                    userConnectionsMap.delete(requestId);
-                    this._prisma.connection.delete({
-                        where: {
-                            user_id      : userId,
-                            connection_id: requestId,
-                        },
-                    }).catch();
-                }
+                // TODO: TEMP
+                response.write(`data: ${ JSON.stringify({
+                    type: NotificationType.DISCONNECTED, dateMs: Date.now(), data: 'time',
+                } as DomainNotification) }\n\n`);
+                closeConnection().then(() => response.end());
             }, 1000 * 20),
         });
+    }
+
+    private async _deleteConnection (userConnectionsMap: Map<string, Connect>, userId: string, requestId: string) {
+        userConnectionsMap.delete(requestId);
+        return this._prisma.connection.delete({
+            where: {
+                user_id      : userId,
+                connection_id: requestId,
+            },
+        }).catch();
     }
 }

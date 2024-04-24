@@ -3,11 +3,6 @@ import {
     IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
 import {
-    DomainLoginData,
-    DomainRegistrationData,
-    DomainFingerprint,
-} from 'product-types';
-import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
@@ -18,6 +13,11 @@ import {
 import {
     BcryptHashService,
 } from '@/domain/services/hash/implementations/bcrypt-hash.service';
+import { DomainLoginData } from 'product-types/dist/authorization/DomainLoginData';
+import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    DomainRegistrationData
+} from 'product-types/dist/authorization/DomainRegistrationData';
 
 
 @Injectable()

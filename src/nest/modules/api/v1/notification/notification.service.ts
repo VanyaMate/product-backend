@@ -7,6 +7,7 @@ import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
 import {
     PrismaExpressConnectionsService,
 } from '@/domain/services/connections/implementations/prisma-express-connections.service';
+import { DomainNotification } from 'product-types/dist/notification/DomainNotification';
 
 
 @Injectable()
@@ -21,9 +22,14 @@ export class NotificationService {
         this._connectionService.add(userId, request, response);
     }
 
-    async sendToUser (login: string, message: string) {
+    async sendToUser (login: string, notification: DomainNotification) {
         const user      = await this._prisma.user.findFirstOrThrow({ where: { login } });
         const responses = this._connectionService.getAllByUserId(user.id);
-        responses.forEach((response) => response.write(`data: ${ message }\n\n`));
+        responses.forEach((response) => response.write(`data: ${ JSON.stringify(notification) }\n\n`));
+    }
+
+    async sendToUserById (userId: string, notification: DomainNotification) {
+        const responses = this._connectionService.getAllByUserId(userId);
+        responses.forEach((response) => response.write(`data: ${ JSON.stringify(notification) }\n\n`));
     }
 }

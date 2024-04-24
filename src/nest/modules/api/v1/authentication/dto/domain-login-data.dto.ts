@@ -1,5 +1,5 @@
-import { DomainLoginData } from 'product-types';
 import { IsBoolean, IsString } from 'class-validator';
+import { DomainLoginData } from 'product-types/dist/authorization/DomainLoginData';
 
 
 export class DomainLoginDataDto implements DomainLoginData {

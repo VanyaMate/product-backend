@@ -1,5 +1,7 @@
 import { HttpException } from '@nestjs/common';
-import { DomainServiceResponseError } from 'product-types';
+import {
+    DomainServiceResponseError
+} from 'product-types/dist/error/DomainServiceResponseError';
 
 
 export class DomainServiceErrorException extends HttpException {

@@ -1,19 +1,25 @@
-import { IAuthenticationService } from '../authentication-service.interface';
-import { PrismaClient, User } from '@prisma/client';
-import {
-    assertDomainLoginData,
-    assertDomainRegistrationData,
-    DomainAuthResponse,
-    DomainLoginData,
-    DomainRegistrationData,
-    serviceErrorResponse,
-} from 'product-types';
 import { IHashService } from '@/domain/services/hash/hash-service.interface';
 import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
 import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
     userPrismaToDomain,
 } from '@/domain/services/user/converters/userPrismaToDomain';
+import {
+    IAuthenticationService
+} from '@/domain/services/authentication/authentication-service.interface';
+import { PrismaClient, User } from '@prisma/client';
+import {
+    assertDomainLoginData,
+    DomainLoginData,
+} from 'product-types/dist/authorization/DomainLoginData';
+import { DomainAuthResponse } from 'product-types/dist/authorization/DomainAuthResponse';
+import {
+    serviceErrorResponse
+} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    assertDomainRegistrationData,
+    DomainRegistrationData,
+} from 'product-types/dist/authorization/DomainRegistrationData';
 
 
 export class PrismaAuthenticationService implements IAuthenticationService {

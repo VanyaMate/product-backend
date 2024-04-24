@@ -1,5 +1,6 @@
-import { throwAssertError, TypeAssert, TypeGuard } from 'product-types';
-
+import { TypeGuard } from "product-types/dist/_helpers/types/guard.types";
+import { TypeAssert } from 'product-types/dist/_helpers/types/assert.types';
+import { throwAssertError } from 'product-types/dist/_helpers/lib/throwAssertError';
 
 export type ValidationPipeError = {
     statusCode: number;
