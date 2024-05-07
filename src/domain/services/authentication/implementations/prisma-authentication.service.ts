@@ -1,20 +1,26 @@
 import { IHashService } from '@/domain/services/hash/hash-service.interface';
-import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
-import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    ITokensService,
+} from '@/domain/services/tokens/tokens-service.interface';
+import {
+    DomainFingerprint,
+} from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
     userPrismaToDomain,
 } from '@/domain/services/user/converters/userPrismaToDomain';
 import {
-    IAuthenticationService
+    IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
 import { PrismaClient, User } from '@prisma/client';
 import {
     assertDomainLoginData,
     DomainLoginData,
 } from 'product-types/dist/authorization/DomainLoginData';
-import { DomainAuthResponse } from 'product-types/dist/authorization/DomainAuthResponse';
 import {
-    serviceErrorResponse
+    DomainAuthResponse,
+} from 'product-types/dist/authorization/DomainAuthResponse';
+import {
+    serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 import {
     assertDomainRegistrationData,
@@ -61,11 +67,11 @@ export class PrismaAuthenticationService implements IAuthenticationService {
             const user: User                 = await this._prisma.user.findFirst({ where: { login } });
 
             if (!user) {
-                const passwordHash  = await this._hashService.hash(password);
+                const passwordHash = await this._hashService.hash(password);
                 const newUser: User = await this._prisma.user.create({
                     data: { login, email, password: passwordHash },
                 });
-                const tokens        = await this._tokensService.generateForUser(newUser.id, fingerprint);
+                const tokens = await this._tokensService.generateForUser(newUser.id, fingerprint);
                 return {
                     tokens,
                     user: userPrismaToDomain(newUser),
@@ -82,7 +88,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
         try {
             return await this._tokensService.refreshTokensByRefreshToken(refreshToken, fingerprint);
         } catch (e) {
-            throw serviceErrorResponse(e, PrismaAuthenticationService.name, 400, 'Bad logout');
+            throw serviceErrorResponse(e, PrismaAuthenticationService.name, 400, 'Bad refresh token');
         }
     }
 

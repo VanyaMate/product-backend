@@ -19,8 +19,12 @@ import {
 } from '@/nest/exceptions/domain-service-error.exception';
 import { Request } from 'express';
 import { TokenService } from '@/nest/modules/api/v1/token/token.service';
-import { getFingerprint } from '@/domain/lib/request/fingerprint/getFingerprint';
-import { isDomainSimpleError } from 'product-types/dist/error/DomainSimpleError';
+import {
+    getFingerprint,
+} from '@/domain/lib/request/fingerprint/getFingerprint';
+import {
+    isDomainSimpleError,
+} from 'product-types/dist/error/DomainSimpleError';
 import {
     assertDomainRefreshTokenPayload,
     DomainRefreshTokenPayload,
@@ -70,7 +74,10 @@ export class IsUserGuard implements CanActivate {
                         const tokens: DomainTokens = await this._tokensService.refreshTokensByRefreshToken(refreshToken, getFingerprint(context));
 
                         // set params
-                        request[RESPONSE_ADDITIONAL_DATA] = { tokens };
+                        request[RESPONSE_ADDITIONAL_DATA] = {
+                            ...(request[RESPONSE_ADDITIONAL_DATA] ?? {}),
+                            tokens,
+                        };
                         request[RESPONSE_UPDATED_TOKENS]  = tokens;
                         request[REQUEST_USER_ID]          = accessTokenPayload.user_id;
 

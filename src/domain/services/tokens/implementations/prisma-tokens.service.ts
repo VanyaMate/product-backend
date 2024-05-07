@@ -1,4 +1,6 @@
-import { ITokensService } from '@/domain/services/tokens/tokens-service.interface';
+import {
+    ITokensService,
+} from '@/domain/services/tokens/tokens-service.interface';
 import { PrismaClient, UserRefreshToken } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -10,14 +12,14 @@ import {
 } from 'product-types/dist/fingerprint/DomainFingerprint';
 import { DomainTokens } from 'product-types/dist/token/DomainTokens';
 import {
-    serviceErrorResponse
+    serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 import {
     assertDomainRefreshTokenPayload,
     DomainRefreshTokenPayload,
 } from 'product-types/dist/token/DomainRefreshTokenPayload';
 import {
-    DomainTokenGenerateData
+    DomainTokenGenerateData,
 } from 'product-types/dist/token/DomainTokenGenerateData';
 
 
@@ -83,7 +85,15 @@ export class PrismaTokensService implements ITokensService {
         });
 
         if (validateRefreshTokenByFingerprint(fingerprint, refreshTokenData)) {
-            await this._prisma.userRefreshToken.delete({ where: { id: refreshTokenPayload.id } });
+            if (!refreshTokenData.awaitDelete) {
+                await this._prisma.userRefreshToken.update({
+                    where: { id: refreshTokenPayload.id },
+                    data : { awaitDelete: true },
+                });
+                setTimeout(async () => {
+                    await this._prisma.userRefreshToken.delete({ where: { id: refreshTokenPayload.id } });
+                }, 30 * 1000);
+            }
             return refreshTokenData.user_id;
         } else {
             throw new Error('Refresh token not valid');

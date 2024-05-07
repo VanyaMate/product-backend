@@ -39,6 +39,7 @@ model UserRefreshToken {
   ip           String
   browser      String
   devise       String
+  awaitDelete  Boolean  @default(false)
 
   User User @relation(fields: [user_id], references: [id])
 }

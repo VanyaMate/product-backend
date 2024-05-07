@@ -17,7 +17,7 @@
     - nest - `nest deps`
         - modules - `nest modules`
             - api - `модули относящиеся к api`
-            - services - `любые другое модули`
+            - services - `любые другие модули`
         - pipes - `nest pipes`
         - guards - `nest guards`
         - decorators - `nest decorators`
