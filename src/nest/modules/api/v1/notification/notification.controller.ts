@@ -36,7 +36,7 @@ export class NotificationController {
             this._service.sendToUserById(request[REQUEST_USER_ID], {
                 type  : NotificationType.TOKENS_UPDATE,
                 dateMs: Date.now(),
-                data  : JSON.stringify(updatedTokens),
+                data  : updatedTokens,
             });
         }
     }
