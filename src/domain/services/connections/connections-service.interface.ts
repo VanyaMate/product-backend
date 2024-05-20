@@ -1,7 +1,7 @@
 export interface IConnectionsService<ConnectionRequest, ConnectionResponse> {
-    add (userId: string, request: ConnectionRequest, response: ConnectionResponse): void;
+    add (userId: string, request: ConnectionRequest, response: ConnectionResponse): Promise<ConnectionResponse>;
 
-    remove (userId: string, request: ConnectionRequest): void;
+    remove (userId: string, request: ConnectionRequest): Promise<void>;
 
-    getAllByUserId (userId: string): ConnectionResponse[];
+    getAllByUserId (userId: string): Promise<ConnectionResponse[]>;
 }

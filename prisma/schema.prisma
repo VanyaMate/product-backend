@@ -8,13 +8,13 @@ datasource db {
 }
 
 enum NotificationType {
-  MESSAGE                 @map("msg")
-  MESSAGE_DELETED         @map("msg_d")
-  MESSAGE_REDACTED        @map("msg_r")
-  MESSAGE_READ            @map("msg_read")
-  FRIEND_REQUEST          @map("fr_r")
-  FRIEND_REQUEST_ACCEPTED @map("fr_ra")
-  FRIEND_REQUEST_CANCELED @map("fr_rc")
+  msg
+  msg_d
+  msg_r
+  msg_read
+  fr_r
+  fr_ra
+  fr_rc
 }
 
 model User {
@@ -56,7 +56,7 @@ model Notification {
   user_id      String           @db.ObjectId
   creationDate DateTime         @default(now())
   type         NotificationType
-  data         String
+  data         Json
   readed       Boolean          @default(false)
 
   User User @relation(fields: [user_id], references: [id])
