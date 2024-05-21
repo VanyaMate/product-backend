@@ -53,7 +53,6 @@ model Friend {
   FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendFrom")
   ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendTo")
 
-  @@unique([fromUserId, toUserId])
   @@index([fromUserId])
   @@index([toUserId])
 }
