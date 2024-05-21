@@ -6,7 +6,7 @@ export interface IFriendsService {
     getFriendsOfUserByUserId (userId: string): Promise<DomainUser[]>;
 
     // Получить отправленные заявки в друзья от пользователя
-    getFriendRequestsSendByUserId (userId: string): Promise<DomainUser[]>;
+    getFriendRequestsSentByUserId (userId: string): Promise<DomainUser[]>;
 
     // Получить полученные заявки в друзья для пользователя
     getFriendRequestsReceivedByUserId (userId: string): Promise<DomainUser[]>;

@@ -23,12 +23,6 @@ export class PrismaFriendService implements IFriendService {
                 },
             });
 
-            // if same request created
-            if (friendRequest.fromUserId === fromUserId) {
-                // return false
-                return false;
-            }
-
             // if !request
             if (!friendRequest) {
                 // create request
@@ -42,6 +36,12 @@ export class PrismaFriendService implements IFriendService {
             }
             // else
             else {
+                // if same request created
+                if (friendRequest.fromUserId === fromUserId) {
+                    // return false
+                    return false;
+                }
+
                 // accept request
                 // - create link
                 await this._prisma.friend.create({

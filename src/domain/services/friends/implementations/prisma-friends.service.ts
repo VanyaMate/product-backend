@@ -40,7 +40,7 @@ export class PrismaFriendsService implements IFriendsService {
         );
     }
 
-    async getFriendRequestsSendByUserId (userId: string): Promise<DomainUser[]> {
+    async getFriendRequestsSentByUserId (userId: string): Promise<DomainUser[]> {
         try {
             const friends = await this._prisma.friendRequest.findMany({
                 where  : { fromUserId: userId },
