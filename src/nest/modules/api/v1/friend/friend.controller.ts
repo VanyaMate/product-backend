@@ -26,6 +26,15 @@ export class FriendController {
         return this._service.add(request[REQUEST_USER_ID], userId);
     }
 
+    @Post('/accept/:userId')
+    @UseGuards(IsUserGuard)
+    accept (
+        @Req() request: Request,
+        @Param('userId') userId: string,
+    ) {
+        return this._service.accept(request[REQUEST_USER_ID], userId);
+    }
+
     @Delete('/remove/:userId')
     @UseGuards(IsUserGuard)
     remove (

@@ -8,7 +8,6 @@ import { not } from 'rxjs/internal/util/not';
 
 export const notificationFactory = function (notification: unknown): DomainNotification {
     if (isDomainNotification(notification)) {
-        console.log('is domain notification', notification);
         return {
             id          : notification.id,
             data        : notification.data,

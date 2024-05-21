@@ -20,6 +20,9 @@ import {
     providers  : [
         NotificationService,
     ],
+    exports    : [
+        NotificationService,
+    ],
 })
 export class NotificationModule {
 }

@@ -5,6 +5,9 @@ import {
 import { FriendService } from '@/nest/modules/api/v1/friend/friend.service';
 import { TokenModule } from '@/nest/modules/api/v1/token/token.module';
 import { ServicesModule } from '@/nest/modules/services/services.module';
+import {
+    NotificationModule,
+} from '@/nest/modules/api/v1/notification/notification.module';
 
 
 @Module({
@@ -13,6 +16,7 @@ import { ServicesModule } from '@/nest/modules/services/services.module';
     imports    : [
         TokenModule,
         ServicesModule,
+        NotificationModule,
     ],
 })
 export class FriendModule {

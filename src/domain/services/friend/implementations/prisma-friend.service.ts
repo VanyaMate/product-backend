@@ -1,7 +1,7 @@
 import {
     IFriendService,
 } from '@/domain/services/friend/friend-service.interface';
-import { FriendRequest, PrismaClient } from '@prisma/client';
+import { Friend, FriendRequest, PrismaClient } from '@prisma/client';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
@@ -11,51 +11,52 @@ export class PrismaFriendService implements IFriendService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
+    async accept (fromUserId: string, toUserId: string): Promise<boolean> {
+        try {
+            const receivedFriendRequest: FriendRequest = await this._prisma.friendRequest.findFirst({
+                where: { toUserId: fromUserId, fromUserId: toUserId },
+            });
+
+            if (receivedFriendRequest) {
+                await this._prisma.friend.create({
+                    data: {
+                        fromUserId: receivedFriendRequest.fromUserId,
+                        toUserId  : receivedFriendRequest.toUserId,
+                    },
+                });
+                await this._prisma.friendRequest.delete({
+                    where: { id: receivedFriendRequest.id },
+                });
+
+                return true;
+            }
+
+            return false;
+        } catch (e) {
+            throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant accept friend request');
+        }
+    }
+
     async add (fromUserId: string, toUserId: string): Promise<boolean> {
         try {
-            // check requests
-            const friendRequest: FriendRequest = await this._prisma.friendRequest.findFirst({
+            const isFriends: Friend = await this._prisma.friend.findFirst({
                 where: {
                     OR: [
-                        { fromUserId: toUserId, toUserId: fromUserId },
                         { fromUserId, toUserId },
+                        { fromUserId: toUserId, toUserId: fromUserId },
                     ],
                 },
             });
 
-            // if !request
-            if (!friendRequest) {
-                // create request
+            if (!isFriends) {
                 await this._prisma.friendRequest.create({
-                    data: {
-                        fromUserId,
-                        toUserId,
-                    },
+                    data: { fromUserId, toUserId },
                 });
-                return true;
-            }
-            // else
-            else {
-                // if same request created
-                if (friendRequest.fromUserId === fromUserId) {
-                    // return false
-                    return false;
-                }
 
-                // accept request
-                // - create link
-                await this._prisma.friend.create({
-                    data: {
-                        fromUserId: toUserId,
-                        toUserId  : fromUserId,
-                    },
-                });
-                // - delete request
-                await this._prisma.friendRequest.delete({
-                    where: { id: friendRequest.id },
-                });
                 return true;
             }
+
+            return false;
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant add to friend');
         }

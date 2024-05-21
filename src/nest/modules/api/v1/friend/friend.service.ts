@@ -12,19 +12,37 @@ import {
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    NotificationService,
+} from '@/nest/modules/api/v1/notification/notification.service';
 
 
 @Injectable()
 export class FriendService {
     private readonly _service: IFriendService;
 
-    constructor (private readonly _prisma: PrismaService) {
+    constructor (
+        private readonly _prisma: PrismaService,
+        private readonly _notificationService: NotificationService,
+    ) {
         this._service = new PrismaFriendService(this._prisma);
     }
 
     async add (fromUserId: string, toUserId: string) {
         try {
-            return await this._service.add(fromUserId, toUserId);
+            const response = await this._service.add(fromUserId, toUserId);
+            this._notificationService.friendRequest(toUserId, fromUserId, '');
+            return response;
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
+        }
+    }
+
+    async accept (fromUserId: string, toUserId: string) {
+        try {
+            const response = await this._service.accept(fromUserId, toUserId);
+            this._notificationService.friendRequestAccepted(toUserId, fromUserId);
+            return response;
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
         }
@@ -32,7 +50,9 @@ export class FriendService {
 
     async remove (fromUserId: string, toUserId: string) {
         try {
-            return await this._service.remove(fromUserId, toUserId);
+            const response = await this._service.remove(fromUserId, toUserId);
+            this._notificationService.friendDeleted(toUserId, fromUserId);
+            return response;
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant remove friend'));
         }
@@ -40,7 +60,9 @@ export class FriendService {
 
     async cancel (fromUserId: string, toUserId: string) {
         try {
-            return await this._service.cancel(fromUserId, toUserId);
+            const response = await this._service.cancel(fromUserId, toUserId);
+            this._notificationService.friendRequestCanceled(toUserId, fromUserId);
+            return response;
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant cancel friend request'));
         }
