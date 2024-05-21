@@ -23,7 +23,6 @@ import {
 import {
     SseSenderService,
 } from '@/domain/services/sse-sender/implementations/sse-sender.service';
-import { isDate } from 'class-validator';
 
 
 export class PrismaNotificationService implements INotificationService<DomainNotificationType, DomainNotification> {

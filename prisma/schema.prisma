@@ -35,37 +35,34 @@ model User {
 model UserRefreshToken {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   creationDate DateTime @default(now())
-  user_id      String   @db.ObjectId
+  userId       String   @db.ObjectId
   ip           String
   browser      String
   devise       String
   awaitDelete  Boolean  @default(false)
 
-  User User @relation(fields: [user_id], references: [id])
-}
-
-model Dialog {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  creationDate DateTime @default(now())
-  title        String
-  avatar       String
+  User User @relation(fields: [userId], references: [id])
 }
 
 model Notification {
   id           String           @id @default(auto()) @map("_id") @db.ObjectId
-  user_id      String           @db.ObjectId
+  userId       String           @db.ObjectId
   creationDate DateTime         @default(now())
   type         NotificationType
   data         Json
   readed       Boolean          @default(false)
 
-  User User @relation(fields: [user_id], references: [id])
+  User User @relation(fields: [userId], references: [id])
+
+  @@index([type])
 }
 
 model Connection {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  user_id       String @db.ObjectId
-  connection_id String @unique
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String @db.ObjectId
+  connectionId String @unique
 
-  User User @relation(fields: [user_id], references: [id])
+  User User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }

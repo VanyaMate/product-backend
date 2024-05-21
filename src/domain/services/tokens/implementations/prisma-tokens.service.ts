@@ -112,7 +112,7 @@ export class PrismaTokensService implements ITokensService {
 
         const accessToken: string  = this._jwtService.sign(
             { id: refreshTokenData.id, user_id: data.user_id },
-            { expiresIn: '1m' },
+            { expiresIn: '10m' },
         );
         const refreshToken: string = this._jwtService.sign(
             { id: refreshTokenData.id },

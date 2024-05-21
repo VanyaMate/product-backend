@@ -44,10 +44,15 @@ export class NotificationController {
     }
 
     @Get('/send')
+    @UseGuards(IsUserGuard)
     send (
+        @Req() request: Request,
         @Query('message') message: string,
         @Query('user_login') login: string,
     ) {
-        return this._service.sendToUser(login, DomainNotificationType.MESSAGE, message);
+        return this._service.sendToUser(login, DomainNotificationType.MESSAGE, {
+            message,
+            from: request[REQUEST_USER_ID],
+        });
     }
 }

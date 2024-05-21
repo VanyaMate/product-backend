@@ -23,3 +23,14 @@
         - decorators - `nest decorators`
         - filters - `nest filters`
         - interceptors - `nest interceptors`
+
+
+- DB
+    - Notifications
+        - 1 коллекция для уведомлений
+        - получатель в модели уведомления
+        - тип уведомления в модели уведомлении
+        - отправитель (id) в данных уведомления
+        - информация в данных уведомления
+        - данные уведомления в формате объекта (prisma.jsonValue)
+        - хранение уведомлений 1 месяц (readed: false) и конец дня (readed: true)
