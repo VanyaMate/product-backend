@@ -40,9 +40,9 @@ export class PrismaNotificationService implements INotificationService<DomainNot
         if (NotificationType[type] !== undefined) {
             notification = await this._prisma.notification.create({
                 data: {
-                    user_id: userId,
-                    type   : NotificationType[type],
-                    data   : data,
+                    userId: userId,
+                    type  : NotificationType[type],
+                    data  : data,
                 },
             });
         } else {
