@@ -69,8 +69,8 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
         return this._prisma.connection
             .create({
                 data: {
-                    user_id      : userId,
-                    connection_id: requestId,
+                    userId      : userId,
+                    connectionId: requestId,
                 },
             })
             .then();
@@ -107,8 +107,8 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
         userConnectionsMap.delete(requestId);
         return this._prisma.connection.delete({
             where: {
-                user_id      : userId,
-                connection_id: requestId,
+                userId      : userId,
+                connectionId: requestId,
             },
         });
     }

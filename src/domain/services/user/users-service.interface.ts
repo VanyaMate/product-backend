@@ -10,4 +10,6 @@ export interface IUserService {
     getPrivateUserFullByLogin (login: string): Promise<DomainUserFull>;
 
     getUsersByLogins (logins: string[]): Promise<DomainUser[]>;
+
+    findUsersByStartLogin (loginStart: string): Promise<DomainUser[]>;
 }

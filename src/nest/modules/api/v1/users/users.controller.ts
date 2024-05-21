@@ -1,11 +1,11 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { IsUserGuard } from '@/nest/guards/authorization/is-user.guard';
-import { UserService } from '@/nest/modules/api/v1/user/user.service';
+import { UsersService } from '@/nest/modules/api/v1/users/users.service';
 
 
-@Controller('/api/v1/user')
-export class UserController {
-    constructor (private readonly _service: UserService) {
+@Controller('/api/v1/users')
+export class UsersController {
+    constructor (private readonly _service: UsersService) {
     }
 
     @Get('/list')
@@ -30,6 +30,14 @@ export class UserController {
         @Param('login') login: string,
     ) {
         return this._service.getPrivateUserFullByLogin(login);
+    }
+
+    @Get('/find-start/:login')
+    @UseGuards(IsUserGuard)
+    findUserByStartLogin (
+        @Param('login') login: string,
+    ) {
+        return this._service.findUserByStartLogin(login);
     }
 
     @Get('/:login')

@@ -52,7 +52,7 @@ export class IsUserGuard implements CanActivate {
             }
             const accessTokenPayload = this._jwtService.verify<DomainAccessTokenPayload>(accessToken);
             assertDomainAccessTokenPayload(accessTokenPayload, 'accessTokenPayload', 'DomainAccessTokenPayload');
-            request[REQUEST_USER_ID] = accessTokenPayload.user_id;
+            request[REQUEST_USER_ID] = accessTokenPayload.userId;
 
             return true;
         } catch (e) {
@@ -79,7 +79,7 @@ export class IsUserGuard implements CanActivate {
                             tokens,
                         };
                         request[RESPONSE_UPDATED_TOKENS]  = tokens;
-                        request[REQUEST_USER_ID]          = accessTokenPayload.user_id;
+                        request[REQUEST_USER_ID]          = accessTokenPayload.userId;
 
                         return true;
                     }

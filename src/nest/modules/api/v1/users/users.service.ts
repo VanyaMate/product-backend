@@ -3,21 +3,21 @@ import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
-import { IUserService } from '@/domain/services/user/user-service.interface';
+import { IUserService } from '@/domain/services/user/users-service.interface';
 import {
-    PrismaUserService,
-} from '@/domain/services/user/implementations/prisma-user.service';
+    PrismaUsersService,
+} from '@/domain/services/user/implementations/prisma-users.service';
 import {
-    serviceErrorResponse
+    serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 
 
 @Injectable()
-export class UserService {
+export class UsersService {
     private readonly _service: IUserService;
 
     constructor (private readonly _prisma: PrismaService) {
-        this._service = new PrismaUserService(this._prisma);
+        this._service = new PrismaUsersService(this._prisma);
     }
 
     async getUserByLogin (login: string) {
@@ -47,6 +47,14 @@ export class UserService {
     async getUsersByLogins (logins: string[]) {
         try {
             return await this._service.getUsersByLogins(logins);
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+        }
+    }
+
+    async findUserByStartLogin (loginStart: string) {
+        try {
+            return await this._service.findUsersByStartLogin(loginStart);
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }

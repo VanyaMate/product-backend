@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { UserController } from '@/nest/modules/api/v1/user/user.controller';
+import { UsersController } from '@/nest/modules/api/v1/users/users.controller';
 import { TokenModule } from '@/nest/modules/api/v1/token/token.module';
 import { ServicesModule } from '@/nest/modules/services/services.module';
-import { UserService } from '@/nest/modules/api/v1/user/user.service';
+import { UsersService } from '@/nest/modules/api/v1/users/users.service';
 
 
 @Module({
     controllers: [
-        UserController,
+        UsersController,
     ],
     imports    : [
         TokenModule,
         ServicesModule,
     ],
     providers  : [
-        UserService,
+        UsersService,
     ],
 })
-export class UserModule {
+export class UsersModule {
 }

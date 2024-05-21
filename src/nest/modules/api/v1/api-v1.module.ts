@@ -5,7 +5,7 @@ import {
 import {
     AuthenticationModule,
 } from '@/nest/modules/api/v1/authentication/authentication.module';
-import { UserModule } from '@/nest/modules/api/v1/user/user.module';
+import { UsersModule } from '@/nest/modules/api/v1/users/users.module';
 import { TokenModule } from '@/nest/modules/api/v1/token/token.module';
 import {
     NotificationModule,
@@ -16,7 +16,7 @@ import {
     imports: [
         AuthorizationModule,
         AuthenticationModule,
-        UserModule,
+        UsersModule,
         TokenModule,
         NotificationModule,
     ],

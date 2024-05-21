@@ -27,9 +27,35 @@ model User {
   firstName   String? @default("")
   lastName    String? @default("")
 
-  UserRefreshToken UserRefreshToken[]
-  Notification     Notification[]
-  Connection       Connection[]
+  UserRefreshToken      UserRefreshToken[]
+  Notification          Notification[]
+  Connection            Connection[]
+  FriendsFrom           Friend[]           @relation("FriendFrom")
+  FriendsTo             Friend[]           @relation("FriendTo")
+  FriendRequestSend     FriendRequest[]    @relation(name: "FriendRequestSend")
+  FriendRequestReceived FriendRequest[]    @relation(name: "FriendRequestReceived")
+}
+
+model FriendRequest {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId String @db.ObjectId
+  toUserId   String @db.ObjectId
+
+  FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendRequestSend")
+  ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendRequestReceived")
+}
+
+model Friend {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId String @db.ObjectId
+  toUserId   String @db.ObjectId
+
+  FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendFrom")
+  ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendTo")
+
+  @@unique([fromUserId, toUserId])
+  @@index([fromUserId])
+  @@index([toUserId])
 }
 
 model UserRefreshToken {
