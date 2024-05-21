@@ -1,7 +1,7 @@
 import {
     IFriendsService,
 } from '@/domain/services/friends/friends-service.interface';
-import { Friend, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
     userPrismaToDomain,
