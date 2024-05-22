@@ -26,13 +26,13 @@ export class FriendController {
         return this._service.add(request[REQUEST_USER_ID], userId);
     }
 
-    @Post('/accept/:userId')
+    @Post('/accept/:requestId')
     @UseGuards(IsUserGuard)
     accept (
         @Req() request: Request,
-        @Param('userId') userId: string,
+        @Param('requestId') requestId: string,
     ) {
-        return this._service.accept(request[REQUEST_USER_ID], userId);
+        return this._service.accept(request[REQUEST_USER_ID], requestId);
     }
 
     @Delete('/remove/:userId')
@@ -44,12 +44,12 @@ export class FriendController {
         return this._service.remove(request[REQUEST_USER_ID], userId);
     }
 
-    @Delete('/cancel/:userId')
+    @Delete('/cancel/:requestId')
     @UseGuards(IsUserGuard)
     cancel (
         @Req() request: Request,
-        @Param('userId') userId: string,
+        @Param('requestId') requestId: string,
     ) {
-        return this._service.cancel(request[REQUEST_USER_ID], userId);
+        return this._service.cancel(request[REQUEST_USER_ID], requestId);
     }
 }

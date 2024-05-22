@@ -28,8 +28,8 @@ export class PrismaFriendService implements IFriendService {
 
     async accept (fromUserId: string, requestId: string): Promise<[ string[], DomainNotificationFriendRequestAcceptedData ]> {
         try {
-            const receivedFriendRequest = await this._prisma.friendRequest.delete({
-                where : { fromUserId, id: requestId },
+            const receivedFriendRequest = await this._prisma.friendRequest.findFirstOrThrow({
+                where : { toUserId: fromUserId, id: requestId },
                 select: {
                     ToUser    : {
                         select: prismaDomainUserSelector,
@@ -88,8 +88,9 @@ export class PrismaFriendService implements IFriendService {
                 return [
                     [ toUserId ],
                     {
-                        user   : request.FromUser,
-                        message: '',
+                        user     : request.FromUser,
+                        requestId: request.id,
+                        message  : '',
                     },
                 ];
             }

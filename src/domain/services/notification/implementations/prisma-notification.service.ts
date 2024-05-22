@@ -96,11 +96,7 @@ export class PrismaNotificationService implements INotificationService {
     async userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user        : data.user.id,
-                message     : data.message,
-                messageIndex: data.messageIndex,
-            },
+            data,
             type: DomainNotificationType.USER_MESSAGE_DELETED,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -109,12 +105,7 @@ export class PrismaNotificationService implements INotificationService {
     async userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user           : data.user.id,
-                newMessage     : data.newMessage,
-                previousMessage: data.previousMessage,
-                messageIndex   : data.messageIndex,
-            },
+            data,
             type: DomainNotificationType.USER_MESSAGE_REDACTED,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -123,10 +114,7 @@ export class PrismaNotificationService implements INotificationService {
     async userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user        : data.user.id,
-                messageIndex: data.messageIndex,
-            },
+            data,
             type: DomainNotificationType.USER_MESSAGE_READ,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -135,9 +123,7 @@ export class PrismaNotificationService implements INotificationService {
     async friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user: data.user.id,
-            },
+            data,
             type: DomainNotificationType.FRIEND_REQUEST,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -146,9 +132,7 @@ export class PrismaNotificationService implements INotificationService {
     async friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user: data.user.id,
-            },
+            data,
             type: DomainNotificationType.FRIEND_DELETED,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -157,9 +141,7 @@ export class PrismaNotificationService implements INotificationService {
     async friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user: data.user.id,
-            },
+            data,
             type: DomainNotificationType.FRIEND_REQUEST_ACCEPTED,
         });
         return this._notify(userId, notificationFactory(notification));
@@ -168,9 +150,7 @@ export class PrismaNotificationService implements INotificationService {
     async friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
-            data: {
-                user: data.user.id,
-            },
+            data,
             type: DomainNotificationType.FRIEND_REQUEST_CANCELED,
         });
         return this._notify(userId, notificationFactory(notification));

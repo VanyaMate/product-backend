@@ -16,7 +16,7 @@ export class SseSenderService implements ISseSenderService<Response> {
 
     private _convertToResponseFormat (message: unknown): string {
         if (typeof message === 'string') {
-            return `data: ${ message }\n\n`;
+            return `data ${ message }\n\n`;
         } else {
             return `data ${ JSON.stringify(message) }\n\n`;
         }

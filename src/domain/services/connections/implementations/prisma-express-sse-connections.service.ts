@@ -91,7 +91,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
             response,
             $__timer: setTimeout(() => {
                 // TODO: TEMP
-                response.write(`data: ${ JSON.stringify({
+                response.write(`data ${ JSON.stringify({
                     id          : '',
                     type        : DomainNotificationType.DISCONNECTED,
                     creationDate: new Date().toUTCString(),
