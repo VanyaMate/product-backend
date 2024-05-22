@@ -36,23 +36,10 @@ export class NotificationController {
         response.setHeader('Cache-Control', 'no-cache');
 
         this._service.add(request[REQUEST_USER_ID], request, response);
-        this._service.sendToUserById(request[REQUEST_USER_ID], DomainNotificationType.CONNECTED, '');
+        this._service.connected(request[REQUEST_USER_ID]);
         const updatedTokens = request[RESPONSE_UPDATED_TOKENS];
         if (updatedTokens) {
-            this._service.sendToUserById(request[REQUEST_USER_ID], DomainNotificationType.TOKENS_UPDATE, updatedTokens);
+            this._service.tokensUpdate(request[REQUEST_USER_ID], updatedTokens);
         }
-    }
-
-    @Get('/send')
-    @UseGuards(IsUserGuard)
-    send (
-        @Req() request: Request,
-        @Query('message') message: string,
-        @Query('user_login') login: string,
-    ) {
-        return this._service.sendToUser(login, DomainNotificationType.MESSAGE, {
-            message,
-            from: request[REQUEST_USER_ID],
-        });
     }
 }

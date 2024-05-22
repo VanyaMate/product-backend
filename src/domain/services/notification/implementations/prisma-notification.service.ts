@@ -64,40 +64,37 @@ export class PrismaNotificationService implements INotificationService {
         this._sseSender = new SseSenderService();
     }
 
-    error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
+    async error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
         return this._notify(userId, this._notification(DomainNotificationType.ERROR, data));
     }
 
-    connected (userId: string): Promise<DomainNotification> {
+    async connected (userId: string): Promise<DomainNotification> {
         return this._notify(userId, this._notification(DomainNotificationType.CONNECTED));
     }
 
-    connecting (userId: string): Promise<DomainNotification> {
+    async connecting (userId: string): Promise<DomainNotification> {
         return this._notify(userId, this._notification(DomainNotificationType.CONNECTED));
     }
 
-    disconnected (userId: string, data: DomainNotificationDisconnectedData): Promise<DomainNotification> {
+    async disconnected (userId: string, data: DomainNotificationDisconnectedData): Promise<DomainNotification> {
         return this._notify(userId, this._notification(DomainNotificationType.DISCONNECTED, data));
     }
 
-    tokensUpdate (userId: string, data: DomainNotificationTokensUpdateData): Promise<DomainNotification> {
+    async tokensUpdate (userId: string, data: DomainNotificationTokensUpdateData): Promise<DomainNotification> {
         return this._notify(userId, this._notification(DomainNotificationType.TOKENS_UPDATE, data));
     }
 
-    userMessage (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
-        const notification = this._create({
+    async userMessage (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
-            data: {
-                user   : data.user.id,
-                message: data.message,
-            },
+            data,
             type: DomainNotificationType.USER_MESSAGE,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
-        const notification = this._create({
+    async userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user        : data.user.id,
@@ -109,8 +106,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
-        const notification = this._create({
+    async userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user           : data.user.id,
@@ -123,8 +120,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
-        const notification = this._create({
+    async userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user        : data.user.id,
@@ -135,8 +132,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
-        const notification = this._create({
+    async friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user: data.user.id,
@@ -146,8 +143,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
-        const notification = this._create({
+    async friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user: data.user.id,
@@ -157,8 +154,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
-        const notification = this._create({
+    async friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user: data.user.id,
@@ -168,8 +165,8 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, notificationFactory(notification));
     }
 
-    friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
-        const notification = this._create({
+    async friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        const notification = await this._create({
             userId,
             data: {
                 user: data.user.id,

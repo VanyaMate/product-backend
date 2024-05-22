@@ -18,6 +18,12 @@ enum NotificationType {
   fr_rc
 }
 
+enum MessageType {
+  text
+  image
+  link
+}
+
 model User {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   login       String  @unique
@@ -35,6 +41,8 @@ model User {
   FriendsTo             Friend[]           @relation("FriendTo")
   FriendRequestSend     FriendRequest[]    @relation(name: "FriendRequestSend")
   FriendRequestReceived FriendRequest[]    @relation(name: "FriendRequestReceived")
+  LinkWithDialogues     DialogueToUser[]
+  Messages              Message[]
 }
 
 model FriendRequest {
@@ -91,4 +99,46 @@ model Connection {
   User User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model Dialogue {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  title  String @default("")
+  avatar String @default("")
+
+  LinkWithUsers    DialogueToUser[]    @relation()
+  LinkWithMessages DialogueToMessage[] @relation()
+}
+
+model DialogueToUser {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  dialogueId String  @db.ObjectId
+  userId     String  @db.ObjectId
+  archive    Boolean @default(false)
+
+  Dialogue Dialogue @relation(fields: [dialogueId], references: [id])
+  User     User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, archive])
+}
+
+model DialogueToMessage {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  dialogueId String @db.ObjectId
+  messageId  String @db.ObjectId
+
+  Dialogue Dialogue @relation(fields: [dialogueId], references: [id])
+  Message  Message  @relation(fields: [messageId], references: [id])
+}
+
+model Message {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  authorId     String      @db.ObjectId
+  message      String
+  type         MessageType
+  redacted     Boolean     @default(false)
+  creationDate DateTime    @default(now())
+
+  Author            User                @relation(fields: [authorId], references: [id])
+  LinkWithDialogues DialogueToMessage[]
 }

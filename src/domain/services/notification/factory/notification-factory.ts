@@ -12,7 +12,9 @@ export const notificationFactory = function (notification: unknown): DomainNotif
             id          : notification.id,
             data        : notification.data,
             type        : notification.type,
-            creationDate: notification.creationDate,
+            creationDate: typeof notification.creationDate === 'string'
+                          ? notification.creationDate
+                          : (notification.creationDate as Date).toUTCString(),
         };
     }
 

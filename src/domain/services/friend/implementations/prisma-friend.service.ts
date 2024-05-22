@@ -5,39 +5,63 @@ import { Friend, FriendRequest, PrismaClient } from '@prisma/client';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    DomainNotificationFriendRequestAcceptedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestAcceptedData';
+import {
+    DomainNotificationFriendRequestData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestData';
+import {
+    DomainNotificationFriendDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendDeletedData';
+import {
+    DomainNotificationFriendRequestCanceledData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
+import {
+    prismaDomainUserSelector,
+} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
 
 
 export class PrismaFriendService implements IFriendService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
-    async accept (fromUserId: string, toUserId: string): Promise<boolean> {
+    async accept (fromUserId: string, requestId: string): Promise<[ string[], DomainNotificationFriendRequestAcceptedData ]> {
         try {
-            const receivedFriendRequest: FriendRequest = await this._prisma.friendRequest.findFirst({
-                where: { toUserId: fromUserId, fromUserId: toUserId },
+            const receivedFriendRequest = await this._prisma.friendRequest.delete({
+                where : { fromUserId, id: requestId },
+                select: {
+                    ToUser    : {
+                        select: prismaDomainUserSelector,
+                    },
+                    fromUserId: true,
+                    toUserId  : true,
+                    id        : true,
+                },
             });
 
-            if (receivedFriendRequest) {
-                await this._prisma.friend.create({
-                    data: {
-                        fromUserId: receivedFriendRequest.fromUserId,
-                        toUserId  : receivedFriendRequest.toUserId,
-                    },
-                });
-                await this._prisma.friendRequest.delete({
-                    where: { id: receivedFriendRequest.id },
-                });
+            await this._prisma.friend.create({
+                data: {
+                    fromUserId: receivedFriendRequest.fromUserId,
+                    toUserId  : receivedFriendRequest.toUserId,
+                },
+            });
+            await this._prisma.friendRequest.delete({
+                where: { id: receivedFriendRequest.id },
+            });
 
-                return true;
-            }
-
-            return false;
+            return [
+                [ receivedFriendRequest.fromUserId ],
+                {
+                    user: receivedFriendRequest.ToUser,
+                },
+            ];
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant accept friend request');
         }
     }
 
-    async add (fromUserId: string, toUserId: string): Promise<boolean> {
+    async add (fromUserId: string, toUserId: string): Promise<[ string[], DomainNotificationFriendRequestData ]> {
         try {
             const isFriends: Friend = await this._prisma.friend.findFirst({
                 where: {
@@ -49,46 +73,95 @@ export class PrismaFriendService implements IFriendService {
             });
 
             if (!isFriends) {
-                await this._prisma.friendRequest.create({
-                    data: { fromUserId, toUserId },
+                const request = await this._prisma.friendRequest.create({
+                    data   : {
+                        fromUserId,
+                        toUserId,
+                    },
+                    include: {
+                        FromUser: {
+                            select: prismaDomainUserSelector,
+                        },
+                    },
                 });
 
-                return true;
+                return [
+                    [ toUserId ],
+                    {
+                        user   : request.FromUser,
+                        message: '',
+                    },
+                ];
             }
 
-            return false;
+            throw 'Request already exists';
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant add to friend');
         }
     }
 
-    async remove (fromUserId: string, toUserId: string): Promise<boolean> {
+    async remove (fromUserId: string, removedUserId: string): Promise<[ string[], DomainNotificationFriendDeletedData ]> {
         try {
-            await this._prisma.friend.deleteMany({
-                where: {
+            const deletedFriend = await this._prisma.friend.findFirstOrThrow({
+                where : {
                     OR: [
-                        { fromUserId, toUserId },
-                        { toUserId: fromUserId, fromUserId: toUserId },
+                        { fromUserId, toUserId: removedUserId },
+                        { fromUserId: removedUserId, toUserId: fromUserId },
                     ],
                 },
+                select: {
+                    id      : true,
+                    FromUser: { select: prismaDomainUserSelector },
+                    ToUser  : { select: prismaDomainUserSelector },
+                },
             });
-            return true;
+            await this._prisma.friend.delete({
+                where: {
+                    id: deletedFriend.id,
+                },
+            });
+
+            if (fromUserId === deletedFriend.ToUser.id) {
+                return [
+                    [ deletedFriend.FromUser.id ],
+                    {
+                        user: deletedFriend.ToUser,
+                    },
+                ];
+            } else {
+                return [
+                    [ deletedFriend.ToUser.id ],
+                    {
+                        user: deletedFriend.FromUser,
+                    },
+                ];
+            }
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant remove friend');
         }
     }
 
-    async cancel (fromUserId: string, toUserId: string): Promise<boolean> {
+    async cancel (fromUserId: string, requestId: string): Promise<[ string[], DomainNotificationFriendRequestCanceledData ]> {
         try {
-            await this._prisma.friendRequest.deleteMany({
-                where: {
+            const canceledRequest = await this._prisma.friendRequest.delete({
+                where : {
+                    id: requestId,
                     OR: [
-                        { fromUserId, toUserId },
-                        { toUserId: fromUserId, fromUserId: toUserId },
+                        { fromUserId },
+                        { toUserId: fromUserId },
                     ],
                 },
+                select: {
+                    FromUser: { select: prismaDomainUserSelector },
+                    ToUser  : { select: prismaDomainUserSelector },
+                },
             });
-            return true;
+
+            if (canceledRequest.FromUser.id === fromUserId) {
+                return [ [], null ];
+            } else {
+                return [ [ canceledRequest.FromUser.id ], { user: canceledRequest.ToUser } ];
+            }
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant cancel friend request');
         }

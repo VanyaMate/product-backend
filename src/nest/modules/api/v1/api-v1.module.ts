@@ -12,6 +12,7 @@ import {
 } from '@/nest/modules/api/v1/notification/notification.module';
 import { FriendModule } from '@/nest/modules/api/v1/friend/friend.module';
 import { FriendsModule } from '@/nest/modules/api/v1/friends/friends.module';
+import { MessageModule } from '@/nest/modules/api/v1/message/message.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { FriendsModule } from '@/nest/modules/api/v1/friends/friends.module';
         NotificationModule,
         FriendModule,
         FriendsModule,
+        MessageModule,
     ],
 })
 export class ApiV1Module {

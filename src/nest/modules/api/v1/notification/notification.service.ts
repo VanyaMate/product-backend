@@ -49,15 +49,10 @@ import {
 import {
     DomainNotificationFriendRequestCanceledData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
-import { UsersService } from '@/nest/modules/api/v1/users/users.service';
-import { User } from '@prisma/client';
-import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
 
 
 @Injectable()
-export class NotificationService {
+export class NotificationService implements INotificationService {
     private readonly _connectionService: IConnectionsService<Request, Response>;
     private readonly _notificationService: INotificationService;
 
@@ -102,32 +97,20 @@ export class NotificationService {
         return this._notificationService.userMessageRead(userId, data);
     }
 
-    async friendRequest (userId: string, fromUserId: string, message: string): Promise<DomainNotification> {
-        const user = await this._prisma.user.findFirst({ where: { id: fromUserId } });
-        return this._notificationService.friendRequest(userId, {
-            user: userPrismaToDomain(user), message,
-        });
+    async friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        return this._notificationService.friendRequest(userId, data);
     }
 
-    async friendDeleted (userId: string, fromUserId: string): Promise<DomainNotification> {
-        const user = await this._prisma.user.findFirst({ where: { id: fromUserId } });
-        return this._notificationService.friendDeleted(userId, {
-            user: userPrismaToDomain(user),
-        });
+    async friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        return this._notificationService.friendDeleted(userId, data);
     }
 
-    async friendRequestAccepted (userId: string, fromUserId: string): Promise<DomainNotification> {
-        const user = await this._prisma.user.findFirst({ where: { id: fromUserId } });
-        return this._notificationService.friendRequestAccepted(userId, {
-            user: userPrismaToDomain(user),
-        });
+    async friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestAccepted(userId, data);
     }
 
-    async friendRequestCanceled (userId: string, fromUserId: string): Promise<DomainNotification> {
-        const user = await this._prisma.user.findFirst({ where: { id: fromUserId } });
-        return this._notificationService.friendRequestCanceled(userId, {
-            user: userPrismaToDomain(user),
-        });
+    async friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestCanceled(userId, data);
     }
 
     add (userId: string, request: Request, response: Response) {
