@@ -84,7 +84,7 @@ model Notification {
   creationDate DateTime         @default(now())
   type         NotificationType
   data         Json
-  readed       Boolean          @default(false)
+  viewed       Boolean          @default(false)
 
   User User @relation(fields: [userId], references: [id])
 

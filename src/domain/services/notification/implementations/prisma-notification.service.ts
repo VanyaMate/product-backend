@@ -170,6 +170,7 @@ export class PrismaNotificationService implements INotificationService {
         return {
             id          : '',
             creationDate: new Date().toUTCString(),
+            viewed      : false,
             type,
             data,
         };

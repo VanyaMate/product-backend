@@ -15,6 +15,7 @@ export const notificationFactory = function (notification: unknown): DomainNotif
             creationDate: typeof notification.creationDate === 'string'
                           ? notification.creationDate
                           : (notification.creationDate as Date).toUTCString(),
+            viewed      : notification.viewed,
         };
     }
 
@@ -23,5 +24,6 @@ export const notificationFactory = function (notification: unknown): DomainNotif
         data        : notification,
         creationDate: new Date().toUTCString(),
         type        : DomainNotificationType.UNKNOWN,
+        viewed      : false,
     };
 };
