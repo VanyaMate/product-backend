@@ -96,6 +96,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
                     type        : DomainNotificationType.DISCONNECTED,
                     creationDate: new Date().toUTCString(),
                     data        : 'time',
+                    viewed      : false,
                 } as DomainNotification) }\n\n`);
                 closeConnection().finally(() => response.end());
             }, 1000 * 20),
