@@ -16,6 +16,10 @@ import {
     assertDomainSearchOptions,
     DomainSearchOptions, isDomainSearchOptions,
 } from 'product-types/dist/search/DomainSearchOptions';
+import {
+    assertDomainSearchItemOptions,
+    DomainSearchItemOptions,
+} from 'product-types/dist/search/DomainSearchItemOptions';
 
 
 @Injectable()
@@ -30,6 +34,15 @@ export class SearchService {
         try {
             assertDomainSearchOptions(options, 'options', 'DomainSearchOptions');
             return this._service.searchAll(options);
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, SearchService.name, 400, 'Search error'));
+        }
+    }
+
+    async searchProfiles (options: DomainSearchItemOptions) {
+        try {
+            assertDomainSearchItemOptions(options, 'options', 'DomainSearchOptions');
+            return this._service.searchProfiles(options);
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, SearchService.name, 400, 'Search error'));
         }

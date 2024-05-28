@@ -5,6 +5,9 @@ import {
     SearchOptionsDto,
 } from '@/nest/modules/api/v1/search/dto/search-options.dto';
 import { DomainSearch } from 'product-types/dist/search/DomainSearch';
+import {
+    SearchProfilesOptionsDto,
+} from '@/nest/modules/api/v1/search/dto/search-profiles-options.dto';
 
 
 @Controller('/api/v1/search')
@@ -20,6 +23,18 @@ export class SearchController {
         return this._service.searchAll({
             query   : queries.query,
             searchIn: queries.searchIn.split(',') as (keyof DomainSearch)[],
+        });
+    }
+
+    @Get('/profiles')
+    @UseGuards(IsUserGuard)
+    searchProfiles (
+        @Query() queries: SearchProfilesOptionsDto,
+    ) {
+        return this._service.searchProfiles({
+            query : queries.query,
+            limit : queries.limit ?? 10,
+            offset: queries.offset ?? 0,
         });
     }
 }

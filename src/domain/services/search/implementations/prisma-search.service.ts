@@ -9,6 +9,10 @@ import {
 import {
     prismaDomainUserSelector,
 } from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+import {
+    DomainSearchItemOptions,
+} from 'product-types/dist/search/DomainSearchItemOptions';
+import { DomainSearchItem } from 'product-types/dist/search/DomainSearchItem';
 
 
 export class PrismaSearchService implements ISearchService {
@@ -33,7 +37,11 @@ export class PrismaSearchService implements ISearchService {
         return response;
     }
 
-    private async _findData (searchIn: string, query: string): Promise<unknown> {
+    public async searchProfiles (options: DomainSearchItemOptions): Promise<DomainSearchItem> {
+        return this._findData('profiles', options.query, options.limit, options.offset);
+    }
+
+    private async _findData (searchIn: keyof DomainSearch, query: string, take: number = 10, skip: number = 0): Promise<DomainSearchItem> {
         switch (searchIn) {
             case 'profiles':
                 const userWhereInput: Prisma.UserWhereInput = { login: { startsWith: query } };
@@ -43,14 +51,17 @@ export class PrismaSearchService implements ISearchService {
                 const userQuery: Prisma.UserFindManyArgs    = {
                     where  : userWhereInput,
                     select : prismaDomainUserSelector,
-                    take   : 10,
                     orderBy: { login: 'asc' },
+                    take,
+                    skip,
                 };
 
-                return this._prisma.$transaction([
+                const [ count, list ] = await this._prisma.$transaction([
                     this._prisma.user.count(userCountArgs),
                     this._prisma.user.findMany(userQuery),
                 ]);
+
+                return { count, list };
             default:
                 return null;
         }
