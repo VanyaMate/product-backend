@@ -13,6 +13,7 @@ import {
 import { FriendModule } from '@/nest/modules/api/v1/friend/friend.module';
 import { FriendsModule } from '@/nest/modules/api/v1/friends/friends.module';
 import { MessageModule } from '@/nest/modules/api/v1/message/message.module';
+import { SearchModule } from '@/nest/modules/api/v1/search/search.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { MessageModule } from '@/nest/modules/api/v1/message/message.module';
         FriendModule,
         FriendsModule,
         MessageModule,
+        SearchModule,
     ],
 })
 export class ApiV1Module {
