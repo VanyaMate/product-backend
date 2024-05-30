@@ -39,10 +39,10 @@ export class SearchService {
         }
     }
 
-    async searchProfiles (options: DomainSearchItemOptions) {
+    async searchUsers (options: DomainSearchItemOptions) {
         try {
             assertDomainSearchItemOptions(options, 'options', 'DomainSearchOptions');
-            return this._service.searchProfiles(options);
+            return this._service.searchUsers(options);
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, SearchService.name, 400, 'Search error'));
         }

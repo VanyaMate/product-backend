@@ -88,9 +88,11 @@ export class PrismaFriendService implements IFriendService {
                 return [
                     [ toUserId ],
                     {
-                        user     : request.FromUser,
-                        requestId: request.id,
-                        message  : '',
+                        request: {
+                            user     : request.FromUser,
+                            requestId: request.id,
+                            message  : '',
+                        },
                     },
                 ];
             }

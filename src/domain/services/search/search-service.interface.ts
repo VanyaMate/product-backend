@@ -11,5 +11,5 @@ import {
 export interface ISearchService {
     searchAll (options: DomainSearchOptions): Promise<DomainSearch>;
 
-    searchProfiles (options: DomainSearchItemOptions): Promise<DomainSearchItem>;
+    searchUsers (options: DomainSearchItemOptions): Promise<DomainSearchItem>;
 }

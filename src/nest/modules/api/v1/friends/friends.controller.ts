@@ -25,13 +25,19 @@ export class FriendsController {
     @Get('')
     @UseGuards(IsUserGuard)
     my (@Req() request: Request) {
-        return this._service.getFriendsOfUserByUserId(request[REQUEST_USER_ID]);
+        return this._service.getFriendsWithRequestsByUserId(request[REQUEST_USER_ID]);
     }
 
     @Get('/requests')
     @UseGuards(IsUserGuard)
     all (@Req() request: Request) {
         return this._service.getFriendRequestsByUserId(request[REQUEST_USER_ID]);
+    }
+
+    @Get('/list')
+    @UseGuards(IsUserGuard)
+    friends (@Req() request: Request) {
+        return this._service.getFriendsOfUserByUserId(request[REQUEST_USER_ID]);
     }
 
     @Get('/:userId')

@@ -6,8 +6,8 @@ import {
 } from '@/nest/modules/api/v1/search/dto/search-options.dto';
 import { DomainSearch } from 'product-types/dist/search/DomainSearch';
 import {
-    SearchProfilesOptionsDto,
-} from '@/nest/modules/api/v1/search/dto/search-profiles-options.dto';
+    SearchUsersOptionsDto,
+} from '@/nest/modules/api/v1/search/dto/search-users-options.dto';
 
 
 @Controller('/api/v1/search')
@@ -26,12 +26,12 @@ export class SearchController {
         });
     }
 
-    @Get('/profiles')
+    @Get('/users')
     @UseGuards(IsUserGuard)
     searchProfiles (
-        @Query() queries: SearchProfilesOptionsDto,
+        @Query() queries: SearchUsersOptionsDto,
     ) {
-        return this._service.searchProfiles({
+        return this._service.searchUsers({
             query : queries.query,
             limit : queries.limit ?? 10,
             offset: queries.offset ?? 0,

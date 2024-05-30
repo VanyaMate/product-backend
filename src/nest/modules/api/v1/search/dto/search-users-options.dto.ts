@@ -5,7 +5,7 @@ import {
 } from '@/domain/lib/class-transform/transform/transformStringToNumber';
 
 
-export class SearchProfilesOptionsDto {
+export class SearchUsersOptionsDto {
     @IsString()
     query: string;
 

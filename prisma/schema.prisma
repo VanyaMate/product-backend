@@ -49,6 +49,7 @@ model FriendRequest {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   fromUserId String @db.ObjectId
   toUserId   String @db.ObjectId
+  message    String @default("")
 
   FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendRequestSend")
   ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendRequestReceived")

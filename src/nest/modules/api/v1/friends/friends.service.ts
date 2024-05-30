@@ -13,6 +13,10 @@ import {
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    DomainFriendRequest,
+} from 'product-types/dist/friends/DomainFriendRequest';
+import { DomainFriends } from 'product-types/dist/friends/DomainFriends';
 
 
 @Injectable()
@@ -31,7 +35,7 @@ export class FriendsService implements IFriendsService {
         }
     }
 
-    async getFriendRequestsSentByUserId (userId: string): Promise<DomainUser[]> {
+    async getFriendRequestsSentByUserId (userId: string): Promise<DomainFriendRequest[]> {
         try {
             return await this._service.getFriendRequestsSentByUserId(userId);
         } catch (e) {
@@ -39,7 +43,7 @@ export class FriendsService implements IFriendsService {
         }
     }
 
-    async getFriendRequestsReceivedByUserId (userId: string): Promise<DomainUser[]> {
+    async getFriendRequestsReceivedByUserId (userId: string): Promise<DomainFriendRequest[]> {
         try {
             return await this._service.getFriendRequestsReceivedByUserId(userId);
         } catch (e) {
@@ -47,11 +51,19 @@ export class FriendsService implements IFriendsService {
         }
     }
 
-    async getFriendRequestsByUserId (userId: string): Promise<[ DomainUser[], DomainUser[] ]> {
+    async getFriendRequestsByUserId (userId: string): Promise<[ DomainFriendRequest[], DomainFriendRequest[] ]> {
         try {
             return await this._service.getFriendRequestsByUserId(userId);
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get friend requests'));
+        }
+    }
+
+    async getFriendsWithRequestsByUserId (userId: string): Promise<DomainFriends> {
+        try {
+            return await this._service.getFriendsWithRequestsByUserId(userId);
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get friends with requests'));
         }
     }
 }

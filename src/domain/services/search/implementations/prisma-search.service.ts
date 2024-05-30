@@ -37,13 +37,13 @@ export class PrismaSearchService implements ISearchService {
         return response;
     }
 
-    public async searchProfiles (options: DomainSearchItemOptions): Promise<DomainSearchItem> {
-        return this._findData('profiles', options.query, options.limit, options.offset);
+    public async searchUsers (options: DomainSearchItemOptions): Promise<DomainSearchItem> {
+        return this._findData('users', options.query, options.limit, options.offset);
     }
 
     private async _findData (searchIn: keyof DomainSearch, query: string, take: number = 10, skip: number = 0): Promise<DomainSearchItem> {
         switch (searchIn) {
-            case 'profiles':
+            case 'users':
                 const userWhereInput: Prisma.UserWhereInput = { login: { startsWith: query } };
                 const userCountArgs: Prisma.UserCountArgs   = {
                     where: userWhereInput,
