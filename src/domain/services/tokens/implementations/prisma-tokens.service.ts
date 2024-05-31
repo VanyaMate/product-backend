@@ -91,7 +91,7 @@ export class PrismaTokensService implements ITokensService {
                     data : { awaitDelete: true },
                 });
                 setTimeout(async () => {
-                    await this._prisma.userRefreshToken.delete({ where: { id: refreshTokenPayload.id } });
+                    await this._prisma.userRefreshToken.deleteMany({ where: { id: refreshTokenPayload.id } });
                 }, 30 * 1000);
             }
             return refreshTokenData.userId;
