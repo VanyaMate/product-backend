@@ -1,7 +1,7 @@
 import {
     IFriendService,
 } from '@/domain/services/friend/friend-service.interface';
-import { Friend, FriendRequest, PrismaClient } from '@prisma/client';
+import { Friend, PrismaClient } from '@prisma/client';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
@@ -26,14 +26,13 @@ export class PrismaFriendService implements IFriendService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
-    async accept (fromUserId: string, requestId: string): Promise<[ string[], DomainNotificationFriendRequestAcceptedData ]> {
+    async accept (fromUserId: string, requestId: string): Promise<Array<[ Array<string>, DomainNotificationFriendRequestAcceptedData ]>> {
         try {
             const receivedFriendRequest = await this._prisma.friendRequest.findFirstOrThrow({
                 where : { toUserId: fromUserId, id: requestId },
                 select: {
-                    ToUser    : {
-                        select: prismaDomainUserSelector,
-                    },
+                    ToUser    : { select: prismaDomainUserSelector },
+                    FromUser  : { select: prismaDomainUserSelector },
                     fromUserId: true,
                     toUserId  : true,
                     id        : true,
@@ -51,17 +50,29 @@ export class PrismaFriendService implements IFriendService {
             });
 
             return [
-                [ receivedFriendRequest.fromUserId ],
-                {
-                    user: receivedFriendRequest.ToUser,
-                },
+                [
+                    [
+                        receivedFriendRequest.toUserId,
+                    ],
+                    {
+                        user     : receivedFriendRequest.FromUser,
+                        requestId: requestId,
+                    },
+                ],
+                [
+                    [ receivedFriendRequest.fromUserId ],
+                    {
+                        user     : receivedFriendRequest.ToUser,
+                        requestId: requestId,
+                    },
+                ],
             ];
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant accept friend request');
         }
     }
 
-    async add (fromUserId: string, toUserId: string): Promise<[ string[], DomainNotificationFriendRequestData ]> {
+    async add (fromUserId: string, toUserId: string): Promise<Array<[ Array<string>, DomainNotificationFriendRequestData ]>> {
         try {
             const isFriends: Friend = await this._prisma.friend.findFirst({
                 where: {
@@ -79,21 +90,28 @@ export class PrismaFriendService implements IFriendService {
                         toUserId,
                     },
                     include: {
-                        FromUser: {
-                            select: prismaDomainUserSelector,
-                        },
+                        FromUser: { select: prismaDomainUserSelector },
+                        ToUser  : { select: prismaDomainUserSelector },
                     },
                 });
 
                 return [
-                    [ toUserId ],
-                    {
-                        request: {
+                    [
+                        [ fromUserId ],
+                        {
+                            user     : request.ToUser,
+                            requestId: request.id,
+                            message  : '',
+                        },
+                    ],
+                    [
+                        [ toUserId ],
+                        {
                             user     : request.FromUser,
                             requestId: request.id,
                             message  : '',
                         },
-                    },
+                    ],
                 ];
             }
 
@@ -103,7 +121,7 @@ export class PrismaFriendService implements IFriendService {
         }
     }
 
-    async remove (fromUserId: string, removedUserId: string): Promise<[ string[], DomainNotificationFriendDeletedData ]> {
+    async remove (fromUserId: string, removedUserId: string): Promise<Array<[ Array<string>, DomainNotificationFriendDeletedData ]>> {
         try {
             const deletedFriend = await this._prisma.friend.findFirstOrThrow({
                 where : {
@@ -126,17 +144,33 @@ export class PrismaFriendService implements IFriendService {
 
             if (fromUserId === deletedFriend.ToUser.id) {
                 return [
-                    [ deletedFriend.FromUser.id ],
-                    {
-                        user: deletedFriend.ToUser,
-                    },
+                    [
+                        [ deletedFriend.ToUser.id ],
+                        {
+                            user: deletedFriend.FromUser,
+                        },
+                    ],
+                    [
+                        [ deletedFriend.FromUser.id ],
+                        {
+                            user: deletedFriend.ToUser,
+                        },
+                    ],
                 ];
             } else {
                 return [
-                    [ deletedFriend.ToUser.id ],
-                    {
-                        user: deletedFriend.FromUser,
-                    },
+                    [
+                        [ deletedFriend.FromUser.id ],
+                        {
+                            user: deletedFriend.ToUser,
+                        },
+                    ],
+                    [
+                        [ deletedFriend.ToUser.id ],
+                        {
+                            user: deletedFriend.FromUser,
+                        },
+                    ],
                 ];
             }
         } catch (e) {
@@ -144,7 +178,7 @@ export class PrismaFriendService implements IFriendService {
         }
     }
 
-    async cancel (fromUserId: string, requestId: string): Promise<[ string[], DomainNotificationFriendRequestCanceledData ]> {
+    async cancel (fromUserId: string, requestId: string): Promise<Array<[ Array<string>, DomainNotificationFriendRequestCanceledData ]>> {
         try {
             const canceledRequest = await this._prisma.friendRequest.delete({
                 where : {
@@ -161,9 +195,39 @@ export class PrismaFriendService implements IFriendService {
             });
 
             if (canceledRequest.FromUser.id === fromUserId) {
-                return [ [], null ];
+                return [
+                    [
+                        [ canceledRequest.FromUser.id ],
+                        {
+                            user     : canceledRequest.ToUser,
+                            requestId: requestId,
+                        },
+                    ],
+                    [
+                        [ canceledRequest.ToUser.id ],
+                        {
+                            user     : canceledRequest.FromUser,
+                            requestId: requestId,
+                        },
+                    ],
+                ];
             } else {
-                return [ [ canceledRequest.FromUser.id ], { user: canceledRequest.ToUser } ];
+                return [
+                    [
+                        [ canceledRequest.ToUser.id ],
+                        {
+                            user     : canceledRequest.FromUser,
+                            requestId: requestId,
+                        },
+                    ],
+                    [
+                        [ canceledRequest.FromUser.id ],
+                        {
+                            user     : canceledRequest.ToUser,
+                            requestId: requestId,
+                        },
+                    ],
+                ];
             }
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendService.name, 400, 'Cant cancel friend request');

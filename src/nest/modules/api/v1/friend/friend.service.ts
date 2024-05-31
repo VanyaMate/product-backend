@@ -30,9 +30,10 @@ export class FriendService {
 
     async add (fromUserId: string, toUserId: string) {
         try {
-            const [ targets, notification ] = await this._service.add(fromUserId, toUserId);
-            targets.forEach((target) => this._notificationService.friendRequest(target, notification));
-            return notification;
+            const [ active, passive ] = await this._service.add(fromUserId, toUserId);
+            active[0].forEach((target) => this._notificationService.friendRequestIn(target, active[1]));
+            passive[0].forEach((target) => this._notificationService.friendRequestOut(target, passive[1]));
+            return active[1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
         }
@@ -40,9 +41,10 @@ export class FriendService {
 
     async accept (fromUserId: string, toUserId: string) {
         try {
-            const [ targets, notification ] = await this._service.accept(fromUserId, toUserId);
-            targets.forEach((target) => this._notificationService.friendRequestAccepted(target, notification));
-            return notification;
+            const [ active, passive ] = await this._service.accept(fromUserId, toUserId);
+            active[0].forEach((target) => this._notificationService.friendRequestAcceptedIn(target, active[1]));
+            passive[0].forEach((target) => this._notificationService.friendRequestAcceptedOut(target, passive[1]));
+            return active[1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
         }
@@ -50,9 +52,10 @@ export class FriendService {
 
     async remove (fromUserId: string, toUserId: string) {
         try {
-            const [ targets, notification ] = await this._service.remove(fromUserId, toUserId);
-            targets.forEach((target) => this._notificationService.friendDeleted(target, notification));
-            return notification;
+            const [ active, passive ] = await this._service.remove(fromUserId, toUserId);
+            active[0].forEach((target) => this._notificationService.friendDeletedIn(target, active[1]));
+            passive[0].forEach((target) => this._notificationService.friendDeletedOut(target, passive[1]));
+            return active[1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant remove friend'));
         }
@@ -60,9 +63,10 @@ export class FriendService {
 
     async cancel (fromUserId: string, toUserId: string) {
         try {
-            const [ targets, notification ] = await this._service.cancel(fromUserId, toUserId);
-            targets.forEach((target) => this._notificationService.friendRequestCanceled(target, notification));
-            return notification;
+            const [ active, passive ] = await this._service.cancel(fromUserId, toUserId);
+            active[0].forEach((target) => this._notificationService.friendRequestCanceledIn(target, active[1]));
+            passive[0].forEach((target) => this._notificationService.friendRequestCanceledOut(target, passive[1]));
+            return active[1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant cancel friend request'));
         }

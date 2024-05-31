@@ -61,56 +61,88 @@ export class NotificationService implements INotificationService {
         this._notificationService = new PrismaNotificationService(this._prisma, this._connectionService);
     }
 
-    error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
+    async error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
         return this._notificationService.error(userId, data);
     }
 
-    connected (userId: string): Promise<DomainNotification> {
+    async connected (userId: string): Promise<DomainNotification> {
         return this._notificationService.connected(userId);
     }
 
-    connecting (userId: string): Promise<DomainNotification> {
+    async connecting (userId: string): Promise<DomainNotification> {
         return this._notificationService.connecting(userId);
     }
 
-    disconnected (userId: string, data: DomainNotificationDisconnectedData): Promise<DomainNotification> {
+    async disconnected (userId: string, data: DomainNotificationDisconnectedData): Promise<DomainNotification> {
         return this._notificationService.disconnected(userId, data);
     }
 
-    tokensUpdate (userId: string, data: DomainNotificationTokensUpdateData): Promise<DomainNotification> {
+    async tokensUpdate (userId: string, data: DomainNotificationTokensUpdateData): Promise<DomainNotification> {
         return this._notificationService.tokensUpdate(userId, data);
     }
 
-    async userMessage (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
-        return this._notificationService.userMessage(userId, data);
+    async userMessageIn (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
+        return this._notificationService.userMessageIn(userId, data);
     }
 
-    userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
-        return this._notificationService.userMessageDeleted(userId, data);
+    async userMessageOut (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
+        return this._notificationService.userMessageOut(userId, data);
     }
 
-    userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
-        return this._notificationService.userMessageRedacted(userId, data);
+    async userMessageDeletedIn (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
+        return this._notificationService.userMessageDeletedIn(userId, data);
     }
 
-    userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
-        return this._notificationService.userMessageRead(userId, data);
+    async userMessageDeletedOut (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
+        return this._notificationService.userMessageDeletedOut(userId, data);
     }
 
-    async friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
-        return this._notificationService.friendRequest(userId, data);
+    async userMessageRedactedIn (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
+        return this._notificationService.userMessageRedactedIn(userId, data);
     }
 
-    async friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
-        return this._notificationService.friendDeleted(userId, data);
+    async userMessageRedactedOut (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
+        return this._notificationService.userMessageRedactedOut(userId, data);
     }
 
-    async friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
-        return this._notificationService.friendRequestAccepted(userId, data);
+    async userMessageReadIn (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
+        return this._notificationService.userMessageReadIn(userId, data);
     }
 
-    async friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
-        return this._notificationService.friendRequestCanceled(userId, data);
+    async userMessageReadOut (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
+        return this._notificationService.userMessageReadOut(userId, data);
+    }
+
+    async friendRequestIn (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestIn(userId, data);
+    }
+
+    async friendRequestOut (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestOut(userId, data);
+    }
+
+    async friendDeletedIn (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        return this._notificationService.friendDeletedIn(userId, data);
+    }
+
+    async friendDeletedOut (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        return this._notificationService.friendDeletedOut(userId, data);
+    }
+
+    async friendRequestAcceptedIn (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestAcceptedIn(userId, data);
+    }
+
+    async friendRequestAcceptedOut (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestAcceptedOut(userId, data);
+    }
+
+    async friendRequestCanceledIn (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestCanceledIn(userId, data);
+    }
+
+    async friendRequestCanceledOut (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        return this._notificationService.friendRequestCanceledOut(userId, data);
     }
 
     add (userId: string, request: Request, response: Response) {

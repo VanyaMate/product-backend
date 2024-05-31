@@ -47,19 +47,35 @@ export interface INotificationService {
 
     tokensUpdate (userId: string, data: DomainNotificationTokensUpdateData): Promise<DomainNotification>;
 
-    userMessage (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification>;
+    userMessageIn (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification>;
 
-    userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification>;
+    userMessageOut (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification>;
 
-    userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification>;
+    userMessageDeletedIn (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification>;
 
-    userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification>;
+    userMessageDeletedOut (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification>;
 
-    friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification>;
+    userMessageRedactedIn (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification>;
 
-    friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification>;
+    userMessageRedactedOut (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification>;
 
-    friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification>;
+    userMessageReadIn (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification>;
 
-    friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification>;
+    userMessageReadOut (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification>;
+
+    friendRequestIn (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification>;
+
+    friendRequestOut (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification>;
+
+    friendDeletedIn (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification>;
+
+    friendDeletedOut (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification>;
+
+    friendRequestAcceptedIn (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification>;
+
+    friendRequestAcceptedOut (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification>;
+
+    friendRequestCanceledIn (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification>;
+
+    friendRequestCanceledOut (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification>;
 }

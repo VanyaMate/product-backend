@@ -84,74 +84,146 @@ export class PrismaNotificationService implements INotificationService {
         return this._notify(userId, this._notification(DomainNotificationType.TOKENS_UPDATE, data));
     }
 
-    async userMessage (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
+    async userMessageIn (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.USER_MESSAGE,
+            type: DomainNotificationType.USER_MESSAGE_IN,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async userMessageDeleted (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
+    async userMessageOut (userId: string, data: DomainNotificationUserMessageData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.USER_MESSAGE_DELETED,
+            type: DomainNotificationType.USER_MESSAGE_OUT,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async userMessageRedacted (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
+    async userMessageDeletedIn (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.USER_MESSAGE_REDACTED,
+            type: DomainNotificationType.USER_MESSAGE_DELETED_IN,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async userMessageRead (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
+    async userMessageDeletedOut (userId: string, data: DomainNotificationUserMessageDeletedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.USER_MESSAGE_READ,
+            type: DomainNotificationType.USER_MESSAGE_DELETED_OUT,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async friendRequest (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+    async userMessageRedactedIn (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.FRIEND_REQUEST,
+            type: DomainNotificationType.USER_MESSAGE_REDACTED_IN,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async friendDeleted (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+    async userMessageRedactedOut (userId: string, data: DomainNotificationUserMessageRedactedData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.FRIEND_DELETED,
+            type: DomainNotificationType.USER_MESSAGE_REDACTED_OUT,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async friendRequestAccepted (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+    async userMessageReadIn (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.FRIEND_REQUEST_ACCEPTED,
+            type: DomainNotificationType.USER_MESSAGE_READ_IN,
         });
         return this._notify(userId, notificationFactory(notification));
     }
 
-    async friendRequestCanceled (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+    async userMessageReadOut (userId: string, data: DomainNotificationUserMessageReadData): Promise<DomainNotification> {
         const notification = await this._create({
             userId,
             data,
-            type: DomainNotificationType.FRIEND_REQUEST_CANCELED,
+            type: DomainNotificationType.USER_MESSAGE_READ_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestIn (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestOut (userId: string, data: DomainNotificationFriendRequestData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendDeletedIn (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_DELETED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendDeletedOut (userId: string, data: DomainNotificationFriendDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_DELETED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestAcceptedIn (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_ACCEPTED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestAcceptedOut (userId: string, data: DomainNotificationFriendRequestAcceptedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_ACCEPTED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestCanceledIn (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_CANCELED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async friendRequestCanceledOut (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.FRIEND_REQUEST_CANCELED_OUT,
         });
         return this._notify(userId, notificationFactory(notification));
     }

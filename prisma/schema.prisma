@@ -8,14 +8,22 @@ datasource db {
 }
 
 enum NotificationType {
-  u_msg
-  u_msg_d
-  u_msg_r
-  u_msg_read
-  fr_r
-  fr_d
-  fr_ra
-  fr_rc
+  u_msg_in
+  u_msg_out
+  u_msg_d_in
+  u_msg_d_out
+  u_msg_r_in
+  u_msg_r_out
+  u_msg_read_in
+  u_msg_read_out
+  fr_r_in
+  fr_r_out
+  fr_d_in
+  fr_d_out
+  fr_ra_in
+  fr_ra_out
+  fr_rc_in
+  fr_rc_out
 }
 
 enum MessageType {

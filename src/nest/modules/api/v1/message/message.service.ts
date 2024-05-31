@@ -34,7 +34,7 @@ export class MessageService {
 
     async send (authorId: string, dialogueId: string, messageType: DomainMessageType, messageBody: string): Promise<DomainNotificationUserMessageData> {
         const [ targets, notification ] = await this._service.send(authorId, dialogueId, messageType, messageBody);
-        targets.forEach((target) => this._notificationService.userMessage(target, notification));
+        targets.forEach((target) => this._notificationService.userMessageIn(target, notification));
         return notification;
     }
 
