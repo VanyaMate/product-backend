@@ -1,9 +1,15 @@
-import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
-    DomainRegistrationData
+    DomainFingerprint,
+} from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    DomainRegistrationData,
 } from 'product-types/dist/authorization/DomainRegistrationData';
-import { DomainLoginData } from 'product-types/dist/authorization/DomainLoginData';
-import { DomainAuthResponse } from 'product-types/dist/authorization/DomainAuthResponse';
+import {
+    DomainLoginData,
+} from 'product-types/dist/authorization/DomainLoginData';
+import {
+    DomainAuthResponse,
+} from 'product-types/dist/authorization/DomainAuthResponse';
 
 
 export interface IAuthenticationService {

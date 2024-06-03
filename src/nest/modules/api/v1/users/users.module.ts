@@ -16,6 +16,9 @@ import { UsersService } from '@/nest/modules/api/v1/users/users.service';
     providers  : [
         UsersService,
     ],
+    exports    : [
+        UsersService,
+    ],
 })
 export class UsersModule {
 }

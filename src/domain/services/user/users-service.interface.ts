@@ -3,6 +3,8 @@ import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 
 
 export interface IUserService {
+    getUserById (id: string): Promise<DomainUser>;
+
     getUserByLogin (login: string): Promise<DomainUser>;
 
     getUserFullByLogin (login: string): Promise<DomainUserFull>;

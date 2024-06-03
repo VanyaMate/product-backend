@@ -19,6 +19,15 @@ export class PrismaUsersService implements IUserService {
     ) {
     }
 
+    async getUserById (id: string): Promise<DomainUser> {
+        try {
+            const user: User = await this._prisma.user.findFirstOrThrow({ where: { id } });
+            return userPrismaToDomain(user);
+        } catch (e) {
+            throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
+        }
+    }
+
     async getUserByLogin (login: string): Promise<DomainUser> {
         try {
             const user: User = await this._prisma.user.findFirstOrThrow({ where: { login } });

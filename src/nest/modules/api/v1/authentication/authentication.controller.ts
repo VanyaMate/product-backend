@@ -1,23 +1,47 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { Fingerprint } from '@/nest/decorators/finger-print.decorator';
-import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
-    AuthenticationService
+    Body,
+    Controller,
+    Get,
+    Post,
+    Req,
+    UseGuards,
+} from '@nestjs/common';
+import { Fingerprint } from '@/nest/decorators/finger-print.decorator';
+import {
+    DomainFingerprint,
+} from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    AuthenticationService,
 } from '@/nest/modules/api/v1/authentication/authentication.service';
 import {
-    DomainLoginDataDto
+    DomainLoginDataDto,
 } from '@/nest/modules/api/v1/authentication/dto/domain-login-data.dto';
 import {
-    DomainRegistrationDataDto
+    DomainRegistrationDataDto,
 } from '@/nest/modules/api/v1/authentication/dto/domain-registration-data.dto';
+import { IsUserGuard } from '@/nest/guards/authorization/is-user.guard';
+import { Request } from 'express';
+import { UsersService } from '@/nest/modules/api/v1/users/users.service';
 import {
-    RefreshTokenDto
-} from '@/nest/modules/api/v1/authentication/dto/refresh-token.dto';
+    REQUEST_ACCESS_TOKEN_HEADER,
+    REQUEST_USER_ID,
+} from '@/domain/consts/request-response';
 
 
 @Controller('/api/v1/authentication')
 export class AuthenticationController {
-    constructor (private readonly _service: AuthenticationService) {
+    constructor (
+        private readonly _service: AuthenticationService,
+        private readonly _usersService: UsersService,
+    ) {
+    }
+
+    @Get()
+    @UseGuards(IsUserGuard)
+    public authorizeByTokens (
+        @Req() req: Request,
+    ) {
+        return this._usersService.getUserById(req[REQUEST_USER_ID]);
     }
 
     @Post('/login')
@@ -36,11 +60,11 @@ export class AuthenticationController {
         return this._service.registration(registrationData, fingerprint);
     }
 
-    @Post('/refresh')
-    public refresh (
-        @Body() refreshToken: RefreshTokenDto,
+    @Post('/logout')
+    public logout (
+        @Req() req: Request,
         @Fingerprint() fingerprint: DomainFingerprint,
     ) {
-        return this._service.refresh(refreshToken.token, fingerprint);
+        return this._service.logout(req.header(REQUEST_ACCESS_TOKEN_HEADER), fingerprint);
     }
 }

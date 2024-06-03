@@ -20,6 +20,14 @@ export class UsersService {
         this._service = new PrismaUsersService(this._prisma);
     }
 
+    async getUserById (id: string) {
+        try {
+            return await this._service.getUserById(id);
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+        }
+    }
+
     async getUserByLogin (login: string) {
         try {
             return await this._service.getUserByLogin(login);

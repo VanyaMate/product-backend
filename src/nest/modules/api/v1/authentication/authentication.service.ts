@@ -13,10 +13,14 @@ import {
 import {
     BcryptHashService,
 } from '@/domain/services/hash/implementations/bcrypt-hash.service';
-import { DomainLoginData } from 'product-types/dist/authorization/DomainLoginData';
-import { DomainFingerprint } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
-    DomainRegistrationData
+    DomainLoginData,
+} from 'product-types/dist/authorization/DomainLoginData';
+import {
+    DomainFingerprint,
+} from 'product-types/dist/fingerprint/DomainFingerprint';
+import {
+    DomainRegistrationData,
 } from 'product-types/dist/authorization/DomainRegistrationData';
 
 
@@ -51,9 +55,9 @@ export class AuthenticationService {
         }
     }
 
-    async refresh (refreshToken: string, fingerprint: DomainFingerprint) {
+    async logout (refreshToken: string, fingerprint: DomainFingerprint) {
         try {
-            return await this._service.refresh(refreshToken, fingerprint);
+            return await this._service.logout(refreshToken, fingerprint);
         } catch (e) {
             throw new DomainServiceErrorException(e);
         }
