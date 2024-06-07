@@ -9,50 +9,97 @@ import { DomainDialogue } from 'product-types/dist/dialog/DomainDialogue';
 import {
     prismaDomainUserSelector,
 } from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+import { DomainMessage } from 'product-types/dist/message/DomainMessage';
 
 
 export class PrismaDialogueService implements IDialogueService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
-    async create (user1Id: string, user2Id: string): Promise<DomainDialogue> {
-        try {
-            const dialogue: Dialogue = await this._prisma.dialogue.create({});
-            await Promise.all([ user1Id, user2Id ].map((userId) => this._prisma.dialogueToUser.create({
-                data: {
-                    userId,
-                    dialogueId: dialogue.id,
+    async createPrivate (userId: string, withUserId: string): Promise<[ string[], DomainDialogue ][]> {
+        const createdDialogue = await this._prisma.dialogue.findFirst({
+            where  : {
+                isPrivate    : true,
+                LinkWithUsers: {
+                    some: { userId },
                 },
-            })));
-            const filledDialogue = await this._prisma.dialogue.findUnique({
-                where  : { id: dialogue.id },
-                include: {
+                AND          : {
                     LinkWithUsers: {
-                        include: {
-                            User: {
-                                select: prismaDomainUserSelector,
+                        some: { userId: withUserId },
+                    },
+                },
+            },
+            include: {
+                LinkWithUsers   : {
+                    include: {
+                        User: {
+                            select: prismaDomainUserSelector,
+                        },
+                    },
+                },
+                LinkWithMessages: {
+                    include: {
+                        Message: {
+                            include: {
+                                Author: {
+                                    select: prismaDomainUserSelector,
+                                },
                             },
                         },
                     },
                 },
-            });
-            return {
-                id      : filledDialogue.id,
-                messages: [],
-                avatar  : dialogue.avatar,
-                title   : dialogue.title,
-                users   : filledDialogue.LinkWithUsers.map((link) => link.User),
-            };
-        } catch (e) {
-            throw serviceErrorResponse(e, PrismaDialogueService.name, 400, 'Cant create or get dialogue');
+            },
+        });
+
+        if (createdDialogue) {
+            return [
+                [
+                    [],
+                    {
+                        id      : createdDialogue.id,
+                        messages: createdDialogue.LinkWithMessages.map(({ Message }) => ({
+                            author      : Message.Author,
+                            creationDate: Message.creationDate.toUTCString(),
+                            message     : Message.message,
+                            type        : Message.type,
+                            id          : Message.id,
+                            dialogId    : createdDialogue.id,
+                            redacted    : Message.redacted,
+                        }) as DomainMessage),
+                        users   : createdDialogue.LinkWithUsers.map(({ User }) => User),
+                        avatar  : createdDialogue.avatar,
+                        title   : createdDialogue.title,
+                    },
+                ],
+            ];
         }
+
+        const dialogue      = await this._prisma.dialogue.create({ data: { isPrivate: true } });
+        const dialogueLinks = await this._prisma.dialogueToUser.createMany({
+            data: [
+                { dialogueId: dialogue.id, userId },
+                { dialogueId: dialogue.id, userId: withUserId },
+            ],
+        });
     }
 
-    async remove (forUserId: string, dialogId: string): Promise<DomainDialogue> {
+    async create (userId: string, userIds: string[]): Promise<[ string[], DomainDialogue ][]> {
         throw new Error('Method not implemented.');
     }
 
-    async archive (forUserId: string, dialogId: string): Promise<DomainDialogue> {
+    async leave (userId: string, dialogueId: string): Promise<[ string[], DomainDialogue ][]> {
+        throw new Error('Method not implemented.');
+    }
+
+    async archive (userId: string, dialogueId: string): Promise<[ string[], DomainDialogue ][]> {
+        throw new Error('Method not implemented.');
+    }
+
+    async updateTitle (userId: string, dialogueId: string, title: string): Promise<[ string[], DomainDialogue ][]> {
+        throw new Error('Method not implemented.');
+    }
+
+    async updateAvatar (userId: string, dialogueId: string, avatar: string): Promise<[ string[], DomainDialogue ][]> {
         throw new Error('Method not implemented.');
     }
 }

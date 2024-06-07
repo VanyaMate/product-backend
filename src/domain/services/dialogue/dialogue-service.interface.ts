@@ -2,9 +2,15 @@ import { DomainDialogue } from 'product-types/dist/dialog/DomainDialogue';
 
 
 export interface IDialogueService {
-    create (user1Id: string, user2Id: string): Promise<DomainDialogue>;
+    createPrivate (userId: string, withUserId: string): Promise<Array<[ Array<string>, DomainDialogue ]>>;
 
-    remove (userInitiatorId: string, dialogId: string): Promise<DomainDialogue>;
+    create (userId: string, userIds: Array<string>): Promise<Array<[ Array<string>, DomainDialogue ]>>;
 
-    archive (userInitiatorId: string, dialogId: string): Promise<DomainDialogue>;
+    leave (userId: string, dialogueId: string): Promise<Array<[ Array<string>, DomainDialogue ]>>;
+
+    archive (userId: string, dialogueId: string): Promise<Array<[ Array<string>, DomainDialogue ]>>;
+
+    updateTitle (userId: string, dialogueId: string, title: string): Promise<Array<[ Array<string>, DomainDialogue ]>>;
+
+    updateAvatar (userId: string, dialogueId: string, avatar: string): Promise<Array<[ Array<string>, DomainDialogue ]>>;
 }

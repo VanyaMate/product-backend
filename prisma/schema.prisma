@@ -111,12 +111,13 @@ model Connection {
 }
 
 model Dialogue {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  title  String @default("")
-  avatar String @default("")
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  title     String  @default("")
+  avatar    String  @default("")
+  isPrivate Boolean @default(true)
 
-  LinkWithUsers    DialogueToUser[]    @relation()
-  LinkWithMessages DialogueToMessage[] @relation()
+  LinkWithUsers    DialogueToUser[]
+  LinkWithMessages DialogueToMessage[]
 }
 
 model DialogueToUser {

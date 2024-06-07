@@ -1,7 +1,7 @@
 import {
     IFriendService,
 } from '@/domain/services/friend/friend-service.interface';
-import { Friend, PrismaClient } from '@prisma/client';
+import { Friend, FriendRequest, PrismaClient } from '@prisma/client';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
@@ -74,16 +74,26 @@ export class PrismaFriendService implements IFriendService {
 
     async add (fromUserId: string, toUserId: string): Promise<Array<[ Array<string>, DomainNotificationFriendRequestData ]>> {
         try {
-            const isFriends: Friend = await this._prisma.friend.findFirst({
-                where: {
-                    OR: [
-                        { fromUserId, toUserId },
-                        { fromUserId: toUserId, toUserId: fromUserId },
-                    ],
-                },
-            });
+            const [ isFriends, friendRequestCreated ]: [ Friend, FriendRequest ] = await this._prisma.$transaction([
+                this._prisma.friend.findFirst({
+                    where: {
+                        OR: [
+                            { fromUserId, toUserId },
+                            { fromUserId: toUserId, toUserId: fromUserId },
+                        ],
+                    },
+                }),
+                this._prisma.friendRequest.findFirst({
+                    where: {
+                        OR: [
+                            { fromUserId, toUserId },
+                            { fromUserId: toUserId, toUserId: fromUserId },
+                        ],
+                    },
+                }),
+            ]);
 
-            if (!isFriends) {
+            if (!isFriends && !friendRequestCreated) {
                 const request = await this._prisma.friendRequest.create({
                     data   : {
                         fromUserId,
