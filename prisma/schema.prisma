@@ -8,22 +8,54 @@ datasource db {
 }
 
 enum NotificationType {
+  // Новое сообщение
   u_msg_in
   u_msg_out
+  // Сообщение удалено
   u_msg_d_in
   u_msg_d_out
+  // Сообщение редактировано
   u_msg_r_in
   u_msg_r_out
+  // Сообщение прочитано
   u_msg_read_in
   u_msg_read_out
+  // Заявка в друзья
   fr_r_in
   fr_r_out
+  // Удаление из друзей
   fr_d_in
   fr_d_out
+  // Заявка в друзья принята
   fr_ra_in
   fr_ra_out
+  // Заявка в друзья отменена
   fr_rc_in
   fr_rc_out
+  // Диалог создан
+  dlg_c_in
+  dlg_c_out
+  // Диалог обновлен
+  dlg_u_in
+  dlg_u_out
+  // Диалог удален
+  dlg_d_in
+  dlg_d_out
+  // Диалог в архиве
+  dlg_a_in
+  dlg_a_out
+  // Приватный диалог создан
+  dlgp_c_in
+  dlgp_c_out
+  // Приватный диалог обновлен
+  dlgp_u_in
+  dlgp_u_out
+  // Приватный диалог удален
+  dlgp_d_in
+  dlgp_d_out
+  // Приватный диалог в архиве
+  dlgp_a_in
+  dlgp_a_out
 }
 
 enum MessageType {
@@ -32,47 +64,66 @@ enum MessageType {
   link
 }
 
+enum UserPreferencesFriendRequest {
+  all
+  none
+}
+
+enum UserPreferencesPrivateDialogue {
+  all
+  friends
+  none
+}
+
+enum UserPreferencesDialogue {
+  all
+  friends
+  none
+}
+
+enum UserPreferencesGeneralPage {
+  all
+  friends
+  none
+}
+
 model User {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  login       String  @unique
-  password    String
-  email       String  @unique
-  phoneNumber String? @default("")
-  avatar      String? @default("")
-  firstName   String? @default("")
-  lastName    String? @default("")
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  login        String   @unique
+  password     String
+  email        String   @unique
+  phoneNumber  String?  @default("")
+  avatar       String?  @default("")
+  firstName    String?  @default("")
+  lastName     String?  @default("")
+  creationDate DateTime @default(now())
 
-  UserRefreshToken      UserRefreshToken[]
-  Notification          Notification[]
-  Connection            Connection[]
-  FriendsFrom           Friend[]           @relation("FriendFrom")
-  FriendsTo             Friend[]           @relation("FriendTo")
-  FriendRequestSend     FriendRequest[]    @relation(name: "FriendRequestSend")
-  FriendRequestReceived FriendRequest[]    @relation(name: "FriendRequestReceived")
-  LinkWithDialogues     DialogueToUser[]
-  Messages              Message[]
+  userRefreshToken         UserRefreshToken[]
+  notifications            Notification[]
+  connections              Connection[]
+  friendsFrom              Friend[]           @relation("FriendFrom")
+  friendsTo                Friend[]           @relation("FriendTo")
+  friendRequestSend        FriendRequest[]    @relation(name: "FriendRequestSend")
+  friendRequestReceived    FriendRequest[]    @relation(name: "FriendRequestReceived")
+  linkWithDialogues        DialogueToUser[]
+  messages                 Message[]
+  createdPrivateDialogue   PrivateDialogue[]  @relation("CreatedPrivateDialogues")
+  connectedPrivateDialogue PrivateDialogue[]  @relation("ConnectedPrivateDialogues")
+  privateMessage           PrivateMessage[]
+
+  preferences UserPreferences?
 }
 
-model FriendRequest {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  fromUserId String @db.ObjectId
-  toUserId   String @db.ObjectId
-  message    String @default("")
+model UserPreferences {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
 
-  FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendRequestSend")
-  ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendRequestReceived")
-}
+  friendRequest   UserPreferencesFriendRequest   @default(all)
+  privateDialogue UserPreferencesPrivateDialogue @default(all)
+  dialogue        UserPreferencesDialogue        @default(all)
+  generalPage     UserPreferencesGeneralPage     @default(all)
 
-model Friend {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  fromUserId String @db.ObjectId
-  toUserId   String @db.ObjectId
-
-  FromUser User @relation(fields: [fromUserId], references: [id], name: "FriendFrom")
-  ToUser   User @relation(fields: [toUserId], references: [id], name: "FriendTo")
-
-  @@index([fromUserId])
-  @@index([toUserId])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserRefreshToken {
@@ -84,7 +135,7 @@ model UserRefreshToken {
   devise       String
   awaitDelete  Boolean  @default(false)
 
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Notification {
@@ -95,60 +146,124 @@ model Notification {
   data         Json
   viewed       Boolean          @default(false)
 
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([type])
 }
 
 model Connection {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String @db.ObjectId
-  connectionId String @unique
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  connectionId String   @unique
+  creationDate DateTime @default(now())
 
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
-model Dialogue {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  title     String  @default("")
-  avatar    String  @default("")
-  isPrivate Boolean @default(true)
+model FriendRequest {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId   String   @db.ObjectId
+  toUserId     String   @db.ObjectId
+  message      String   @default("")
+  creationDate DateTime @default(now())
 
-  LinkWithUsers    DialogueToUser[]
-  LinkWithMessages DialogueToMessage[]
+  fromUser User @relation(fields: [fromUserId], references: [id], name: "FriendRequestSend", onDelete: Cascade)
+  toUser   User @relation(fields: [toUserId], references: [id], name: "FriendRequestReceived", onDelete: Cascade)
+
+  @@index([fromUserId])
+  @@index([toUserId])
+}
+
+model Friend {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId   String   @db.ObjectId
+  toUserId     String   @db.ObjectId
+  creationDate DateTime @default(now())
+
+  fromUser User @relation(fields: [fromUserId], references: [id], name: "FriendFrom", onDelete: Cascade)
+  toUser   User @relation(fields: [toUserId], references: [id], name: "FriendTo", onDelete: Cascade)
+
+  @@index([fromUserId])
+  @@index([toUserId])
+}
+
+model Dialogue {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String   @default("")
+  avatar       String   @default("")
+  creationDate DateTime @default(now())
+
+  linkWithUsers DialogueToUser[]
+  messages      Message[]
 }
 
 model DialogueToUser {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  dialogueId String  @db.ObjectId
-  userId     String  @db.ObjectId
-  archive    Boolean @default(false)
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  dialogueId   String   @db.ObjectId
+  userId       String   @db.ObjectId
+  archive      Boolean  @default(false)
+  creationDate DateTime @default(now())
 
-  Dialogue Dialogue @relation(fields: [dialogueId], references: [id])
-  User     User     @relation(fields: [userId], references: [id])
+  dialogue Dialogue @relation(fields: [dialogueId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
 
-  @@index([userId, archive])
-}
-
-model DialogueToMessage {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  dialogueId String @db.ObjectId
-  messageId  String @db.ObjectId
-
-  Dialogue Dialogue @relation(fields: [dialogueId], references: [id])
-  Message  Message  @relation(fields: [messageId], references: [id])
+  @@index([userId])
 }
 
 model Message {
   id           String      @id @default(auto()) @map("_id") @db.ObjectId
   authorId     String      @db.ObjectId
+  dialogueId   String      @db.ObjectId
   message      String
-  type         MessageType
+  type         MessageType @default(text)
   redacted     Boolean     @default(false)
   creationDate DateTime    @default(now())
+  updatedDate  DateTime    @default(now())
 
-  Author            User                @relation(fields: [authorId], references: [id])
-  LinkWithDialogues DialogueToMessage[]
+  author   User     @relation(fields: [authorId], references: [id])
+  dialogue Dialogue @relation(fields: [dialogueId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([dialogueId])
+}
+
+model PrivateDialogue {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String   @default("")
+  avatar       String   @default("")
+  creationDate DateTime @default(now())
+
+  userInId  String @db.ObjectId
+  userOutId String @db.ObjectId
+
+  userInArchived  Boolean @default(false)
+  userInDeleted   Boolean @default(false)
+  userOutArchived Boolean @default(false)
+  userOutDeleted  Boolean @default(false)
+
+  userIn         User             @relation("CreatedPrivateDialogues", fields: [userInId], references: [id])
+  userOut        User             @relation("ConnectedPrivateDialogues", fields: [userOutId], references: [id])
+  privateMessage PrivateMessage[]
+
+  @@index([userInId])
+  @@index([userOutId])
+}
+
+model PrivateMessage {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  authorId          String      @db.ObjectId
+  privateDialogueId String      @db.ObjectId
+  message           String
+  type              MessageType @default(text)
+  redacted          Boolean     @default(false)
+  creationDate      DateTime    @default(now())
+  updatedDate       DateTime    @default(now())
+
+  author   User            @relation(fields: [authorId], references: [id])
+  dialogue PrivateDialogue @relation(fields: [privateDialogueId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([privateDialogueId])
 }

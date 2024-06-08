@@ -17,70 +17,7 @@ export class PrismaDialogueService implements IDialogueService {
     }
 
     async createPrivate (userId: string, withUserId: string): Promise<[ string[], DomainDialogue ][]> {
-        const createdDialogue = await this._prisma.dialogue.findFirst({
-            where  : {
-                isPrivate    : true,
-                LinkWithUsers: {
-                    some: { userId },
-                },
-                AND          : {
-                    LinkWithUsers: {
-                        some: { userId: withUserId },
-                    },
-                },
-            },
-            include: {
-                LinkWithUsers   : {
-                    include: {
-                        User: {
-                            select: prismaDomainUserSelector,
-                        },
-                    },
-                },
-                LinkWithMessages: {
-                    include: {
-                        Message: {
-                            include: {
-                                Author: {
-                                    select: prismaDomainUserSelector,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        });
-
-        if (createdDialogue) {
-            return [
-                [
-                    [],
-                    {
-                        id      : createdDialogue.id,
-                        messages: createdDialogue.LinkWithMessages.map(({ Message }) => ({
-                            author      : Message.Author,
-                            creationDate: Message.creationDate.toUTCString(),
-                            message     : Message.message,
-                            type        : Message.type,
-                            id          : Message.id,
-                            dialogId    : createdDialogue.id,
-                            redacted    : Message.redacted,
-                        }) as DomainMessage),
-                        users   : createdDialogue.LinkWithUsers.map(({ User }) => User),
-                        avatar  : createdDialogue.avatar,
-                        title   : createdDialogue.title,
-                    },
-                ],
-            ];
-        }
-
-        const dialogue      = await this._prisma.dialogue.create({ data: { isPrivate: true } });
-        const dialogueLinks = await this._prisma.dialogueToUser.createMany({
-            data: [
-                { dialogueId: dialogue.id, userId },
-                { dialogueId: dialogue.id, userId: withUserId },
-            ],
-        });
+        throw new Error('Method not implemented.');
     }
 
     async create (userId: string, userIds: string[]): Promise<[ string[], DomainDialogue ][]> {

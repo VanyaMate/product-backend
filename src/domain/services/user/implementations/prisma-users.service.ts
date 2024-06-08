@@ -39,7 +39,10 @@ export class PrismaUsersService implements IUserService {
 
     async getUserFullByLogin (login: string): Promise<DomainUserFull> {
         try {
-            const user: User = await this._prisma.user.findFirstOrThrow({ where: { login } });
+            const user = await this._prisma.user.findFirstOrThrow({
+                where  : { login },
+                include: { preferences: true },
+            });
             return userPrismaToFullDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
@@ -48,7 +51,10 @@ export class PrismaUsersService implements IUserService {
 
     async getPrivateUserFullByLogin (login: string): Promise<DomainUserFull> {
         try {
-            const user: User = await this._prisma.user.findFirstOrThrow({ where: { login } });
+            const user = await this._prisma.user.findFirstOrThrow({
+                where  : { login },
+                include: { preferences: true },
+            });
             return userPrismaToFullDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');

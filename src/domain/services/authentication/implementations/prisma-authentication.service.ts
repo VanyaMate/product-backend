@@ -11,7 +11,7 @@ import {
 import {
     IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User, UserPreferences } from '@prisma/client';
 import {
     assertDomainLoginData,
     DomainLoginData,
@@ -67,11 +67,16 @@ export class PrismaAuthenticationService implements IAuthenticationService {
             const user: User                 = await this._prisma.user.findFirst({ where: { login } });
 
             if (!user) {
-                const passwordHash = await this._hashService.hash(password);
+                const passwordHash  = await this._hashService.hash(password);
                 const newUser: User = await this._prisma.user.create({
                     data: { login, email, password: passwordHash },
                 });
-                const tokens = await this._tokensService.generateForUser(newUser.id, fingerprint);
+                const tokens        = await this._tokensService.generateForUser(newUser.id, fingerprint);
+
+                await this._prisma.userPreferences.create({
+                    data: { userId: newUser.id },
+                });
+
                 return {
                     tokens,
                     user: userPrismaToDomain(newUser),

@@ -13,6 +13,9 @@ import {
     DomainSearchItemOptions,
 } from 'product-types/dist/search/DomainSearchItemOptions';
 import { DomainSearchItem } from 'product-types/dist/search/DomainSearchItem';
+import {
+    prismaDomainUserWithPreferencesSelector
+} from '@/domain/services/user/selectors/prisma/prisma-domain-user-with-preferences.selector';
 
 
 export class PrismaSearchService implements ISearchService {
@@ -50,7 +53,7 @@ export class PrismaSearchService implements ISearchService {
                 };
                 const userQuery: Prisma.UserFindManyArgs    = {
                     where  : userWhereInput,
-                    select : prismaDomainUserSelector,
+                    select : prismaDomainUserWithPreferencesSelector,
                     orderBy: { login: 'asc' },
                     take,
                     skip,

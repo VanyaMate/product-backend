@@ -31,8 +31,8 @@ export class PrismaFriendService implements IFriendService {
             const receivedFriendRequest = await this._prisma.friendRequest.findFirstOrThrow({
                 where : { toUserId: fromUserId, id: requestId },
                 select: {
-                    ToUser    : { select: prismaDomainUserSelector },
-                    FromUser  : { select: prismaDomainUserSelector },
+                    toUser    : { select: prismaDomainUserSelector },
+                    fromUser  : { select: prismaDomainUserSelector },
                     fromUserId: true,
                     toUserId  : true,
                     id        : true,
@@ -55,14 +55,14 @@ export class PrismaFriendService implements IFriendService {
                         receivedFriendRequest.toUserId,
                     ],
                     {
-                        user     : receivedFriendRequest.FromUser,
+                        user     : receivedFriendRequest.fromUser,
                         requestId: requestId,
                     },
                 ],
                 [
                     [ receivedFriendRequest.fromUserId ],
                     {
-                        user     : receivedFriendRequest.ToUser,
+                        user     : receivedFriendRequest.toUser,
                         requestId: requestId,
                     },
                 ],
@@ -100,8 +100,8 @@ export class PrismaFriendService implements IFriendService {
                         toUserId,
                     },
                     include: {
-                        FromUser: { select: prismaDomainUserSelector },
-                        ToUser  : { select: prismaDomainUserSelector },
+                        fromUser: { select: prismaDomainUserSelector },
+                        toUser  : { select: prismaDomainUserSelector },
                     },
                 });
 
@@ -109,7 +109,7 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ fromUserId ],
                         {
-                            user     : request.ToUser,
+                            user     : request.toUser,
                             requestId: request.id,
                             message  : '',
                         },
@@ -117,7 +117,7 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ toUserId ],
                         {
-                            user     : request.FromUser,
+                            user     : request.fromUser,
                             requestId: request.id,
                             message  : '',
                         },
@@ -142,8 +142,8 @@ export class PrismaFriendService implements IFriendService {
                 },
                 select: {
                     id      : true,
-                    FromUser: { select: prismaDomainUserSelector },
-                    ToUser  : { select: prismaDomainUserSelector },
+                    fromUser: { select: prismaDomainUserSelector },
+                    toUser  : { select: prismaDomainUserSelector },
                 },
             });
             await this._prisma.friend.delete({
@@ -152,33 +152,33 @@ export class PrismaFriendService implements IFriendService {
                 },
             });
 
-            if (fromUserId === deletedFriend.ToUser.id) {
+            if (fromUserId === deletedFriend.toUser.id) {
                 return [
                     [
-                        [ deletedFriend.ToUser.id ],
+                        [ deletedFriend.toUser.id ],
                         {
-                            user: deletedFriend.FromUser,
+                            user: deletedFriend.fromUser,
                         },
                     ],
                     [
-                        [ deletedFriend.FromUser.id ],
+                        [ deletedFriend.fromUser.id ],
                         {
-                            user: deletedFriend.ToUser,
+                            user: deletedFriend.toUser,
                         },
                     ],
                 ];
             } else {
                 return [
                     [
-                        [ deletedFriend.FromUser.id ],
+                        [ deletedFriend.fromUser.id ],
                         {
-                            user: deletedFriend.ToUser,
+                            user: deletedFriend.toUser,
                         },
                     ],
                     [
-                        [ deletedFriend.ToUser.id ],
+                        [ deletedFriend.toUser.id ],
                         {
-                            user: deletedFriend.FromUser,
+                            user: deletedFriend.fromUser,
                         },
                     ],
                 ];
@@ -199,24 +199,24 @@ export class PrismaFriendService implements IFriendService {
                     ],
                 },
                 select: {
-                    FromUser: { select: prismaDomainUserSelector },
-                    ToUser  : { select: prismaDomainUserSelector },
+                    fromUser: { select: prismaDomainUserSelector },
+                    toUser  : { select: prismaDomainUserSelector },
                 },
             });
 
-            if (canceledRequest.FromUser.id === fromUserId) {
+            if (canceledRequest.fromUser.id === fromUserId) {
                 return [
                     [
-                        [ canceledRequest.FromUser.id ],
+                        [ canceledRequest.fromUser.id ],
                         {
-                            user     : canceledRequest.ToUser,
+                            user     : canceledRequest.toUser,
                             requestId: requestId,
                         },
                     ],
                     [
-                        [ canceledRequest.ToUser.id ],
+                        [ canceledRequest.toUser.id ],
                         {
-                            user     : canceledRequest.FromUser,
+                            user     : canceledRequest.fromUser,
                             requestId: requestId,
                         },
                     ],
@@ -224,16 +224,16 @@ export class PrismaFriendService implements IFriendService {
             } else {
                 return [
                     [
-                        [ canceledRequest.ToUser.id ],
+                        [ canceledRequest.toUser.id ],
                         {
-                            user     : canceledRequest.FromUser,
+                            user     : canceledRequest.fromUser,
                             requestId: requestId,
                         },
                     ],
                     [
-                        [ canceledRequest.FromUser.id ],
+                        [ canceledRequest.fromUser.id ],
                         {
-                            user     : canceledRequest.ToUser,
+                            user     : canceledRequest.toUser,
                             requestId: requestId,
                         },
                     ],

@@ -25,15 +25,16 @@ export class DialogueService {
 
     async create (user1Id: string, user2Id: string): Promise<DomainDialogue> {
         try {
-            return await this._service.create(user1Id, user2Id);
+            // WIP: Временно добавил [0][1] чтобы на типы не ругалось.
+            return (await this._service.create(user1Id, [ user2Id ]))[0][1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant create dialogue'));
         }
     }
 
-    async remove (userInitiatorId: string, dialogId: string): Promise<DomainDialogue> {
+    async remove (userInitiatorId: string, dialogueId: string): Promise<DomainDialogue> {
         try {
-            return await this._service.remove(userInitiatorId, dialogId);
+            return (await this._service.leave(userInitiatorId, dialogueId))[0][1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant remove dialogue'));
         }
@@ -41,7 +42,7 @@ export class DialogueService {
 
     async archive (userInitiatorId: string, dialogId: string): Promise<DomainDialogue> {
         try {
-            return await this._service.archive(userInitiatorId, dialogId);
+            return (await this._service.archive(userInitiatorId, dialogId))[0][1];
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant archive dialogue'));
         }

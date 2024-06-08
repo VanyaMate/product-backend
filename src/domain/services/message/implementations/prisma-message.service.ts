@@ -27,62 +27,7 @@ export class PrismaMessageService implements IMessageService {
     }
 
     async send (authorId: string, dialogueId: string, messageType: DomainMessageType, messageBody: string): Promise<[ string[], DomainNotificationUserMessageData ]> {
-        const message      = await this._prisma.message.create({
-            data   : {
-                authorId,
-                message: messageBody,
-                type   : MessageType[messageType] ?? MessageType.text,
-            },
-            include: {
-                Author: {
-                    select: prismaDomainUserSelector,
-                },
-            },
-        });
-        const { Dialogue } = await this._prisma.dialogueToMessage.create({
-            data   : {
-                dialogueId,
-                messageId: message.id,
-            },
-            include: {
-                Dialogue: {
-                    select: {
-                        LinkWithUsers: {
-                            select: {
-                                User: {
-                                    select: prismaDomainUserSelector,
-                                },
-                            },
-                        },
-                        id           : true,
-                        avatar       : true,
-                        title        : true,
-                    },
-                },
-            },
-        });
-
-        return [
-            Dialogue.LinkWithUsers.filter((link) => link.User.id !== authorId).map((link) => link.User.id),
-            {
-                dialogue: {
-                    id      : Dialogue.id,
-                    title   : Dialogue.title,
-                    avatar  : Dialogue.avatar,
-                    users   : Dialogue.LinkWithUsers.map((link) => link.User),
-                    messages: [],
-                },
-                message : {
-                    id          : message.id,
-                    dialogId    : dialogueId,
-                    message     : message.message,
-                    type        : DomainMessageType[message.type],
-                    author      : message.Author,
-                    creationDate: message.creationDate.toUTCString(),
-                    redacted    : message.redacted,
-                },
-            },
-        ];
+        throw new Error('Method not implemented.');
     }
 
     async redact (messageId: string, newMessageBody: string): Promise<[ string[], DomainNotificationUserMessageRedactedData ]> {
