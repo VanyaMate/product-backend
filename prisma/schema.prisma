@@ -64,24 +64,24 @@ enum MessageType {
   link
 }
 
-enum UserPreferencesFriendRequest {
+enum UserPermissionsFriendRequest {
   all
   none
 }
 
-enum UserPreferencesPrivateDialogue {
-  all
-  friends
-  none
-}
-
-enum UserPreferencesDialogue {
+enum UserPermissionsPrivateDialogue {
   all
   friends
   none
 }
 
-enum UserPreferencesGeneralPage {
+enum UserPermissionsDialogue {
+  all
+  friends
+  none
+}
+
+enum UserPermissionsGeneralPage {
   all
   friends
   none
@@ -111,17 +111,17 @@ model User {
   connectedPrivateDialogue PrivateDialogue[]  @relation("ConnectedPrivateDialogues")
   privateMessage           PrivateMessage[]
 
-  preferences UserPreferences?
+  permissions UserPermissions?
 }
 
-model UserPreferences {
+model UserPermissions {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @unique @db.ObjectId
 
-  friendRequest   UserPreferencesFriendRequest   @default(all)
-  privateDialogue UserPreferencesPrivateDialogue @default(all)
-  dialogue        UserPreferencesDialogue        @default(all)
-  generalPage     UserPreferencesGeneralPage     @default(all)
+  friendRequest   UserPermissionsFriendRequest   @default(all)
+  privateDialogue UserPermissionsPrivateDialogue @default(all)
+  dialogue        UserPermissionsDialogue        @default(all)
+  generalPage     UserPermissionsGeneralPage     @default(all)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
