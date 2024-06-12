@@ -1,4 +1,4 @@
-import { DomainDialogue } from 'product-types/dist/dialog/DomainDialogue';
+import { DomainDialogue } from 'product-types/dist/dialogue/DomainDialogue';
 
 
 export interface IDialogueService {

@@ -1,5 +1,5 @@
 import {
-    DomainNotification,
+    DomainNotification, DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
 import {
     DomainNotificationErrorData,
@@ -34,9 +34,26 @@ import {
 import {
     DomainNotificationFriendRequestCanceledData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
+import {
+    DomainNotificationPrivateDialogueCreateData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
+import {
+    DomainNotificationPrivateDialogueDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
+import {
+    DomainNotificationPrivateDialogueArchiveData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPrivateDialogueUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
+import {
+    NotificationServiceResponse,
+} from '@/domain/services/notification/types/NotificationServiceResponse';
 
 
 export interface INotificationService {
+    send (notifications: Array<NotificationServiceResponse>): Promise<void>;
+
     error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification>;
 
     connected (userId: string): Promise<DomainNotification>;
@@ -78,4 +95,20 @@ export interface INotificationService {
     friendRequestCanceledIn (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification>;
 
     friendRequestCanceledOut (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification>;
+
+    privateDialogueCreatedIn (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification>;
+
+    privateDialogueCreatedOut (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification>;
+
+    privateDialogueDeletedIn (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification>;
+
+    privateDialogueDeletedOut (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification>;
+
+    privateDialogueArchivedIn (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification>;
+
+    privateDialogueArchivedOut (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification>;
+
+    privateDialogueUpdatedIn (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification>;
+
+    privateDialogueUpdatedOut (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification>;
 }

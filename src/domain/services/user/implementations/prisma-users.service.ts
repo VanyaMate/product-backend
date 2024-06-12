@@ -41,7 +41,7 @@ export class PrismaUsersService implements IUserService {
         try {
             const user = await this._prisma.user.findFirstOrThrow({
                 where  : { login },
-                include: { preferences: true },
+                include: { permissions: true },
             });
             return userPrismaToFullDomain(user);
         } catch (e) {
@@ -53,7 +53,7 @@ export class PrismaUsersService implements IUserService {
         try {
             const user = await this._prisma.user.findFirstOrThrow({
                 where  : { login },
-                include: { preferences: true },
+                include: { permissions: true },
             });
             return userPrismaToFullDomain(user);
         } catch (e) {

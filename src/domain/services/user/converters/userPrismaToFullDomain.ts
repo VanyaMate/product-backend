@@ -1,4 +1,4 @@
-import { User, UserPreferences } from '@prisma/client';
+import { User, UserPermissions } from '@prisma/client';
 import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 import {
     DomainUserPermissionsDialogue,
@@ -8,7 +8,7 @@ import {
 
 
 export const userPrismaToFullDomain = function (user: User & {
-    preferences: UserPreferences
+    permissions: UserPermissions
 }): DomainUserFull {
     return {
         id         : user.id,
@@ -23,10 +23,10 @@ export const userPrismaToFullDomain = function (user: User & {
             lastName : user.lastName,
         },
         permissions: {
-            dialogue       : user.preferences.dialogue as DomainUserPermissionsDialogue,
-            friendRequest  : user.preferences.friendRequest as DomainUserPermissionsFriendRequest,
-            generalPage    : user.preferences.generalPage as DomainUserPermissionsGeneralPage,
-            privateDialogue: user.preferences.privateDialogue as DomainUserPermissionsPrivateDialogue,
+            dialogue       : user.permissions.dialogue as DomainUserPermissionsDialogue,
+            friendRequest  : user.permissions.friendRequest as DomainUserPermissionsFriendRequest,
+            generalPage    : user.permissions.generalPage as DomainUserPermissionsGeneralPage,
+            privateDialogue: user.permissions.privateDialogue as DomainUserPermissionsPrivateDialogue,
         },
     };
 };

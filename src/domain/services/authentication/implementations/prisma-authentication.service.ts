@@ -11,7 +11,7 @@ import {
 import {
     IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
-import { PrismaClient, User, UserPreferences } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import {
     assertDomainLoginData,
     DomainLoginData,
@@ -73,7 +73,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                 });
                 const tokens        = await this._tokensService.generateForUser(newUser.id, fingerprint);
 
-                await this._prisma.userPreferences.create({
+                await this._prisma.userPermissions.create({
                     data: { userId: newUser.id },
                 });
 

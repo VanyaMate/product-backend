@@ -45,17 +45,23 @@ enum NotificationType {
   dlg_a_in
   dlg_a_out
   // Приватный диалог создан
-  dlgp_c_in
-  dlgp_c_out
+  pdlg_c_in
+  pdlg_c_out
   // Приватный диалог обновлен
-  dlgp_u_in
-  dlgp_u_out
+  pdlg_u_in
+  pdlg_u_out
   // Приватный диалог удален
-  dlgp_d_in
-  dlgp_d_out
+  pdlg_d_in
+  pdlg_d_out
+  // Приватный диалог восстановлен
+  pdlg_du_in
+  pdlg_du_out
   // Приватный диалог в архиве
-  dlgp_a_in
-  dlgp_a_out
+  pdlg_a_in
+  pdlg_a_out
+  // Приватный диалог разархивирован
+  pdlg_au_in
+  pdlg_au_out
 }
 
 enum MessageType {

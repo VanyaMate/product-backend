@@ -106,7 +106,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
     private async _deleteConnection (userConnectionsMap: Map<string, Connect>, userId: string, requestId: string) {
         clearTimeout(userConnectionsMap.get(requestId)?.$__timer);
         userConnectionsMap.delete(requestId);
-        return this._prisma.connection.delete({
+        return this._prisma.connection.deleteMany({
             where: {
                 userId      : userId,
                 connectionId: requestId,

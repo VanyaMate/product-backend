@@ -3,7 +3,6 @@ import {
     IDialogueService,
 } from '@/domain/services/dialogue/dialogue-service.interface';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
-import { DomainDialogue } from 'product-types/dist/dialog/DomainDialogue';
 import {
     PrismaDialogueService,
 } from '@/domain/services/dialogue/implementations/prisma-dialogue.service';
@@ -13,6 +12,7 @@ import {
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import { DomainDialogue } from 'product-types/dist/dialogue/DomainDialogue';
 
 
 @Injectable()

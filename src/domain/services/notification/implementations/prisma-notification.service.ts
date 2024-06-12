@@ -52,6 +52,21 @@ import {
 import {
     notificationFactory,
 } from '@/domain/services/notification/factory/notification-factory';
+import {
+    DomainNotificationPrivateDialogueArchiveData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPrivateDialogueCreateData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
+import {
+    DomainNotificationPrivateDialogueDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
+import {
+    DomainNotificationPrivateDialogueUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
+import {
+    NotificationServiceResponse,
+} from '@/domain/services/notification/types/NotificationServiceResponse';
 
 
 export class PrismaNotificationService implements INotificationService {
@@ -62,6 +77,27 @@ export class PrismaNotificationService implements INotificationService {
         private readonly _connectionService: IConnectionsService<Request, Response>,
     ) {
         this._sseSender = new SseSenderService();
+    }
+
+    async send (notifications: Array<NotificationServiceResponse>): Promise<void> {
+        return Promise.all(
+            notifications.map((notification) => {
+                const [ ids, type, data ] = notification;
+                return Promise.all(
+                    ids.map(async (id) => {
+                        if (data) {
+                            return this
+                                ._create({
+                                    data,
+                                    type,
+                                    userId: id,
+                                })
+                                .then((notification) => this._notify(id, notificationFactory(notification)));
+                        }
+                    }),
+                );
+            }),
+        ).then();
     }
 
     async error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
@@ -224,6 +260,78 @@ export class PrismaNotificationService implements INotificationService {
             userId,
             data,
             type: DomainNotificationType.FRIEND_REQUEST_CANCELED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueCreatedIn (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_CREATED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueCreatedOut (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_CREATED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueDeletedIn (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_DELETED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueDeletedOut (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_DELETED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueArchivedIn (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueArchivedOut (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_OUT,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueUpdatedIn (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_UPDATED_IN,
+        });
+        return this._notify(userId, notificationFactory(notification));
+    }
+
+    async privateDialogueUpdatedOut (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification> {
+        const notification = await this._create({
+            userId,
+            data,
+            type: DomainNotificationType.PRIVATE_DIALOGUE_UPDATED_OUT,
         });
         return this._notify(userId, notificationFactory(notification));
     }

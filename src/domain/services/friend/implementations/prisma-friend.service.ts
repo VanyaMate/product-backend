@@ -146,7 +146,7 @@ export class PrismaFriendService implements IFriendService {
                     toUser  : { select: prismaDomainUserSelector },
                 },
             });
-            await this._prisma.friend.delete({
+            await this._prisma.friend.deleteMany({
                 where: {
                     id: deletedFriend.id,
                 },

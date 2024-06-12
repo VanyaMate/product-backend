@@ -1,15 +1,8 @@
 import {
     IDialogueService,
 } from '@/domain/services/dialogue/dialogue-service.interface';
-import { Dialogue, PrismaClient } from '@prisma/client';
-import {
-    serviceErrorResponse,
-} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
-import { DomainDialogue } from 'product-types/dist/dialog/DomainDialogue';
-import {
-    prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
-import { DomainMessage } from 'product-types/dist/message/DomainMessage';
+import { PrismaClient } from '@prisma/client';
+import { DomainDialogue } from 'product-types/dist/dialogue/DomainDialogue';
 
 
 export class PrismaDialogueService implements IDialogueService {

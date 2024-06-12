@@ -49,6 +49,21 @@ import {
 import {
     DomainNotificationFriendRequestCanceledData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
+import {
+    DomainNotificationPrivateDialogueArchiveData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPrivateDialogueCreateData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
+import {
+    DomainNotificationPrivateDialogueDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
+import {
+    DomainNotificationPrivateDialogueUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
+import {
+    NotificationServiceResponse,
+} from '@/domain/services/notification/types/NotificationServiceResponse';
 
 
 @Injectable()
@@ -59,6 +74,10 @@ export class NotificationService implements INotificationService {
     constructor (private readonly _prisma: PrismaService) {
         this._connectionService   = new PrismaExpressSseConnectionsService(this._prisma);
         this._notificationService = new PrismaNotificationService(this._prisma, this._connectionService);
+    }
+
+    async send (notifications: Array<NotificationServiceResponse>): Promise<void> {
+        return this._notificationService.send(notifications);
     }
 
     async error (userId: string, data: DomainNotificationErrorData): Promise<DomainNotification> {
@@ -143,6 +162,38 @@ export class NotificationService implements INotificationService {
 
     async friendRequestCanceledOut (userId: string, data: DomainNotificationFriendRequestCanceledData): Promise<DomainNotification> {
         return this._notificationService.friendRequestCanceledOut(userId, data);
+    }
+
+    async privateDialogueCreatedIn (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueCreatedIn(userId, data);
+    }
+
+    async privateDialogueCreatedOut (userId: string, data: DomainNotificationPrivateDialogueCreateData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueCreatedOut(userId, data);
+    }
+
+    async privateDialogueDeletedIn (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueDeletedIn(userId, data);
+    }
+
+    async privateDialogueDeletedOut (userId: string, data: DomainNotificationPrivateDialogueDeletedData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueDeletedOut(userId, data);
+    }
+
+    async privateDialogueArchivedIn (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueArchivedIn(userId, data);
+    }
+
+    async privateDialogueArchivedOut (userId: string, data: DomainNotificationPrivateDialogueArchiveData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueArchivedOut(userId, data);
+    }
+
+    async privateDialogueUpdatedIn (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueUpdatedIn(userId, data);
+    }
+
+    async privateDialogueUpdatedOut (userId: string, data: DomainNotificationPrivateDialogueUpdatedData): Promise<DomainNotification> {
+        return this._notificationService.privateDialogueUpdatedOut(userId, data);
     }
 
     add (userId: string, request: Request, response: Response) {

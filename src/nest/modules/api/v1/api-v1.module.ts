@@ -14,6 +14,12 @@ import { FriendModule } from '@/nest/modules/api/v1/friend/friend.module';
 import { FriendsModule } from '@/nest/modules/api/v1/friends/friends.module';
 import { MessageModule } from '@/nest/modules/api/v1/message/message.module';
 import { SearchModule } from '@/nest/modules/api/v1/search/search.module';
+import {
+    PrivateDialogueModule,
+} from '@/nest/modules/api/v1/private-dialogue/private-dialogue.module';
+import {
+    PrivateDialoguesModule,
+} from '@/nest/modules/api/v1/private-dialogues/private-dialogues.module';
 
 
 @Module({
@@ -27,6 +33,8 @@ import { SearchModule } from '@/nest/modules/api/v1/search/search.module';
         FriendsModule,
         MessageModule,
         SearchModule,
+        PrivateDialogueModule,
+        PrivateDialoguesModule,
     ],
 })
 export class ApiV1Module {

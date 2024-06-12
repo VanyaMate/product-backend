@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 
 
-export const prismaDomainUserWithPreferencesSelector: Pick<Prisma.UserSelect, 'id' | 'avatar' | 'login' | 'preferences'> = {
+export const prismaDomainUserWithPreferencesSelector: Pick<Prisma.UserSelect, 'id' | 'avatar' | 'login' | 'permissions'> = {
     id         : true,
     avatar     : true,
     login      : true,
-    preferences: {
+    permissions: {
         select: {
             generalPage    : true,
             privateDialogue: true,
