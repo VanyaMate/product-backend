@@ -25,6 +25,9 @@ import { DomainMessageType } from 'product-types/dist/message/DomainMessage';
 import {
     prismaPrivateDialogueWithUserToDomain,
 } from '@/domain/services/private-dialogue/converters/prismaPrivateDialogueWithUserToDomain';
+import {
+    prismaPrivateMessageToDomain,
+} from '@/domain/services/message/converters/prismaPrivateMessageToDomain';
 
 
 export class PrismaPrivateDialogueService implements IPrivateDialogueService {
@@ -108,15 +111,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                                     companionArchived: createdDialogue.userOutArchived,
                                     companionDeleted : createdDialogue.userOutDeleted,
                                     user             : createdDialogue.userOut,
-                                    messages         : createdDialogue.privateMessage.map((message) => ({
-                                        id          : message.id,
-                                        dialogueId  : message.privateDialogueId,
-                                        creationDate: message.creationDate.toUTCString(),
-                                        author      : message.author,
-                                        type        : message.type as DomainMessageType,
-                                        redacted    : message.redacted,
-                                        message     : message.message,
-                                    })),
+                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
                                 },
                             },
                         ],
@@ -149,15 +144,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                                     companionArchived: createdDialogue.userOutArchived,
                                     companionDeleted : createdDialogue.userOutDeleted,
                                     user             : createdDialogue.userIn,
-                                    messages         : createdDialogue.privateMessage.map((message) => ({
-                                        id          : message.id,
-                                        dialogueId  : message.privateDialogueId,
-                                        creationDate: message.creationDate.toUTCString(),
-                                        author      : message.author,
-                                        type        : message.type as DomainMessageType,
-                                        redacted    : message.redacted,
-                                        message     : message.message,
-                                    })),
+                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
                                 },
                             },
                         ],
@@ -206,8 +193,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                 ],
             },
             include: {
-                userIn : true,
-                userOut: true,
+                userIn : { select: prismaDomainUserSelector },
+                userOut: { select: prismaDomainUserSelector },
             },
         });
 
@@ -273,8 +260,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                 ],
             },
             include: {
-                userIn : true,
-                userOut: true,
+                userIn : { select: prismaDomainUserSelector },
+                userOut: { select: prismaDomainUserSelector },
             },
         });
 

@@ -20,6 +20,23 @@ enum NotificationType {
   // Сообщение прочитано
   u_msg_read_in
   u_msg_read_out
+
+  // Новое приватное сообщение
+  p_msg_in
+  p_msg_out
+  // Приватное сообщение удалено
+  p_msg_d_in
+  p_msg_d_out
+  // Приватное сообщение редактировано
+  p_msg_r_in
+  p_msg_r_out
+  // Приватное сообщение прочитано
+  p_msg_read_in
+  p_msg_read_out
+  // Приватные сообщения прочитаны
+  p_msg_read_all_in
+  p_msg_read_all_out
+
   // Заявка в друзья
   fr_r_in
   fr_r_out
@@ -32,6 +49,7 @@ enum NotificationType {
   // Заявка в друзья отменена
   fr_rc_in
   fr_rc_out
+
   // Диалог создан
   dlg_c_in
   dlg_c_out
@@ -44,6 +62,7 @@ enum NotificationType {
   // Диалог в архиве
   dlg_a_in
   dlg_a_out
+
   // Приватный диалог создан
   pdlg_c_in
   pdlg_c_out
@@ -264,6 +283,7 @@ model PrivateMessage {
   message           String
   type              MessageType @default(text)
   redacted          Boolean     @default(false)
+  read              Boolean     @default(false)
   creationDate      DateTime    @default(now())
   updatedDate       DateTime    @default(now())
 

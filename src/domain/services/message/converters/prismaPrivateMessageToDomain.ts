@@ -6,15 +6,17 @@ import {
 import {
     userPrismaToDomain,
 } from '@/domain/services/user/converters/userPrismaToDomain';
+import { DomainUser } from 'product-types/dist/user/DomainUser';
 
 
-export const prismaPrivateMessageToDomain = function (message: PrivateMessage, author: User): DomainMessage {
+export const prismaPrivateMessageToDomain = function (message: PrivateMessage, author: DomainUser): DomainMessage {
     return {
         id          : message.id,
         message     : message.message,
         type        : message.type as DomainMessageType,
-        author      : userPrismaToDomain(author),
+        author      : author,
         redacted    : message.redacted,
+        read        : message.read,
         creationDate: message.creationDate.toUTCString(),
         dialogueId  : message.privateDialogueId,
     };

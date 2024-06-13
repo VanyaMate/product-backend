@@ -34,7 +34,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                 privateMessage: {
                     take   : 1,
                     include: {
-                        author: true,
+                        author: { select: prismaDomainUserSelector },
+                    },
+                    orderBy: {
+                        creationDate: 'desc',
                     },
                 },
             },
@@ -82,7 +85,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                 privateMessage: {
                     take   : 20,
                     include: {
-                        author: true,
+                        author: { select: prismaDomainUserSelector },
+                    },
+                    orderBy: {
+                        creationDate: 'desc',
                     },
                 },
             },

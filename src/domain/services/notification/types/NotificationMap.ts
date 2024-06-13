@@ -26,6 +26,21 @@ import {
 import {
     DomainNotificationPrivateDialogueArchiveData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPrivateMessageData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageData';
+import {
+    DomainNotificationPrivateMessageReadData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageReadData';
+import {
+    DomainNotificationPrivateMessageRedactedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageRedactedData';
+import {
+    DomainNotificationPrivateMessageDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageDeletedData';
+import {
+    DomainNotificationPrivateMessageReadAllData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageReadAllData';
 
 
 export type NotificationMap = {
@@ -46,6 +61,17 @@ export type NotificationMap = {
     [DomainNotificationType.DIALOGUE_DELETED_OUT]: void,
     [DomainNotificationType.DIALOGUE_ARCHIVED_IN]: void,
     [DomainNotificationType.DIALOGUE_ARCHIVED_OUT]: void,
+
+    [DomainNotificationType.PRIVATE_MESSAGE_IN]: DomainNotificationPrivateMessageData,
+    [DomainNotificationType.PRIVATE_MESSAGE_OUT]: DomainNotificationPrivateMessageData,
+    [DomainNotificationType.PRIVATE_MESSAGE_READ_IN]: DomainNotificationPrivateMessageReadData,
+    [DomainNotificationType.PRIVATE_MESSAGE_READ_OUT]: DomainNotificationPrivateMessageReadData,
+    [DomainNotificationType.PRIVATE_MESSAGE_REDACTED_IN]: DomainNotificationPrivateMessageRedactedData,
+    [DomainNotificationType.PRIVATE_MESSAGE_REDACTED_OUT]: DomainNotificationPrivateMessageRedactedData,
+    [DomainNotificationType.PRIVATE_MESSAGE_DELETED_IN]: DomainNotificationPrivateMessageDeletedData,
+    [DomainNotificationType.PRIVATE_MESSAGE_DELETED_OUT]: DomainNotificationPrivateMessageDeletedData,
+    [DomainNotificationType.PRIVATE_MESSAGE_READ_ALL_IN]: DomainNotificationPrivateMessageReadAllData,
+    [DomainNotificationType.PRIVATE_MESSAGE_READ_ALL_OUT]: DomainNotificationPrivateMessageReadAllData,
 
     [DomainNotificationType.PRIVATE_DIALOGUE_CREATED_IN]: DomainNotificationPrivateDialogueCreateData,
     [DomainNotificationType.PRIVATE_DIALOGUE_CREATED_OUT]: DomainNotificationPrivateDialogueCreateData,

@@ -20,6 +20,12 @@ import {
 import {
     PrivateDialoguesModule,
 } from '@/nest/modules/api/v1/private-dialogues/private-dialogues.module';
+import {
+    PrivateMessagesModule,
+} from '@/nest/modules/api/v1/private-messages/private-messages.module';
+import {
+    PrivateMessageModule,
+} from '@/nest/modules/api/v1/private-message/private-message.module';
 
 
 @Module({
@@ -35,6 +41,8 @@ import {
         SearchModule,
         PrivateDialogueModule,
         PrivateDialoguesModule,
+        PrivateMessageModule,
+        PrivateMessagesModule,
     ],
 })
 export class ApiV1Module {
