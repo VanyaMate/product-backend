@@ -88,7 +88,7 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                         author: { select: prismaDomainUserSelector },
                     },
                     orderBy: {
-                        creationDate: 'desc',
+                        creationDate: 'asc',
                     },
                 },
             },

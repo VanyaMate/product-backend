@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 
-export const prismaDomainUserWithPreferencesSelector: Pick<Prisma.UserSelect, 'id' | 'avatar' | 'login' | 'permissions'> = {
+export const prismaDomainUserWithPermissionsSelector: Pick<Prisma.UserSelect, 'id' | 'avatar' | 'login' | 'permissions'> = {
     id         : true,
     avatar     : true,
     login      : true,

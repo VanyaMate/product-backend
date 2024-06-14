@@ -1,16 +1,4 @@
 import {
-    DomainNotificationPrivateDialogueCreateData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
-import {
-    DomainNotificationPrivateDialogueArchiveData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
-import {
-    DomainNotificationPrivateDialogueDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
-import {
-    DomainNotificationPrivateDialogueUpdatedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
-import {
     NotificationServiceResponse,
 } from '@/domain/services/notification/types/NotificationServiceResponse';
 
