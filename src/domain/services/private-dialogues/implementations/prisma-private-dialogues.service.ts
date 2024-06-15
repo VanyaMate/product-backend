@@ -55,7 +55,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             companionArchived: dialogue.userOutArchived,
             companionDeleted : dialogue.userOutDeleted,
             user             : dialogue.userOut,
-            messages         : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            messages         : dialogue
+                .privateMessage
+                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .reverse(),
         }) : ({
             id               : dialogue.id,
             title            : dialogue.title,
@@ -66,7 +69,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             companionArchived: dialogue.userInArchived,
             companionDeleted : dialogue.userInDeleted,
             user             : dialogue.userIn,
-            messages         : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            messages         : dialogue
+                .privateMessage
+                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .reverse(),
         }));
     }
 
@@ -88,7 +94,7 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                         author: { select: prismaDomainUserSelector },
                     },
                     orderBy: {
-                        creationDate: 'asc',
+                        creationDate: 'desc',
                     },
                 },
             },
@@ -104,7 +110,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             companionArchived: dialogue.userOutArchived,
             companionDeleted : dialogue.userOutDeleted,
             user             : dialogue.userOut,
-            messages         : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            messages         : dialogue
+                .privateMessage
+                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .reverse(),
         }) : ({
             id               : dialogue.id,
             title            : dialogue.title,
@@ -115,7 +124,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             companionArchived: dialogue.userInArchived,
             companionDeleted : dialogue.userInDeleted,
             user             : dialogue.userIn,
-            messages         : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            messages         : dialogue
+                .privateMessage
+                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .reverse(),
         });
     }
 }
