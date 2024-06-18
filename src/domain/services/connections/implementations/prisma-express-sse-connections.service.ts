@@ -99,7 +99,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
                     viewed      : false,
                 } as DomainNotification) }\n\n`);
                 closeConnection().finally(() => response.end());
-            }, 1000 * 20),
+            }, 1000 * 60 * 5),
         });
     }
 

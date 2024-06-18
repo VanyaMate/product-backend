@@ -30,6 +30,11 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
                 },
                 include: {
                     privateMessage: {
+                        where  : {
+                            message: {
+                                contains: options.query,
+                            },
+                        },
                         include: {
                             author: {
                                 select: prismaDomainUserSelector,
@@ -41,7 +46,10 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
                 },
             }),
             this._prisma.privateMessage.count({
-                where: { privateDialogueId: dialogueId },
+                where: {
+                    privateDialogueId: dialogueId,
+                    message          : { contains: options.query },
+                },
             }),
         ]);
 
