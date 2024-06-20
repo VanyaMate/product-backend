@@ -249,6 +249,74 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
         }
     }
 
+    async unArchive (userId: string, privateDialogueId: string): Promise<NotificationServiceResponse[]> {
+        // get dialogue or throw
+        // archive dialogue
+        const dialogue = await this._prisma.privateDialogue.findFirstOrThrow({
+            where  : {
+                id: privateDialogueId,
+                OR: [
+                    { userInId: userId },
+                    { userOutId: userId },
+                ],
+            },
+            include: {
+                userIn : { select: prismaDomainUserSelector },
+                userOut: { select: prismaDomainUserSelector },
+            },
+        });
+
+        if (!dialogue) {
+            throw 'Dialogue not exist';
+        }
+
+        if (dialogue.userInId === userId) {
+            await this._prisma.privateDialogue.update({
+                where: { id: privateDialogueId },
+                data : { userInArchived: false },
+            });
+
+            return [
+                [
+                    [ userId ],
+                    DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_IN,
+                    {
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                    },
+                ],
+                [
+                    [ dialogue.userOutId ],
+                    DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_OUT,
+                    {
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                    },
+                ],
+            ];
+        } else {
+            await this._prisma.privateDialogue.update({
+                where: { id: privateDialogueId },
+                data : { userOutArchived: false },
+            });
+
+            return [
+                [
+                    [ userId ],
+                    DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_IN,
+                    {
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                    },
+                ],
+                [
+                    [ dialogue.userInId ],
+                    DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_OUT,
+                    {
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                    },
+                ],
+            ];
+        }
+    }
+
     async remove (userId: string, privateDialogueId: string): Promise<NotificationServiceResponse[]> {
         // get dialogue
         const dialogue = await this._prisma.privateDialogue.findFirstOrThrow({

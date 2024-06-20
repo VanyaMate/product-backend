@@ -48,6 +48,16 @@ export class PrivateDialogueService {
         }
     }
 
+    async unArchive (userInitiatorId: string, dialogueId: string) {
+        try {
+            const [ active, passive ] = await this._service.unArchive(userInitiatorId, dialogueId);
+            this._notificationService.send([ active, passive ]);
+            return active[2];
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant archive dialogue'));
+        }
+    }
+
     async remove (userInitiatorId: string, dialogueId: string) {
         try {
             const [ active, passive ] = await this._service.remove(userInitiatorId, dialogueId);

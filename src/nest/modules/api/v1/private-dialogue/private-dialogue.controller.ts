@@ -37,6 +37,15 @@ export class PrivateDialogueController {
         return this._service.archive(request[REQUEST_USER_ID], dialogueId);
     }
 
+    @Post('/un-archive/:dialogueId')
+    @UseGuards(IsUserGuard)
+    unArchive (
+        @Param('dialogueId') dialogueId: string,
+        @Req() request: Request,
+    ) {
+        return this._service.unArchive(request[REQUEST_USER_ID], dialogueId);
+    }
+
     @Delete('/:dialogueId')
     @UseGuards(IsUserGuard)
     remove (

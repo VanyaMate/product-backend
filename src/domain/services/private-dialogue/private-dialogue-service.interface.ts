@@ -8,6 +8,8 @@ export interface IPrivateDialogueService {
 
     archive (userId: string, privateDialogueId: string): Promise<Array<NotificationServiceResponse>>;
 
+    unArchive (userId: string, privateDialogueId: string): Promise<Array<NotificationServiceResponse>>;
+
     remove (userId: string, privateDialogueId: string): Promise<Array<NotificationServiceResponse>>;
 
     updateTitle (userId: string, privateDialogueId: string, title: string): Promise<Array<NotificationServiceResponse>>;
