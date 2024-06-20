@@ -15,6 +15,9 @@ import {
 import {
     DomainSearchItemOptions,
 } from 'product-types/dist/search/DomainSearchItemOptions';
+import {
+    DomainSearchCursorOptions,
+} from 'product-types/dist/search/DomainSearchCursorOptions';
 
 
 @Injectable()
@@ -28,6 +31,14 @@ export class PrivateMessagesService {
     async get (userId: string, dialogueId: string, options: DomainSearchItemOptions) {
         try {
             return await this._service.get(userId, dialogueId, options);
+        } catch (e) {
+            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
+        }
+    }
+
+    async getByCursor (userId: string, dialogueId: string, options: DomainSearchCursorOptions) {
+        try {
+            return await this._service.getByCursor(userId, dialogueId, options);
         } catch (e) {
             throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
         }
