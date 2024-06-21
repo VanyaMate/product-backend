@@ -82,20 +82,26 @@ export class PrismaNotificationService implements INotificationService {
     async send (notifications: Array<NotificationServiceResponse>): Promise<void> {
         return Promise.all(
             notifications.map((notification) => {
-                const [ ids, type, data ] = notification;
-                return Promise.all(
-                    ids.map(async (id) => {
-                        if (data) {
-                            return this
-                                ._create({
-                                    data,
-                                    type,
-                                    userId: id,
-                                })
-                                .then((notification) => this._notify(id, notificationFactory(notification)));
-                        }
-                    }),
-                );
+                if (Array.isArray(notification)) {
+                    const [ ids, type, data ] = notification;
+                    return Promise.all(
+                        ids.map(async (id) => {
+                            if (data) {
+                                return this
+                                    ._create({
+                                        data,
+                                        type,
+                                        userId: id,
+                                    })
+                                    .then((notification) => ({
+                                        ...notification,
+                                        creationDate: notification.creationDate.toUTCString(),
+                                    }))
+                                    .then((notification) => this._notify(id, notificationFactory(notification)));
+                            }
+                        }),
+                    );
+                }
             }),
         ).then();
     }
