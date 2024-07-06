@@ -26,6 +26,7 @@ import {
 import {
     PrivateMessageModule,
 } from '@/nest/modules/api/v1/private-message/private-message.module';
+import { PostModule } from '@/nest/modules/api/v1/post/post.module';
 
 
 @Module({
@@ -43,6 +44,7 @@ import {
         PrivateDialoguesModule,
         PrivateMessageModule,
         PrivateMessagesModule,
+        PostModule,
     ],
 })
 export class ApiV1Module {
