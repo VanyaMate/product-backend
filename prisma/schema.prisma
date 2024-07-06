@@ -81,6 +81,16 @@ enum NotificationType {
   // Приватный диалог разархивирован
   pdlg_au_in
   pdlg_au_out
+
+  // Пост создан
+  pt_c_in
+  pt_c_out
+  // Пост обновлен
+  pt_u_in
+  pt_u_out
+  // Пост удален
+  pt_d_in
+  pt_d_out
 }
 
 enum MessageType {
@@ -135,8 +145,8 @@ model User {
   createdPrivateDialogue   PrivateDialogue[]  @relation("CreatedPrivateDialogues")
   connectedPrivateDialogue PrivateDialogue[]  @relation("ConnectedPrivateDialogues")
   privateMessage           PrivateMessage[]
-
-  permissions UserPermissions?
+  posts                    Post[]
+  permissions              UserPermissions?
 }
 
 model UserPermissions {
@@ -292,4 +302,16 @@ model PrivateMessage {
 
   @@index([authorId])
   @@index([privateDialogueId])
+}
+
+model Post {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  authorId     String   @db.ObjectId
+  message      String
+  redacted     Boolean  @default(false)
+  creationDate DateTime @default(now())
+
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
 }

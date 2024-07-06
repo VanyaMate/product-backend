@@ -41,6 +41,15 @@ import {
 import {
     DomainNotificationPrivateMessageReadAllData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageReadAllData';
+import {
+    DomainNotificationPostCreateData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostCreateData';
+import {
+    DomainNotificationPostUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostUpdatedData';
+import {
+    DomainNotificationPostDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostDeletedData';
 
 
 export type NotificationMap = {
@@ -85,4 +94,11 @@ export type NotificationMap = {
     [DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_OUT]: DomainNotificationPrivateDialogueArchiveData,
     [DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_IN]: DomainNotificationPrivateDialogueArchiveData,
     [DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_OUT]: DomainNotificationPrivateDialogueArchiveData,
+
+    [DomainNotificationType.POST_CREATED_IN]: DomainNotificationPostCreateData,
+    [DomainNotificationType.POST_CREATED_OUT]: DomainNotificationPostCreateData,
+    [DomainNotificationType.POST_UPDATED_IN]: DomainNotificationPostUpdatedData,
+    [DomainNotificationType.POST_UPDATED_OUT]: DomainNotificationPostUpdatedData,
+    [DomainNotificationType.POST_DELETED_IN]: DomainNotificationPostDeletedData,
+    [DomainNotificationType.POST_DELETED_OUT]: DomainNotificationPostDeletedData,
 }
