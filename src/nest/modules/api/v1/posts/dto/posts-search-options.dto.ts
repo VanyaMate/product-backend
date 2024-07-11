@@ -7,6 +7,7 @@ import {
 
 export class PostsSearchOptionsDto {
     @IsString()
+    @IsOptional()
     query: string;
 
     @Transform(transformStringToNumber)
