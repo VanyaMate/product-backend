@@ -31,6 +31,7 @@ export class PrismaPostsService implements IPostsService {
                 },
                 skip   : options.offset,
                 take   : options.limit,
+                orderBy: { id: 'desc' },
                 include: {
                     author: {
                         select: prismaDomainUserSelector,
@@ -65,6 +66,7 @@ export class PrismaPostsService implements IPostsService {
                 cursor : {
                     id: options.cursor,
                 },
+                orderBy: { id: 'desc' },
                 take   : options.limit,
                 include: {
                     author: {
