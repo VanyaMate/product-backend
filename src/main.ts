@@ -5,11 +5,10 @@ import { AppModule } from '@/app.module';
 import * as cookieParser from 'cookie-parser';
 import { PORT } from '@/domain/consts/env';
 import { HttpExceptionFilter } from '@/nest/filters/http-exception.filter';
-import {
-    DomainHttpExceptionFilter,
-} from '@/nest/filters/domain-http-exception.filter';
 import { ResponseInterceptor } from '@/nest/interceptors/respose.interceptor';
 import * as express from 'express';
+import { json, urlencoded } from 'express';
+import { unless } from '@/domain/lib/helpers/unless';
 
 
 async function bootstrap () {
@@ -31,10 +30,14 @@ async function bootstrap () {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalInterceptors(new ResponseInterceptor());
-    // app.useGlobalFilters(new DomainHttpExceptionFilter());
 
     app.use(`/static`, express.static('static'));
-    app.use(cookieParser());
+    app.use(unless('/api/v1/file', cookieParser()));
+    app.use(unless('/api/v1/file', json({ limit: '10mb' })));
+    app.use(unless('/api/v1/file', urlencoded({
+        limit   : '10mb',
+        extended: true,
+    })));
 
     await app.listen(port, () => console.log(`server started on: ${ port }`));
 }
