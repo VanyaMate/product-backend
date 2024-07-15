@@ -50,6 +50,15 @@ import {
 import {
     DomainNotificationPostDeletedData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationPostDeletedData';
+import {
+    DomainNotificationFileUploadedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileUploadedData';
+import {
+    DomainNotificationFileUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileUpdatedData';
+import {
+    DomainNotificationFileDeletedData,
+} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileDeletedData';
 
 
 export type NotificationMap = {
@@ -101,4 +110,11 @@ export type NotificationMap = {
     [DomainNotificationType.POST_UPDATED_OUT]: DomainNotificationPostUpdatedData,
     [DomainNotificationType.POST_DELETED_IN]: DomainNotificationPostDeletedData,
     [DomainNotificationType.POST_DELETED_OUT]: DomainNotificationPostDeletedData,
+
+    [DomainNotificationType.FILE_UPLOADED_IN]: DomainNotificationFileUploadedData,
+    [DomainNotificationType.FILE_UPLOADED_OUT]: DomainNotificationFileUploadedData,
+    [DomainNotificationType.FILE_UPDATED_IN]: DomainNotificationFileUpdatedData,
+    [DomainNotificationType.FILE_UPDATED_OUT]: DomainNotificationFileUpdatedData,
+    [DomainNotificationType.FILE_DELETED_IN]: DomainNotificationFileDeletedData,
+    [DomainNotificationType.FILE_DELETED_OUT]: DomainNotificationFileDeletedData,
 }

@@ -91,6 +91,16 @@ enum NotificationType {
   // Пост удален
   pt_d_in
   pt_d_out
+
+  // Файл загружен
+  fl_u_in
+  fl_u_out
+  // Файл изменен
+  fl_upd_in
+  fl_upd_out
+  // Файл удален
+  fl_d_in
+  fl_d_out
 }
 
 enum MessageType {
@@ -146,6 +156,7 @@ model User {
   connectedPrivateDialogue PrivateDialogue[]  @relation("ConnectedPrivateDialogues")
   privateMessage           PrivateMessage[]
   posts                    Post[]
+  files                    File[]
   permissions              UserPermissions?
 }
 
@@ -314,4 +325,19 @@ model Post {
   author User @relation(fields: [authorId], references: [id])
 
   @@index([authorId])
+}
+
+model File {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId          String   @db.ObjectId
+  fileName         String   @default("")
+  filePath         String
+  fileType         String
+  fileOriginalName String
+  fileWeight       Float
+  uploadDate       DateTime @default(now())
+
+  owner User @relation(fields: [ownerId], references: [id])
+
+  @@index([ownerId])
 }

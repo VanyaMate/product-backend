@@ -15,6 +15,9 @@ import {
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -29,7 +32,7 @@ export class PrivateDialoguesService {
         try {
             return await this._service.getList(userId, options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialoguesService.name, 400, 'Cant get dialogues'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialoguesService.name, 400, 'Cant get dialogues'));
         }
     }
 
@@ -37,7 +40,7 @@ export class PrivateDialoguesService {
         try {
             return await this._service.getOne(userId, dialogueId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialoguesService.name, 400, 'Cant get dialogues'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialoguesService.name, 400, 'Cant get dialogues'));
         }
     }
 }

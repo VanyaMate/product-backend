@@ -17,6 +17,9 @@ import {
     DomainFriendRequest,
 } from 'product-types/dist/friends/DomainFriendRequest';
 import { DomainFriends } from 'product-types/dist/friends/DomainFriends';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -31,7 +34,7 @@ export class FriendsService implements IFriendsService {
         try {
             return await this._service.getFriendsOfUserByUserId(userId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get friends'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, FriendsService.name, 400, 'Cant get friends'));
         }
     }
 
@@ -39,7 +42,7 @@ export class FriendsService implements IFriendsService {
         try {
             return await this._service.getFriendRequestsSentByUserId(userId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get sent friend requests'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, FriendsService.name, 400, 'Cant get sent friend requests'));
         }
     }
 
@@ -47,7 +50,7 @@ export class FriendsService implements IFriendsService {
         try {
             return await this._service.getFriendRequestsReceivedByUserId(userId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get received friend requests'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, FriendsService.name, 400, 'Cant get received friend requests'));
         }
     }
 
@@ -55,7 +58,7 @@ export class FriendsService implements IFriendsService {
         try {
             return await this._service.getFriendRequestsByUserId(userId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get friend requests'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, FriendsService.name, 400, 'Cant get friend requests'));
         }
     }
 
@@ -63,7 +66,7 @@ export class FriendsService implements IFriendsService {
         try {
             return await this._service.getFriendsWithRequestsByUserId(userId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, FriendsService.name, 400, 'Cant get friends with requests'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, FriendsService.name, 400, 'Cant get friends with requests'));
         }
     }
 }

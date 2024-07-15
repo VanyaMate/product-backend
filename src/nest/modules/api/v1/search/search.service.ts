@@ -20,6 +20,9 @@ import {
     assertDomainSearchItemOptions,
     DomainSearchItemOptions,
 } from 'product-types/dist/search/DomainSearchItemOptions';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -35,7 +38,7 @@ export class SearchService {
             assertDomainSearchOptions(options, 'options', 'DomainSearchOptions');
             return this._service.searchAll(options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, SearchService.name, 400, 'Search error'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, SearchService.name, 400, 'Search error'));
         }
     }
 
@@ -44,7 +47,7 @@ export class SearchService {
             assertDomainSearchItemOptions(options, 'options', 'DomainSearchOptions');
             return this._service.searchUsers(options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, SearchService.name, 400, 'Search error'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, SearchService.name, 400, 'Search error'));
         }
     }
 }

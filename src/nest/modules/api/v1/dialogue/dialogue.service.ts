@@ -13,6 +13,9 @@ import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 import { DomainDialogue } from 'product-types/dist/dialogue/DomainDialogue';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -28,7 +31,7 @@ export class DialogueService {
             // WIP: Временно добавил [0][1] чтобы на типы не ругалось.
             return (await this._service.create(user1Id, [ user2Id ]))[0][1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant create dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, DialogueService.name, 400, 'Cant create dialogue'));
         }
     }
 
@@ -36,7 +39,7 @@ export class DialogueService {
         try {
             return (await this._service.leave(userInitiatorId, dialogueId))[0][1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant remove dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, DialogueService.name, 400, 'Cant remove dialogue'));
         }
     }
 
@@ -44,7 +47,7 @@ export class DialogueService {
         try {
             return (await this._service.archive(userInitiatorId, dialogId))[0][1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, DialogueService.name, 400, 'Cant archive dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, DialogueService.name, 400, 'Cant archive dialogue'));
         }
     }
 }

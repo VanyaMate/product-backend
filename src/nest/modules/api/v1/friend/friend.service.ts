@@ -15,6 +15,9 @@ import {
 import {
     NotificationService,
 } from '@/nest/modules/api/v1/notification/notification.service';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -35,7 +38,7 @@ export class FriendService {
             passive[0].forEach((target) => this._notificationService.friendRequestOut(target, passive[1]));
             return active[1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
         }
     }
 
@@ -46,7 +49,7 @@ export class FriendService {
             passive[0].forEach((target) => this._notificationService.friendRequestAcceptedOut(target, passive[1]));
             return active[1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'FriendService', 400, 'Cant add friend'));
         }
     }
 
@@ -57,7 +60,7 @@ export class FriendService {
             passive[0].forEach((target) => this._notificationService.friendDeletedOut(target, passive[1]));
             return active[1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant remove friend'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'FriendService', 400, 'Cant remove friend'));
         }
     }
 
@@ -68,7 +71,7 @@ export class FriendService {
             passive[0].forEach((target) => this._notificationService.friendRequestCanceledOut(target, passive[1]));
             return active[1];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'FriendService', 400, 'Cant cancel friend request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'FriendService', 400, 'Cant cancel friend request'));
         }
     }
 }

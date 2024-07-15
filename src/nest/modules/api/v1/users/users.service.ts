@@ -10,6 +10,9 @@ import {
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    globalExceptionServiceErrorResponse,
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -24,7 +27,7 @@ export class UsersService {
         try {
             return await this._service.getUserById(id);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 
@@ -32,7 +35,7 @@ export class UsersService {
         try {
             return await this._service.getUserByLogin(login);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 
@@ -40,7 +43,7 @@ export class UsersService {
         try {
             return await this._service.getUserFullByLogin(login);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 
@@ -48,7 +51,7 @@ export class UsersService {
         try {
             return await this._service.getPrivateUserFullByLogin(login);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 
@@ -56,7 +59,7 @@ export class UsersService {
         try {
             return await this._service.getUsersByLogins(logins);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 
@@ -64,7 +67,7 @@ export class UsersService {
         try {
             return await this._service.findUsersByStartLogin(loginStart);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, `UserService`, 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, `UserService`, 400, 'Bad request'));
         }
     }
 }

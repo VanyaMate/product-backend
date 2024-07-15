@@ -11,6 +11,9 @@ import { DomainTokens } from 'product-types/dist/token/DomainTokens';
 import {
     serviceErrorResponse
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -28,7 +31,7 @@ export class TokenService implements ITokensService {
         try {
             return this._service.generateForUser(login, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'TokenService', 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'TokenService', 400, 'Bad request'));
         }
     }
 
@@ -36,7 +39,7 @@ export class TokenService implements ITokensService {
         try {
             return this._service.refreshTokensByRefreshToken(refreshToken, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'TokenService', 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'TokenService', 400, 'Bad request'));
         }
     }
 
@@ -44,7 +47,7 @@ export class TokenService implements ITokensService {
         try {
             return this._service.removeTokensByRefreshToken(refreshToken, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'TokenService', 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'TokenService', 400, 'Bad request'));
         }
     }
 
@@ -52,7 +55,7 @@ export class TokenService implements ITokensService {
         try {
             return this._service.removeAllTokensForUserByRefreshToken(refreshToken, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, 'TokenService', 400, 'Bad request'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'TokenService', 400, 'Bad request'));
         }
     }
 }
