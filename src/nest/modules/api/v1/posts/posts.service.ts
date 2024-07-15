@@ -18,6 +18,9 @@ import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
 import {
     PrismaPostsService,
 } from '@/domain/services/posts/implementations/prisma-posts.service';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -32,7 +35,7 @@ export class PostsService {
         try {
             return await this._service.getByUserId(userId, options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostsService.name, 400, 'Cant get posts'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostsService.name, 400, 'Cant get posts'));
         }
     }
 
@@ -40,7 +43,7 @@ export class PostsService {
         try {
             return await this._service.getByUserIdWithCursor(userId, options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostsService.name, 400, 'Cant get posts'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostsService.name, 400, 'Cant get posts'));
         }
     }
 
@@ -48,7 +51,7 @@ export class PostsService {
         try {
             return await this._service.getById(postId);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostsService.name, 400, 'Cant get post'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostsService.name, 400, 'Cant get post'));
         }
     }
 }

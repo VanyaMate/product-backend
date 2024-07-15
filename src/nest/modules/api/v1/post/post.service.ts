@@ -22,6 +22,9 @@ import {
 import {
     NotificationService,
 } from '@/nest/modules/api/v1/notification/notification.service';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -41,7 +44,7 @@ export class PostService {
             this._notification.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostService.name, 400, 'Cant create post'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostService.name, 400, 'Cant create post'));
         }
     }
 
@@ -51,7 +54,7 @@ export class PostService {
             this._notification.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostService.name, 400, 'Cant create post'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostService.name, 400, 'Cant create post'));
         }
     }
 
@@ -61,7 +64,7 @@ export class PostService {
             this._notification.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PostService.name, 400, 'Cant create post'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostService.name, 400, 'Cant create post'));
         }
     }
 }

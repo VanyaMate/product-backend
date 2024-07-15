@@ -9,6 +9,7 @@ import {
     DomainHttpExceptionFilter,
 } from '@/nest/filters/domain-http-exception.filter';
 import { ResponseInterceptor } from '@/nest/interceptors/respose.interceptor';
+import * as express from 'express';
 
 
 async function bootstrap () {
@@ -30,9 +31,11 @@ async function bootstrap () {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalInterceptors(new ResponseInterceptor());
-    app.useGlobalFilters(new DomainHttpExceptionFilter());
+    // app.useGlobalFilters(new DomainHttpExceptionFilter());
 
+    app.use(`/static`, express.static('static'));
     app.use(cookieParser());
+
     await app.listen(port, () => console.log(`server started on: ${ port }`));
 }
 

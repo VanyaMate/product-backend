@@ -21,6 +21,9 @@ import {
 import {
     NotificationService,
 } from '@/nest/modules/api/v1/notification/notification.service';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -40,7 +43,7 @@ export class PrivateMessageService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessageService.name, 400, 'Cant send message'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessageService.name, 400, 'Cant send message'));
         }
     }
 
@@ -50,7 +53,7 @@ export class PrivateMessageService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessageService.name, 400, 'Cant remove message'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessageService.name, 400, 'Cant remove message'));
         }
     }
 
@@ -60,7 +63,7 @@ export class PrivateMessageService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessageService.name, 400, 'Cant update message'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessageService.name, 400, 'Cant update message'));
         }
     }
 
@@ -70,7 +73,7 @@ export class PrivateMessageService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessageService.name, 400, 'Cant read message'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessageService.name, 400, 'Cant read message'));
         }
     }
 
@@ -80,7 +83,7 @@ export class PrivateMessageService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessageService.name, 400, 'Cant read all messages'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessageService.name, 400, 'Cant read all messages'));
         }
     }
 }

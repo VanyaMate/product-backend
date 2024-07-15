@@ -15,6 +15,9 @@ import {
 import {
     NotificationService,
 } from '@/nest/modules/api/v1/notification/notification.service';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -34,7 +37,7 @@ export class PrivateDialogueService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant create dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant create dialogue'));
         }
     }
 
@@ -44,7 +47,7 @@ export class PrivateDialogueService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant archive dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant archive dialogue'));
         }
     }
 
@@ -54,7 +57,7 @@ export class PrivateDialogueService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant archive dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant archive dialogue'));
         }
     }
 
@@ -64,7 +67,7 @@ export class PrivateDialogueService {
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant remove dialogue'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateDialogueService.name, 400, 'Cant remove dialogue'));
         }
     }
 

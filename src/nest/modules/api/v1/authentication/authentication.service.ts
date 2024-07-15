@@ -22,6 +22,9 @@ import {
 import {
     DomainRegistrationData,
 } from 'product-types/dist/authorization/DomainRegistrationData';
+import {
+    globalExceptionServiceErrorResponse,
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -43,7 +46,7 @@ export class AuthenticationService {
         try {
             return await this._service.login(loginData, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(e);
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'AuthenticationService', 400, 'Bad login'));
         }
     }
 
@@ -51,7 +54,7 @@ export class AuthenticationService {
         try {
             return await this._service.registration(registrationData, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(e);
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'AuthenticationService', 400, 'Bad registration'));
         }
     }
 
@@ -59,7 +62,7 @@ export class AuthenticationService {
         try {
             return await this._service.logout(refreshToken, fingerprint);
         } catch (e) {
-            throw new DomainServiceErrorException(e);
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'AuthenticationService', 400, 'Bad logout'));
         }
     }
 }

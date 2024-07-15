@@ -18,6 +18,9 @@ import {
 import {
     DomainSearchCursorOptions,
 } from 'product-types/dist/search/DomainSearchCursorOptions';
+import {
+    globalExceptionServiceErrorResponse
+} from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
 @Injectable()
@@ -32,7 +35,7 @@ export class PrivateMessagesService {
         try {
             return await this._service.get(userId, dialogueId, options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
         }
     }
 
@@ -40,7 +43,7 @@ export class PrivateMessagesService {
         try {
             return await this._service.getByCursor(userId, dialogueId, options);
         } catch (e) {
-            throw new DomainServiceErrorException(serviceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
+            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PrivateMessagesService.name, 400, 'Cant get messages'));
         }
     }
 }
