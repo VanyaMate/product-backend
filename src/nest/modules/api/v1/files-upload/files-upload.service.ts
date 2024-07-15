@@ -3,7 +3,7 @@ import {
     IFilesUploadService,
 } from '@/domain/services/files-upload/files-upload-service.interface';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
-import { FilesService } from '@/nest/modules/services/files/files.service';
+import { FileService } from '@/nest/modules/services/files/file.service';
 import {
     PrismaFileUploadService,
 } from '@/domain/services/files-upload/implementations/prisma-file-upload.service';
@@ -27,7 +27,7 @@ export class FilesUploadService {
 
     constructor (
         private readonly _prisma: PrismaService,
-        private readonly _files: FilesService,
+        private readonly _files: FileService,
         private readonly _notificationService: NotificationService,
     ) {
         this._service = new PrismaFileUploadService(this._prisma, this._files);

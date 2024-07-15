@@ -12,6 +12,7 @@ export const prismaFileToDomain = function (data: File, owner: DomainUser): Doma
         fileWeight      : data.fileWeight,
         fileType        : data.fileType,
         uploadDate      : data.uploadDate.toUTCString(),
+        private         : data.private,
         owner           : owner,
     };
 };

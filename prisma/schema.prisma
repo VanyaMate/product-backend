@@ -336,6 +336,7 @@ model File {
   fileOriginalName String
   fileWeight       Float
   uploadDate       DateTime @default(now())
+  private          Boolean  @default(true)
 
   owner User @relation(fields: [ownerId], references: [id])
 

@@ -2,7 +2,7 @@ import {
     IFilesUploadService,
 } from '@/domain/services/files-upload/files-upload-service.interface';
 import { PrismaClient } from '@prisma/client';
-import { IFilesService } from '@/domain/services/file/file-service.interface';
+import { IFileService } from '@/domain/services/file/file-service.interface';
 import { DomainFile } from 'product-types/dist/file/DomainFile';
 import {
     prismaDomainUserSelector,
@@ -21,7 +21,7 @@ import {
 export class PrismaFileUploadService implements IFilesUploadService {
     constructor (
         private readonly _prisma: PrismaClient,
-        private readonly _files: IFilesService,
+        private readonly _files: IFileService,
     ) {
     }
 

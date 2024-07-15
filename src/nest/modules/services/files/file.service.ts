@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { IFilesService } from '@/domain/services/file/file-service.interface';
+import { IFileService } from '@/domain/services/file/file-service.interface';
 import {
-    MulterFilesService,
-} from '@/domain/services/file/implementations/multer-files.service';
+    MulterFileService,
+} from '@/domain/services/file/implementations/multer-file.service';
 
 
 @Injectable()
-export class FilesService implements IFilesService {
-    private readonly _service: IFilesService = new MulterFilesService(`./static/uploads`);
+export class FileService implements IFileService {
+    private readonly _service: IFileService = new MulterFileService(`./static/uploads`);
 
     async saveTo<T> (
         filePath: string,

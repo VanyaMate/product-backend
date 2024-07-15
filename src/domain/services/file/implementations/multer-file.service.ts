@@ -1,9 +1,9 @@
-import { IFilesService } from '@/domain/services/file/file-service.interface';
+import { IFileService } from '@/domain/services/file/file-service.interface';
 import * as fs from 'fs';
 import * as path from 'path';
 
 
-export class MulterFilesService implements IFilesService {
+export class MulterFileService implements IFileService {
     constructor (private readonly _baseDir: string) {
     }
 
