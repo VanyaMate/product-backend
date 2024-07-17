@@ -32,14 +32,18 @@ async function bootstrap () {
     app.useGlobalInterceptors(new ResponseInterceptor());
 
     app.use(`/static`, express.static('static'));
-    app.use(unless('/api/v1/file', cookieParser()));
+    app.use(cookieParser());
     app.use(unless('/api/v1/file', json({ limit: '10mb' })));
     app.use(unless('/api/v1/file', urlencoded({
         limit   : '10mb',
         extended: true,
     })));
 
-    await app.listen(port, () => console.log(`server started on: ${ port }`));
+    if (process.env.NODE_ENV === 'dev') {
+        await app.listen(port, () => console.log(`server started on: ${ port }`));
+    } else {
+        await app.listen(port, () => console.log(`server started on: ${ port }`));
+    }
 }
 
 bootstrap();

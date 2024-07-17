@@ -54,6 +54,9 @@ export class PrismaFilesService implements IFilesService {
                 },
                 take   : searchOptions.limit,
                 skip   : searchOptions.offset,
+                orderBy: {
+                    id: 'desc',
+                },
             }),
             this._prisma.file.count({
                 where: {
