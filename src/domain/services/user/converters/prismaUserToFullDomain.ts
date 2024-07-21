@@ -1,4 +1,4 @@
-import { User, UserPermissions } from '@prisma/client';
+import { Connection, User, UserPermissions } from '@prisma/client';
 import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 import {
     DomainUserPermissionsDialogue,
@@ -7,13 +7,15 @@ import {
 } from 'product-types/dist/user/DomainUserPermissions';
 
 
-export const userPrismaToFullDomain = function (user: User & {
-    permissions: UserPermissions
+export const prismaUserToFullDomain = function (user: User & {
+    permissions: UserPermissions,
+    connections: Connection[]
 }): DomainUserFull {
     return {
         id         : user.id,
         login      : user.login,
         avatar     : user.avatar,
+        online     : !!user.connections.length,
         contacts   : {
             email      : user.email,
             phoneNumber: user.phoneNumber,

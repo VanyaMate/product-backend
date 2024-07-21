@@ -10,8 +10,8 @@ import {
 } from '@prisma/client';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
@@ -19,6 +19,9 @@ import {
     DomainFriendRequest,
 } from 'product-types/dist/friends/DomainFriendRequest';
 import { DomainFriends } from 'product-types/dist/friends/DomainFriends';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaFriendsService implements IFriendsService {
@@ -30,8 +33,8 @@ export class PrismaFriendsService implements IFriendsService {
             const friends = await this._getFriendsByUserId(userId);
             return friends.map(
                 (friend) => friend.toUser.id === userId
-                            ? userPrismaToDomain(friend.fromUser)
-                            : userPrismaToDomain(friend.toUser),
+                            ? prismaUserToDomain(friend.fromUser)
+                            : prismaUserToDomain(friend.toUser),
             );
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendsService.name, 400, 'Cant get friends');
@@ -44,7 +47,7 @@ export class PrismaFriendsService implements IFriendsService {
             return friends.map(({ toUser, id, message }) => ({
                 requestId: id,
                 message  : message,
-                user     : userPrismaToDomain(toUser),
+                user     : prismaUserToDomain(toUser),
             }));
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendsService.name, 400, 'Cant get sent friend requests');
@@ -57,7 +60,7 @@ export class PrismaFriendsService implements IFriendsService {
             return friends.map(({ fromUser, id, message }) => ({
                 requestId: id,
                 message  : message,
-                user     : userPrismaToDomain(fromUser),
+                user     : prismaUserToDomain(fromUser),
             }));
         } catch (e) {
             throw serviceErrorResponse(e, PrismaFriendsService.name, 400, 'Cant get received friend requests');
@@ -75,13 +78,13 @@ export class PrismaFriendsService implements IFriendsService {
                     friendRequestReceived.push({
                         requestId: request.id,
                         message  : request.message,
-                        user     : userPrismaToDomain(request.fromUser),
+                        user     : prismaUserToDomain(request.fromUser),
                     });
                 } else {
                     friendRequestReceived.push({
                         requestId: request.id,
                         message  : request.message,
-                        user     : userPrismaToDomain(request.toUser),
+                        user     : prismaUserToDomain(request.toUser),
                     });
                 }
             });
@@ -104,18 +107,18 @@ export class PrismaFriendsService implements IFriendsService {
             return {
                 friends    : currentFriends.map(
                     (friend) => friend.toUser.id === userId
-                                ? userPrismaToDomain(friend.fromUser)
-                                : userPrismaToDomain(friend.toUser),
+                                ? prismaUserToDomain(friend.fromUser)
+                                : prismaUserToDomain(friend.toUser),
                 ),
                 requestsIn : requestIn.map(({ fromUser, id, message }) => ({
                     requestId: id,
                     message  : message,
-                    user     : userPrismaToDomain(fromUser),
+                    user     : prismaUserToDomain(fromUser),
                 })),
                 requestsOut: requestOut.map(({ toUser, id, message }) => ({
                     requestId: id,
                     message  : message,
-                    user     : userPrismaToDomain(toUser),
+                    user     : prismaUserToDomain(toUser),
                 })),
             };
         } catch (e) {
@@ -132,8 +135,8 @@ export class PrismaFriendsService implements IFriendsService {
                 ],
             },
             include: {
-                toUser  : true,
-                fromUser: true,
+                toUser  : { include: prismaToDomainUserInclude },
+                fromUser: { include: prismaToDomainUserInclude },
             },
         });
     }
@@ -142,7 +145,7 @@ export class PrismaFriendsService implements IFriendsService {
         return this._prisma.friendRequest.findMany({
             where  : { fromUserId: userId },
             include: {
-                toUser: true,
+                toUser: { include: prismaToDomainUserInclude },
             },
         });
     }
@@ -151,7 +154,7 @@ export class PrismaFriendsService implements IFriendsService {
         return this._prisma.friendRequest.findMany({
             where  : { toUserId: userId },
             include: {
-                fromUser: true,
+                fromUser: { include: prismaToDomainUserInclude },
             },
         });
     }
@@ -165,8 +168,8 @@ export class PrismaFriendsService implements IFriendsService {
                 ],
             },
             include: {
-                toUser  : true,
-                fromUser: true,
+                toUser  : { include: prismaToDomainUserInclude },
+                fromUser: { include: prismaToDomainUserInclude },
             },
         });
     }

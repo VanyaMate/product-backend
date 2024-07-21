@@ -6,8 +6,8 @@ import {
     DomainFingerprint,
 } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 import {
     IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
@@ -49,7 +49,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                     const tokens = await this._tokensService.generateForUser(user.id, fingerprint);
                     return {
                         tokens,
-                        user: userPrismaToDomain(user),
+                        user: prismaUserToDomain({ ...user, connections: [] }),
                     };
                 }
             }
@@ -79,7 +79,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
 
                 return {
                     tokens,
-                    user: userPrismaToDomain(newUser),
+                    user: prismaUserToDomain({ ...newUser, connections: [] }),
                 };
             } else {
                 throw new Error('This login is already taken');

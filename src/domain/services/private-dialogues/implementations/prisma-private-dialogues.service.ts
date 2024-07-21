@@ -14,6 +14,12 @@ import {
 import {
     prismaPrivateMessageToDomain,
 } from '@/domain/services/message/converters/prismaPrivateMessageToDomain';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
@@ -29,12 +35,12 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                 ],
             },
             include: {
-                userOut       : { select: prismaDomainUserSelector },
-                userIn        : { select: prismaDomainUserSelector },
+                userOut       : { include: prismaToDomainUserInclude },
+                userIn        : { include: prismaToDomainUserInclude },
                 privateMessage: {
                     take   : 1,
                     include: {
-                        author: { select: prismaDomainUserSelector },
+                        author: { include: prismaToDomainUserInclude },
                     },
                     orderBy: {
                         creationDate: 'desc',
@@ -54,10 +60,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             meDeleted        : dialogue.userInDeleted,
             companionArchived: dialogue.userOutArchived,
             companionDeleted : dialogue.userOutDeleted,
-            user             : dialogue.userOut,
+            user             : prismaUserToDomain(dialogue.userOut),
             messages         : dialogue
                 .privateMessage
-                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author)))
                 .reverse(),
         }) : ({
             id               : dialogue.id,
@@ -68,10 +74,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             meDeleted        : dialogue.userOutDeleted,
             companionArchived: dialogue.userInArchived,
             companionDeleted : dialogue.userInDeleted,
-            user             : dialogue.userIn,
+            user             : prismaUserToDomain(dialogue.userIn),
             messages         : dialogue
                 .privateMessage
-                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author)))
                 .reverse(),
         }));
     }
@@ -86,12 +92,12 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
                 ],
             },
             include: {
-                userOut       : { select: prismaDomainUserSelector },
-                userIn        : { select: prismaDomainUserSelector },
+                userOut       : { include: prismaToDomainUserInclude },
+                userIn        : { include: prismaToDomainUserInclude },
                 privateMessage: {
                     take   : 20,
                     include: {
-                        author: { select: prismaDomainUserSelector },
+                        author: { include: prismaToDomainUserInclude },
                     },
                     orderBy: {
                         creationDate: 'desc',
@@ -109,10 +115,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             meDeleted        : dialogue.userInDeleted,
             companionArchived: dialogue.userOutArchived,
             companionDeleted : dialogue.userOutDeleted,
-            user             : dialogue.userOut,
+            user             : prismaUserToDomain(dialogue.userOut),
             messages         : dialogue
                 .privateMessage
-                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author)))
                 .reverse(),
         }) : ({
             id               : dialogue.id,
@@ -123,10 +129,10 @@ export class PrismaPrivateDialoguesService implements IPrivateDialoguesService {
             meDeleted        : dialogue.userOutDeleted,
             companionArchived: dialogue.userInArchived,
             companionDeleted : dialogue.userInDeleted,
-            user             : dialogue.userIn,
+            user             : prismaUserToDomain(dialogue.userIn),
             messages         : dialogue
                 .privateMessage
-                .map((message) => prismaPrivateMessageToDomain(message, message.author))
+                .map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author)))
                 .reverse(),
         });
     }

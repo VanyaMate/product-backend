@@ -15,6 +15,12 @@ import {
 import {
     DomainSearchCursorOptions,
 } from 'product-types/dist/search/DomainSearchCursorOptions';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaPrivateMessagesService implements IPrivateMessagesService {
@@ -40,7 +46,7 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
                         },
                         include: {
                             author: {
-                                select: prismaDomainUserSelector,
+                                include: prismaToDomainUserInclude,
                             },
                         },
                         skip   : options.offset,
@@ -57,7 +63,7 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
         ]);
 
         return {
-            list : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            list : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author))),
             count: count,
         };
     }
@@ -84,7 +90,7 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
                         },
                         include: {
                             author: {
-                                select: prismaDomainUserSelector,
+                                include: prismaToDomainUserInclude,
                             },
                         },
                         orderBy: {
@@ -104,7 +110,7 @@ export class PrismaPrivateMessagesService implements IPrivateMessagesService {
         ]);
 
         return {
-            list : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+            list : dialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author))),
             count: count,
         };
     }

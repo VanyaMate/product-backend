@@ -14,6 +14,12 @@ import {
 import {
     prismaFileToDomain,
 } from '@/domain/services/files-upload/converters/prismaFileToDomain';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaFilesService implements IFilesService {
@@ -30,12 +36,12 @@ export class PrismaFilesService implements IFilesService {
             },
             include: {
                 owner: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
 
-        return prismaFileToDomain(fileData, fileData.owner);
+        return prismaFileToDomain(fileData, prismaUserToDomain(fileData.owner));
     }
 
     getFilesByIds (userId: string, filesIds: string[]): Promise<DomainFile[]> {
@@ -50,7 +56,7 @@ export class PrismaFilesService implements IFilesService {
                     fileName: searchOptions.query,
                 },
                 include: {
-                    owner: { select: prismaDomainUserSelector },
+                    owner: { include: prismaToDomainUserInclude },
                 },
                 take   : searchOptions.limit,
                 skip   : searchOptions.offset,
@@ -68,7 +74,7 @@ export class PrismaFilesService implements IFilesService {
 
         return {
             count,
-            list: files.map((file) => prismaFileToDomain(file, file.owner)),
+            list: files.map((file) => prismaFileToDomain(file, prismaUserToDomain(file.owner))),
         };
     }
 

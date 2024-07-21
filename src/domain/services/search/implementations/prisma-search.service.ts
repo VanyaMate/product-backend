@@ -16,6 +16,12 @@ import { DomainSearchItem } from 'product-types/dist/search/DomainSearchItem';
 import {
     prismaDomainUserWithPermissionsSelector,
 } from '@/domain/services/user/selectors/prisma/prisma-domain-user-with-permissions.selector';
+import {
+    prismaToDomainFullUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-full-user.inculde';
+import {
+    prismaUserToPermissionsDomain,
+} from '@/domain/services/user/converters/prismaUserToPermissionsDomain';
 
 
 export class PrismaSearchService implements ISearchService {
@@ -53,7 +59,6 @@ export class PrismaSearchService implements ISearchService {
                 };
                 const userQuery: Prisma.UserFindManyArgs    = {
                     where  : userWhereInput,
-                    select : prismaDomainUserWithPermissionsSelector,
                     orderBy: { login: 'asc' },
                     take,
                     skip,
@@ -61,10 +66,16 @@ export class PrismaSearchService implements ISearchService {
 
                 const [ count, list ] = await this._prisma.$transaction([
                     this._prisma.user.count(userCountArgs),
-                    this._prisma.user.findMany(userQuery),
+                    this._prisma.user.findMany({
+                        ...userQuery,
+                        include: prismaToDomainFullUserInclude,
+                    }),
                 ]);
 
-                return { count, list };
+                return {
+                    count,
+                    list: list.map(prismaUserToPermissionsDomain),
+                };
             default:
                 return null;
         }

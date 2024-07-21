@@ -14,6 +14,12 @@ import {
 import {
     prismaPostToDomain,
 } from '@/domain/services/post/converters/prismaPostToDomain';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaPostsService implements IPostsService {
@@ -34,7 +40,7 @@ export class PrismaPostsService implements IPostsService {
                 orderBy: { id: 'desc' },
                 include: {
                     author: {
-                        select: prismaDomainUserSelector,
+                        include: prismaToDomainUserInclude,
                     },
                 },
             }),
@@ -49,7 +55,7 @@ export class PrismaPostsService implements IPostsService {
         ]);
 
         return {
-            list: posts.map((post) => prismaPostToDomain(post, post.author)),
+            list: posts.map((post) => prismaPostToDomain(post, prismaUserToDomain(post.author))),
             count,
         };
     }
@@ -70,7 +76,7 @@ export class PrismaPostsService implements IPostsService {
                 take   : options.limit,
                 include: {
                     author: {
-                        select: prismaDomainUserSelector,
+                        include: prismaToDomainUserInclude,
                     },
                 },
             }),
@@ -85,7 +91,7 @@ export class PrismaPostsService implements IPostsService {
         ]);
 
         return {
-            list: posts.map((post) => prismaPostToDomain(post, post.author)),
+            list: posts.map((post) => prismaPostToDomain(post, prismaUserToDomain(post.author))),
             count,
         };
     }
@@ -97,12 +103,12 @@ export class PrismaPostsService implements IPostsService {
             },
             include: {
                 author: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
 
-        return prismaPostToDomain(post, post.author);
+        return prismaPostToDomain(post, prismaUserToDomain(post.author));
     }
 
 }

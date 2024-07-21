@@ -16,8 +16,8 @@ import {
     prismaPostToDomain,
 } from '@/domain/services/post/converters/prismaPostToDomain';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaPostService implements IPostService {
@@ -32,12 +32,16 @@ export class PrismaPostService implements IPostService {
             },
             include: {
                 author: {
-                    include: { friendsTo: true, friendsFrom: true },
+                    include: {
+                        friendsTo  : true,
+                        friendsFrom: true,
+                        connections: { take: 1 },
+                    },
                 },
             },
         });
 
-        const postData   = prismaPostToDomain(post, userPrismaToDomain(post.author));
+        const postData   = prismaPostToDomain(post, prismaUserToDomain(post.author));
         const friendsIds = [ ...post.author.friendsTo, ...post.author.friendsFrom ]
             .map(({ toUserId, fromUserId }) =>
                 toUserId === userId ? fromUserId : toUserId,
@@ -81,14 +85,18 @@ export class PrismaPostService implements IPostService {
                 },
                 include: {
                     author: {
-                        include: { friendsTo: true, friendsFrom: true },
+                        include: {
+                            friendsTo  : true,
+                            friendsFrom: true,
+                            connections: { take: 1 },
+                        },
                     },
                 },
             },
         );
 
-        const previousPostData = prismaPostToDomain(createdPost, userPrismaToDomain(post.author));
-        const postData         = prismaPostToDomain(post, userPrismaToDomain(post.author));
+        const previousPostData = prismaPostToDomain(createdPost, prismaUserToDomain(post.author));
+        const postData         = prismaPostToDomain(post, prismaUserToDomain(post.author));
         const friendsIds       = [ ...post.author.friendsTo, ...post.author.friendsFrom ]
             .map(({ toUserId, fromUserId }) =>
                 toUserId === userId ? fromUserId : toUserId,
@@ -122,7 +130,11 @@ export class PrismaPostService implements IPostService {
             },
             include: {
                 author: {
-                    include: { friendsTo: true, friendsFrom: true },
+                    include: {
+                        friendsTo  : true,
+                        friendsFrom: true,
+                        connections: { take: 1 },
+                    },
                 },
             },
         });
@@ -140,7 +152,7 @@ export class PrismaPostService implements IPostService {
             },
         );
 
-        const postData   = prismaPostToDomain(post, userPrismaToDomain(post.author));
+        const postData   = prismaPostToDomain(post, prismaUserToDomain(post.author));
         const friendsIds = [ ...post.author.friendsTo, ...post.author.friendsFrom ]
             .map(({ toUserId, fromUserId }) =>
                 toUserId === userId ? fromUserId : toUserId,

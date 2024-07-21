@@ -4,8 +4,8 @@ import {
     DomainMessageType,
 } from 'product-types/dist/message/DomainMessage';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 
 

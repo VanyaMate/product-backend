@@ -6,8 +6,8 @@ import {
     DomainUserPermissionsPrivateDialogue,
 } from 'product-types/dist/user/DomainUserPermissions';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 import {
     prismaDomainUserSelector,
 } from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
@@ -28,6 +28,9 @@ import {
 import {
     prismaPrivateMessageToDomain,
 } from '@/domain/services/message/converters/prismaPrivateMessageToDomain';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaPrivateDialogueService implements IPrivateDialogueService {
@@ -57,6 +60,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                             },
                         },
                     },
+                    connections: { take: 1 },
                 },
             }),
             this._prisma.privateDialogue.findFirst({
@@ -67,23 +71,21 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     ],
                 },
                 include: {
-                    userIn        : true,
-                    userOut       : true,
+                    userIn        : { include: prismaToDomainUserInclude },
+                    userOut       : { include: prismaToDomainUserInclude },
                     privateMessage: {
                         take   : 10,
                         include: {
-                            author: {
-                                select: prismaDomainUserSelector,
-                            },
+                            author: { include: prismaToDomainUserInclude },
                         },
                     },
                 },
             }),
             this._prisma.user.findFirstOrThrow({
-                where : {
+                where  : {
                     id: userInId,
                 },
-                select: prismaDomainUserSelector,
+                include: prismaToDomainUserInclude,
             }),
         ]);
         if (!user) {
@@ -110,8 +112,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                                     meDeleted        : createdDialogue.userInDeleted,
                                     companionArchived: createdDialogue.userOutArchived,
                                     companionDeleted : createdDialogue.userOutDeleted,
-                                    user             : createdDialogue.userOut,
-                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+                                    user             : prismaUserToDomain(createdDialogue.userOut),
+                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author))),
                                 },
                             },
                         ],
@@ -119,7 +121,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                             [ userOutId ],
                             DomainNotificationType.PRIVATE_DIALOGUE_UNDELETED_OUT,
                             {
-                                dialogue: prismaPrivateDialogueWithUserToDomain(createdDialogue, createdDialogue.userIn),
+                                dialogue: prismaPrivateDialogueWithUserToDomain(createdDialogue, prismaUserToDomain(createdDialogue.userIn)),
                             },
                         ],
                     ];
@@ -143,8 +145,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                                     meDeleted        : createdDialogue.userInDeleted,
                                     companionArchived: createdDialogue.userOutArchived,
                                     companionDeleted : createdDialogue.userOutDeleted,
-                                    user             : createdDialogue.userIn,
-                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, message.author)),
+                                    user             : prismaUserToDomain(createdDialogue.userIn),
+                                    messages         : createdDialogue.privateMessage.map((message) => prismaPrivateMessageToDomain(message, prismaUserToDomain(message.author))),
                                 },
                             },
                         ],
@@ -152,7 +154,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                             [ userOutId ],
                             DomainNotificationType.PRIVATE_DIALOGUE_UNDELETED_OUT,
                             {
-                                dialogue: prismaPrivateDialogueWithUserToDomain(createdDialogue, createdDialogue.userOut),
+                                dialogue: prismaPrivateDialogueWithUserToDomain(createdDialogue, prismaUserToDomain(createdDialogue.userOut)),
                             },
                         ],
                     ];
@@ -164,12 +166,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
             switch (user.permissions.privateDialogue) {
                 case DomainUserPermissionsPrivateDialogue.ALL:
                     return this._createConversationForUsers(
-                        userIn, userPrismaToDomain(user),
+                        prismaUserToDomain(userIn),
+                        prismaUserToDomain(user),
                     );
                 case DomainUserPermissionsPrivateDialogue.FRIENDS:
                     if (user.friendsFrom.length || user.friendsTo.length) {
                         return this._createConversationForUsers(
-                            userIn, userPrismaToDomain(user),
+                            prismaUserToDomain(userIn),
+                            prismaUserToDomain(user),
                         );
                     }
                     throw 'No access';
@@ -193,8 +197,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                 ],
             },
             include: {
-                userIn : { select: prismaDomainUserSelector },
-                userOut: { select: prismaDomainUserSelector },
+                userIn : { include: prismaToDomainUserInclude },
+                userOut: { include: prismaToDomainUserInclude },
             },
         });
 
@@ -213,14 +217,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
                 [
                     [ dialogue.userOutId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
             ];
@@ -235,14 +239,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
                 [
                     [ dialogue.userInId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_ARCHIVED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
             ];
@@ -261,8 +265,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                 ],
             },
             include: {
-                userIn : { select: prismaDomainUserSelector },
-                userOut: { select: prismaDomainUserSelector },
+                userIn : { include: prismaToDomainUserInclude },
+                userOut: { include: prismaToDomainUserInclude },
             },
         });
 
@@ -281,14 +285,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
                 [
                     [ dialogue.userOutId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
             ];
@@ -303,14 +307,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
                 [
                     [ dialogue.userInId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_UNARCHIVED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
             ];
@@ -328,8 +332,8 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                 ],
             },
             include: {
-                userIn : { select: prismaDomainUserSelector },
-                userOut: { select: prismaDomainUserSelector },
+                userIn : { include: prismaToDomainUserInclude },
+                userOut: { include: prismaToDomainUserInclude },
             },
         });
 
@@ -355,14 +359,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_DELETED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
                 [
                     [ dialogue.userOutId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_DELETED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
             ];
@@ -385,14 +389,14 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                     [ userId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_DELETED_IN,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userIn),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userIn)),
                     },
                 ],
                 [
                     [ dialogue.userOutId ],
                     DomainNotificationType.PRIVATE_DIALOGUE_DELETED_OUT,
                     {
-                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, dialogue.userOut),
+                        dialogue: prismaPrivateDialogueWithUserToDomain(dialogue, prismaUserToDomain(dialogue.userOut)),
                     },
                 ],
             ];

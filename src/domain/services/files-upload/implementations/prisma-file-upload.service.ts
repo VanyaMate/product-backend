@@ -16,6 +16,12 @@ import {
 import {
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaFileUploadService implements IFilesUploadService {
@@ -41,7 +47,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
             },
             include: {
                 owner: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
@@ -51,7 +57,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
                 [ userId ],
                 DomainNotificationType.FILE_UPLOADED_IN,
                 {
-                    file: prismaFileToDomain(fileData, fileData.owner),
+                    file: prismaFileToDomain(fileData, prismaUserToDomain(fileData.owner)),
                 },
             ],
         ];
@@ -63,7 +69,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
             where  : { ownerId: userId, id: fileId },
             include: {
                 owner: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
@@ -74,7 +80,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
                 [ userId ],
                 DomainNotificationType.FILE_DELETED_IN,
                 {
-                    file: prismaFileToDomain(fileData, fileData.owner),
+                    file: prismaFileToDomain(fileData, prismaUserToDomain(fileData.owner)),
                 },
             ],
         ];
@@ -85,7 +91,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
             where  : { ownerId: userId, id: fileId },
             include: {
                 owner: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
@@ -99,7 +105,7 @@ export class PrismaFileUploadService implements IFilesUploadService {
             data   : { fileName },
             include: {
                 owner: {
-                    select: prismaDomainUserSelector,
+                    include: prismaToDomainUserInclude,
                 },
             },
         });
@@ -110,8 +116,8 @@ export class PrismaFileUploadService implements IFilesUploadService {
                 [ userId ],
                 DomainNotificationType.FILE_UPDATED_IN,
                 {
-                    previousFile: prismaFileToDomain(previousFileData, previousFileData.owner),
-                    newFile     : prismaFileToDomain(fileData, fileData.owner),
+                    previousFile: prismaFileToDomain(previousFileData, prismaUserToDomain(previousFileData.owner)),
+                    newFile     : prismaFileToDomain(fileData, prismaUserToDomain(fileData.owner)),
                 },
             ],
         ];

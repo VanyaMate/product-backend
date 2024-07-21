@@ -1,16 +1,22 @@
 import { IUserService } from '@/domain/services/user/users-service.interface';
 import { PrismaClient, User } from '@prisma/client';
 import {
-    userPrismaToDomain,
-} from '@/domain/services/user/converters/userPrismaToDomain';
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 import {
-    userPrismaToFullDomain,
-} from '@/domain/services/user/converters/userPrismaToFullDomain';
+    prismaUserToFullDomain,
+} from '@/domain/services/user/converters/prismaUserToFullDomain';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaToDomainFullUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-full-user.inculde';
 
 
 export class PrismaUsersService implements IUserService {
@@ -21,8 +27,11 @@ export class PrismaUsersService implements IUserService {
 
     async getUserById (id: string): Promise<DomainUser> {
         try {
-            const user: User = await this._prisma.user.findFirstOrThrow({ where: { id } });
-            return userPrismaToDomain(user);
+            const user = await this._prisma.user.findFirstOrThrow({
+                where  : { id },
+                include: prismaToDomainUserInclude,
+            });
+            return prismaUserToDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }
@@ -30,8 +39,11 @@ export class PrismaUsersService implements IUserService {
 
     async getUserByLogin (login: string): Promise<DomainUser> {
         try {
-            const user: User = await this._prisma.user.findFirstOrThrow({ where: { login } });
-            return userPrismaToDomain(user);
+            const user = await this._prisma.user.findFirstOrThrow({
+                where  : { login },
+                include: prismaToDomainUserInclude,
+            });
+            return prismaUserToDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }
@@ -41,9 +53,9 @@ export class PrismaUsersService implements IUserService {
         try {
             const user = await this._prisma.user.findFirstOrThrow({
                 where  : { login },
-                include: { permissions: true },
+                include: prismaToDomainFullUserInclude,
             });
-            return userPrismaToFullDomain(user);
+            return prismaUserToFullDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }
@@ -53,9 +65,9 @@ export class PrismaUsersService implements IUserService {
         try {
             const user = await this._prisma.user.findFirstOrThrow({
                 where  : { login },
-                include: { permissions: true },
+                include: prismaToDomainFullUserInclude,
             });
-            return userPrismaToFullDomain(user);
+            return prismaUserToFullDomain(user);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }
@@ -63,8 +75,11 @@ export class PrismaUsersService implements IUserService {
 
     async getUsersByLogins (logins: string[]): Promise<DomainUser[]> {
         try {
-            const users: User[] = await this._prisma.user.findMany({ where: { login: { in: logins } } });
-            return users.map(userPrismaToDomain);
+            const users = await this._prisma.user.findMany({
+                where  : { login: { in: logins } },
+                include: prismaToDomainUserInclude,
+            });
+            return users.map(prismaUserToDomain);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }
@@ -72,8 +87,11 @@ export class PrismaUsersService implements IUserService {
 
     async findUsersByStartLogin (loginStart: string): Promise<DomainUser[]> {
         try {
-            const users: User[] = await this._prisma.user.findMany({ where: { login: { startsWith: loginStart } } });
-            return users.map(userPrismaToDomain);
+            const users = await this._prisma.user.findMany({
+                where  : { login: { startsWith: loginStart } },
+                include: prismaToDomainUserInclude,
+            });
+            return users.map(prismaUserToDomain);
         } catch (e) {
             throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
         }

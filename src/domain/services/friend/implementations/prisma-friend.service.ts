@@ -20,6 +20,12 @@ import {
 import {
     prismaDomainUserSelector,
 } from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+import {
+    prismaToDomainUserInclude,
+} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+import {
+    prismaUserToDomain,
+} from '@/domain/services/user/converters/prismaUserToDomain';
 
 
 export class PrismaFriendService implements IFriendService {
@@ -31,8 +37,8 @@ export class PrismaFriendService implements IFriendService {
             const receivedFriendRequest = await this._prisma.friendRequest.findFirstOrThrow({
                 where : { toUserId: fromUserId, id: requestId },
                 select: {
-                    toUser    : { select: prismaDomainUserSelector },
-                    fromUser  : { select: prismaDomainUserSelector },
+                    toUser    : { include: prismaToDomainUserInclude },
+                    fromUser  : { include: prismaToDomainUserInclude },
                     fromUserId: true,
                     toUserId  : true,
                     id        : true,
@@ -55,14 +61,14 @@ export class PrismaFriendService implements IFriendService {
                         receivedFriendRequest.toUserId,
                     ],
                     {
-                        user     : receivedFriendRequest.fromUser,
+                        user     : prismaUserToDomain(receivedFriendRequest.fromUser),
                         requestId: requestId,
                     },
                 ],
                 [
                     [ receivedFriendRequest.fromUserId ],
                     {
-                        user     : receivedFriendRequest.toUser,
+                        user     : prismaUserToDomain(receivedFriendRequest.toUser),
                         requestId: requestId,
                     },
                 ],
@@ -100,8 +106,8 @@ export class PrismaFriendService implements IFriendService {
                         toUserId,
                     },
                     include: {
-                        fromUser: { select: prismaDomainUserSelector },
-                        toUser  : { select: prismaDomainUserSelector },
+                        fromUser: { include: prismaToDomainUserInclude },
+                        toUser  : { include: prismaToDomainUserInclude },
                     },
                 });
 
@@ -109,7 +115,7 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ fromUserId ],
                         {
-                            user     : request.toUser,
+                            user     : prismaUserToDomain(request.toUser),
                             requestId: request.id,
                             message  : '',
                         },
@@ -117,7 +123,7 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ toUserId ],
                         {
-                            user     : request.fromUser,
+                            user     : prismaUserToDomain(request.fromUser),
                             requestId: request.id,
                             message  : '',
                         },
@@ -142,8 +148,8 @@ export class PrismaFriendService implements IFriendService {
                 },
                 select: {
                     id      : true,
-                    fromUser: { select: prismaDomainUserSelector },
-                    toUser  : { select: prismaDomainUserSelector },
+                    fromUser: { include: prismaToDomainUserInclude },
+                    toUser  : { include: prismaToDomainUserInclude },
                 },
             });
             await this._prisma.friend.deleteMany({
@@ -157,13 +163,13 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ deletedFriend.toUser.id ],
                         {
-                            user: deletedFriend.fromUser,
+                            user: prismaUserToDomain(deletedFriend.fromUser),
                         },
                     ],
                     [
                         [ deletedFriend.fromUser.id ],
                         {
-                            user: deletedFriend.toUser,
+                            user: prismaUserToDomain(deletedFriend.toUser),
                         },
                     ],
                 ];
@@ -172,13 +178,13 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ deletedFriend.fromUser.id ],
                         {
-                            user: deletedFriend.toUser,
+                            user: prismaUserToDomain(deletedFriend.toUser),
                         },
                     ],
                     [
                         [ deletedFriend.toUser.id ],
                         {
-                            user: deletedFriend.fromUser,
+                            user: prismaUserToDomain(deletedFriend.fromUser),
                         },
                     ],
                 ];
@@ -199,8 +205,8 @@ export class PrismaFriendService implements IFriendService {
                     ],
                 },
                 select: {
-                    fromUser: { select: prismaDomainUserSelector },
-                    toUser  : { select: prismaDomainUserSelector },
+                    fromUser: { include: prismaToDomainUserInclude },
+                    toUser  : { include: prismaToDomainUserInclude },
                 },
             });
 
@@ -209,14 +215,14 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ canceledRequest.fromUser.id ],
                         {
-                            user     : canceledRequest.toUser,
+                            user     : prismaUserToDomain(canceledRequest.toUser),
                             requestId: requestId,
                         },
                     ],
                     [
                         [ canceledRequest.toUser.id ],
                         {
-                            user     : canceledRequest.fromUser,
+                            user     : prismaUserToDomain(canceledRequest.fromUser),
                             requestId: requestId,
                         },
                     ],
@@ -226,14 +232,14 @@ export class PrismaFriendService implements IFriendService {
                     [
                         [ canceledRequest.toUser.id ],
                         {
-                            user     : canceledRequest.fromUser,
+                            user     : prismaUserToDomain(canceledRequest.fromUser),
                             requestId: requestId,
                         },
                     ],
                     [
                         [ canceledRequest.fromUser.id ],
                         {
-                            user     : canceledRequest.toUser,
+                            user     : prismaUserToDomain(canceledRequest.toUser),
                             requestId: requestId,
                         },
                     ],
