@@ -273,15 +273,23 @@ export class PrismaPrivateMessageService implements IPrivateMessageService {
         // update message status
         // check if out notification need
         // return notifications
-
         const message = await this._prisma.privateMessage.findFirst({
-            where: {
-                id      : messageId,
-                authorId: userId,
+            where  : { id: messageId },
+            include: {
+                dialogue: {
+                    include: {
+                        userIn : true,
+                        userOut: true,
+                    },
+                },
             },
         });
 
-        if (!message) {
+        if (!message || message.authorId === userId) {
+            throw 'Message not exist';
+        }
+
+        if (!(message.dialogue.userIn.id === userId) && !(message.dialogue.userOut.id === userId)) {
             throw 'Message not exist';
         }
 
