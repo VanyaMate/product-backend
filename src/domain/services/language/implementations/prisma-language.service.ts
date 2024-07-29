@@ -246,17 +246,29 @@ export class PrismaLanguageService implements ILanguageService {
     }
 
     async updateWord (userId: string, wordId: string, updateData: DomainLanguageWordUpdateData): Promise<NotificationServiceResponse[]> {
+        const _dataToUpdate: DomainLanguageWordUpdateData = {};
+        if (updateData.checked !== undefined) {
+            _dataToUpdate.checked = updateData.checked;
+        }
+
+        if (updateData.original !== undefined) {
+            _dataToUpdate.original = updateData.original;
+        }
+
+        if (updateData.notice !== undefined) {
+            _dataToUpdate.notice = updateData.notice;
+        }
+
+        if (updateData.translations !== undefined) {
+            _dataToUpdate.translations = updateData.translations;
+        }
+
         const word = await this._prisma.languageWord.update({
             where  : {
                 ownerId: userId,
                 id     : wordId,
             },
-            data   : {
-                original    : updateData.original,
-                translations: updateData.translations,
-                notice      : updateData.notice,
-                checked     : updateData.checked,
-            },
+            data   : _dataToUpdate,
             include: {
                 owner : {
                     include: prismaToDomainUserInclude,
