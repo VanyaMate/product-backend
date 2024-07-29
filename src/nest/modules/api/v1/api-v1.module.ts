@@ -32,6 +32,7 @@ import {
     FilesUploadModule,
 } from '@/nest/modules/api/v1/files-upload/files-upload.module';
 import { FilesModule } from '@/nest/modules/api/v1/files/files.module';
+import { LanguageModule } from '@/nest/modules/api/v1/language/language.module';
 
 
 @Module({
@@ -53,6 +54,7 @@ import { FilesModule } from '@/nest/modules/api/v1/files/files.module';
         PostsModule,
         FilesUploadModule,
         FilesModule,
+        LanguageModule,
     ],
 })
 export class ApiV1Module {
