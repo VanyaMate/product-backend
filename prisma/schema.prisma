@@ -101,6 +101,34 @@ enum NotificationType {
   // Файл удален
   fl_d_in
   fl_d_out
+
+  // Язык создан
+  lg_c_in
+  lg_c_out
+  // Язык изменен
+  lg_u_in
+  lg_u_out
+  // Язык удален
+  lg_d_in
+  lg_d_out
+  // Папка языка создана
+  lgf_c_in
+  lgf_c_out
+  // Папка языка изменена
+  lgf_u_in
+  lgf_u_out
+  // Папка языка удалена
+  lgf_d_in
+  lgf_d_out
+  // Слово языка создано
+  lgw_c_in
+  lgw_c_out
+  // Слово языка изменено
+  lgw_u_in
+  lgw_u_out
+  // Слово языка удалено
+  lgw_d_in
+  lgw_d_out
 }
 
 enum MessageType {
@@ -157,6 +185,9 @@ model User {
   privateMessage           PrivateMessage[]
   posts                    Post[]
   files                    File[]
+  languages                Language[]
+  languageFolders          LanguageFolder[]
+  languageWords            LanguageWord[]
   permissions              UserPermissions?
 }
 
@@ -253,7 +284,7 @@ model DialogueToUser {
   creationDate DateTime @default(now())
 
   dialogue Dialogue @relation(fields: [dialogueId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -322,7 +353,7 @@ model Post {
   redacted     Boolean  @default(false)
   creationDate DateTime @default(now())
 
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
 }
@@ -338,7 +369,46 @@ model File {
   uploadDate       DateTime @default(now())
   private          Boolean  @default(true)
 
-  owner User @relation(fields: [ownerId], references: [id])
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@index([ownerId])
+}
+
+model Language {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId String @db.ObjectId
+  title   String
+
+  owner   User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  folders LanguageFolder[]
+
+  @@index([ownerId])
+}
+
+model LanguageFolder {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId    String @db.ObjectId
+  languageId String @db.ObjectId
+  title      String
+
+  owner    User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  language Language       @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  words    LanguageWord[]
+
+  @@index([languageId])
+}
+
+model LanguageWord {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId      String   @db.ObjectId
+  folderId     String   @db.ObjectId
+  original     String
+  translations String[]
+  notice       String
+  checked      Boolean  @default(false)
+
+  owner  User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  folder LanguageFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  @@index([folderId])
 }

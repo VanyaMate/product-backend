@@ -59,6 +59,33 @@ import {
 import {
     DomainNotificationFileDeletedData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationFileDeletedData';
+import {
+    DomainNotificationLanguageCreateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageCreateData';
+import {
+    DomainNotificationLanguageUpdateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageUpdateData';
+import {
+    DomainNotificationLanguageDeletedData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageDeletedData';
+import {
+    DomainNotificationLanguageWordCreateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageWordCreateData';
+import {
+    DomainNotificationLanguageFolderCreateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageFolderCreateData';
+import {
+    DomainNotificationLanguageFolderUpdateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageFolderUpdateData';
+import {
+    DomainNotificationLanguageFolderDeletedData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageFolderDeletedData';
+import {
+    DomainNotificationLanguageWordUpdateData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageWordUpdateData';
+import {
+    DomainNotificationLanguageWordDeletedData,
+} from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageWordDeletedData';
 
 
 export type NotificationMap = {
@@ -117,4 +144,25 @@ export type NotificationMap = {
     [DomainNotificationType.FILE_UPDATED_OUT]: DomainNotificationFileUpdatedData,
     [DomainNotificationType.FILE_DELETED_IN]: DomainNotificationFileDeletedData,
     [DomainNotificationType.FILE_DELETED_OUT]: DomainNotificationFileDeletedData,
+
+    [DomainNotificationType.LANGUAGE_CREATED_IN]: DomainNotificationLanguageCreateData,
+    [DomainNotificationType.LANGUAGE_CREATED_OUT]: DomainNotificationLanguageCreateData,
+    [DomainNotificationType.LANGUAGE_UPDATED_IN]: DomainNotificationLanguageUpdateData,
+    [DomainNotificationType.LANGUAGE_UPDATED_OUT]: DomainNotificationLanguageUpdateData,
+    [DomainNotificationType.LANGUAGE_DELETED_IN]: DomainNotificationLanguageDeletedData,
+    [DomainNotificationType.LANGUAGE_DELETED_OUT]: DomainNotificationLanguageDeletedData,
+
+    [DomainNotificationType.LANGUAGE_FOLDER_CREATED_IN]: DomainNotificationLanguageFolderCreateData,
+    [DomainNotificationType.LANGUAGE_FOLDER_CREATED_OUT]: DomainNotificationLanguageFolderCreateData,
+    [DomainNotificationType.LANGUAGE_FOLDER_UPDATED_IN]: DomainNotificationLanguageFolderUpdateData,
+    [DomainNotificationType.LANGUAGE_FOLDER_UPDATED_OUT]: DomainNotificationLanguageFolderUpdateData,
+    [DomainNotificationType.LANGUAGE_FOLDER_DELETED_IN]: DomainNotificationLanguageFolderDeletedData,
+    [DomainNotificationType.LANGUAGE_FOLDER_DELETED_OUT]: DomainNotificationLanguageFolderDeletedData,
+
+    [DomainNotificationType.LANGUAGE_WORD_CREATED_IN]: DomainNotificationLanguageWordCreateData,
+    [DomainNotificationType.LANGUAGE_WORD_CREATED_OUT]: DomainNotificationLanguageWordCreateData,
+    [DomainNotificationType.LANGUAGE_WORD_UPDATED_IN]: DomainNotificationLanguageWordUpdateData,
+    [DomainNotificationType.LANGUAGE_WORD_UPDATED_OUT]: DomainNotificationLanguageWordUpdateData,
+    [DomainNotificationType.LANGUAGE_WORD_DELETED_IN]: DomainNotificationLanguageWordDeletedData,
+    [DomainNotificationType.LANGUAGE_WORD_DELETED_OUT]: DomainNotificationLanguageWordDeletedData,
 }
