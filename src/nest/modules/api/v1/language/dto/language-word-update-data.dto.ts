@@ -17,10 +17,6 @@ export class LanguageWordUpdateDataDto implements DomainLanguageWordUpdateData {
     @IsOptional()
     notice: string;
 
-    @IsString()
-    @IsOptional()
-    folderId: string;
-
     @IsBoolean()
     @IsOptional()
     checked: boolean;

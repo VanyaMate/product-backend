@@ -13,7 +13,4 @@ export class LanguageWordCreateDataDto implements DomainLanguageWordCreateData {
 
     @IsString()
     notice: string;
-
-    @IsString()
-    folderId: string;
 }

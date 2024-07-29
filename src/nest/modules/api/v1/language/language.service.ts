@@ -33,19 +33,27 @@ import {
 import {
     globalExceptionServiceErrorResponse,
 } from '@/domain/types/lib/globalExceptionServiceErrorResponse';
+import {
+    NotificationService,
+} from '@/nest/modules/api/v1/notification/notification.service';
 
 
 @Injectable()
 export class LanguageService {
     private readonly _service: ILanguageService;
 
-    constructor (private readonly _prisma: PrismaService) {
+    constructor (
+        private readonly _prisma: PrismaService,
+        private readonly _notifications: NotificationService,
+    ) {
         this._service = new PrismaLanguageService(this._prisma);
     }
 
     async createLanguage (userId: string, createData: DomainLanguageCreateData) {
         try {
-            return await this._service.createLanguage(userId, createData);
+            const [ active ] = await this._service.createLanguage(userId, createData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant create language'));
         }
@@ -53,7 +61,9 @@ export class LanguageService {
 
     async updateLanguage (userId: string, languageId: string, updateData: DomainLanguageUpdateData) {
         try {
-            return await this._service.updateLanguage(userId, languageId, updateData);
+            const [ active ] = await this._service.updateLanguage(userId, languageId, updateData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant update language'));
         }
@@ -61,7 +71,9 @@ export class LanguageService {
 
     async removeLanguage (userId: string, languageId: string) {
         try {
-            return await this._service.removeLanguage(userId, languageId);
+            const [ active ] = await this._service.removeLanguage(userId, languageId);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant remove language'));
         }
@@ -69,7 +81,9 @@ export class LanguageService {
 
     async createFolder (userId: string, languageId: string, createData: DomainLanguageFolderCreateData) {
         try {
-            return await this._service.createFolder(userId, languageId, createData);
+            const [ active ] = await this._service.createFolder(userId, languageId, createData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant create folder'));
         }
@@ -77,7 +91,9 @@ export class LanguageService {
 
     async updateFolder (userId: string, folderId: string, updateData: DomainLanguageFolderUpdateData) {
         try {
-            return await this._service.updateFolder(userId, folderId, updateData);
+            const [ active ] = await this._service.updateFolder(userId, folderId, updateData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant update folder'));
         }
@@ -85,7 +101,9 @@ export class LanguageService {
 
     async removeFolder (userId: string, folderId: string) {
         try {
-            return await this._service.removeFolder(userId, folderId);
+            const [ active ] = await this._service.removeFolder(userId, folderId);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant remove folder'));
         }
@@ -93,7 +111,9 @@ export class LanguageService {
 
     async createWord (userId: string, folderId: string, createData: DomainLanguageWordCreateData) {
         try {
-            return await this._service.createWord(userId, folderId, createData);
+            const [ active ] = await this._service.createWord(userId, folderId, createData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant create word'));
         }
@@ -101,7 +121,9 @@ export class LanguageService {
 
     async updateWord (userId: string, wordId: string, updateData: DomainLanguageWordUpdateData) {
         try {
-            return await this._service.updateWord(userId, wordId, updateData);
+            const [ active ] = await this._service.updateWord(userId, wordId, updateData);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant update word'));
         }
@@ -109,7 +131,9 @@ export class LanguageService {
 
     async removeWord (userId: string, wordId: string) {
         try {
-            return await this._service.removeWord(userId, wordId);
+            const [ active ] = await this._service.removeWord(userId, wordId);
+            this._notifications.send([ active ]);
+            return active[2];
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, LanguageService.name, 400, 'Cant remove word'));
         }

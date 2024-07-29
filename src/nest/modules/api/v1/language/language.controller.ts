@@ -47,6 +47,7 @@ export class LanguageController {
     }
 
     @Patch(`:languageId`)
+    @UseGuards(IsUserGuard)
     updateLanguage (
         @Param('languageId') languageId: string,
         @Body() updateData: LanguageUpdateDataDto,
@@ -56,6 +57,7 @@ export class LanguageController {
     }
 
     @Delete(`:languageId`)
+    @UseGuards(IsUserGuard)
     removeLanguage (
         @Param('languageId') languageId: string,
         @Req() request: Request,
@@ -64,6 +66,7 @@ export class LanguageController {
     }
 
     @Post(`/folder/:languageId`)
+    @UseGuards(IsUserGuard)
     createFolder (
         @Param('languageId') languageId: string,
         @Body() createData: LanguageFolderCreateDataDto,
@@ -73,6 +76,7 @@ export class LanguageController {
     }
 
     @Patch(`/folder/:folderId`)
+    @UseGuards(IsUserGuard)
     updateFolder (
         @Param('folderId') folderId: string,
         @Body() updateData: LanguageFolderUpdateDataDto,
@@ -82,6 +86,7 @@ export class LanguageController {
     }
 
     @Delete(`/folder/:folderId`)
+    @UseGuards(IsUserGuard)
     removeFolder (
         @Param('folderId') folderId: string,
         @Req() request: Request,
@@ -90,6 +95,7 @@ export class LanguageController {
     }
 
     @Post(`/word/:folderId`)
+    @UseGuards(IsUserGuard)
     createWord (
         @Param('folderId') folderId: string,
         @Body() createData: LanguageWordCreateDataDto,
@@ -99,6 +105,7 @@ export class LanguageController {
     }
 
     @Patch(`/word/:wordId`)
+    @UseGuards(IsUserGuard)
     updateWord (
         @Param('wordId') wordId: string,
         @Body() updateData: LanguageWordUpdateDataDto,
@@ -108,6 +115,7 @@ export class LanguageController {
     }
 
     @Delete(`/word/:wordId`)
+    @UseGuards(IsUserGuard)
     removeWord (
         @Param('wordId') wordId: string,
         @Req() request: Request,
