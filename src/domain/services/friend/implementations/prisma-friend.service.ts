@@ -5,27 +5,25 @@ import { Friend, FriendRequest, PrismaClient } from '@prisma/client';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
-import {
-    DomainNotificationFriendRequestAcceptedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestAcceptedData';
-import {
-    DomainNotificationFriendRequestData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestData';
-import {
-    DomainNotificationFriendDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendDeletedData';
-import {
-    DomainNotificationFriendRequestCanceledData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
-import {
-    prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
+import {
+    DomainNotificationFriendRequestAcceptedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestAcceptedData';
+import {
+    DomainNotificationFriendRequestData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestData';
+import {
+    DomainNotificationFriendDeletedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendDeletedData';
+import {
+    DomainNotificationFriendRequestCanceledData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestCanceledData';
 
 
 export class PrismaFriendService implements IFriendService {

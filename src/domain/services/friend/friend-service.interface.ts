@@ -1,15 +1,15 @@
 import {
-    DomainNotificationFriendRequestData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestData';
+    DomainNotificationFriendRequestData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestData';
 import {
-    DomainNotificationFriendRequestAcceptedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestAcceptedData';
+    DomainNotificationFriendRequestAcceptedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestAcceptedData';
 import {
-    DomainNotificationFriendDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendDeletedData';
+    DomainNotificationFriendDeletedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendDeletedData';
 import {
-    DomainNotificationFriendRequestCanceledData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
+    DomainNotificationFriendRequestCanceledData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestCanceledData';
 
 
 export interface IFriendService {

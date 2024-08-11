@@ -3,63 +3,6 @@ import {
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
 import {
-    DomainNotificationPrivateDialogueUpdatedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
-import {
-    DomainNotificationFriendRequestData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestData';
-import {
-    DomainNotificationFriendDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendDeletedData';
-import {
-    DomainNotificationFriendRequestAcceptedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestAcceptedData';
-import {
-    DomainNotificationFriendRequestCanceledData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
-import {
-    DomainNotificationPrivateDialogueCreateData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
-import {
-    DomainNotificationPrivateDialogueDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
-import {
-    DomainNotificationPrivateDialogueArchiveData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
-import {
-    DomainNotificationPrivateMessageData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageData';
-import {
-    DomainNotificationPrivateMessageReadData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageReadData';
-import {
-    DomainNotificationPrivateMessageRedactedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageRedactedData';
-import {
-    DomainNotificationPrivateMessageDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageDeletedData';
-import {
-    DomainNotificationPrivateMessageReadAllData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateMessageReadAllData';
-import {
-    DomainNotificationPostCreateData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostCreateData';
-import {
-    DomainNotificationPostUpdatedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostUpdatedData';
-import {
-    DomainNotificationPostDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPostDeletedData';
-import {
-    DomainNotificationFileUploadedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileUploadedData';
-import {
-    DomainNotificationFileUpdatedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileUpdatedData';
-import {
-    DomainNotificationFileDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFileDeletedData';
-import {
     DomainNotificationLanguageCreateData,
 } from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageCreateData';
 import {
@@ -86,9 +29,95 @@ import {
 import {
     DomainNotificationLanguageWordDeletedData,
 } from 'product-types/dist/notification/notification-data-types/language/DomainNotificationLanguageWordDeletedData';
+import {
+    DomainNotificationFriendRequestData,
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestData';
+import {
+    DomainNotificationFriendDeletedData,
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendDeletedData';
+import {
+    DomainNotificationFriendRequestAcceptedData,
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestAcceptedData';
+import {
+    DomainNotificationFriendRequestCanceledData,
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestCanceledData';
+import {
+    DomainNotificationPrivateMessageData,
+} from 'product-types/dist/notification/notification-data-types/private-message/DomainNotificationPrivateMessageData';
+import {
+    DomainNotificationPrivateMessageReadData,
+} from 'product-types/dist/notification/notification-data-types/private-message/DomainNotificationPrivateMessageReadData';
+import {
+    DomainNotificationPrivateMessageRedactedData,
+} from 'product-types/dist/notification/notification-data-types/private-message/DomainNotificationPrivateMessageRedactedData';
+import {
+    DomainNotificationPrivateMessageDeletedData,
+} from 'product-types/dist/notification/notification-data-types/private-message/DomainNotificationPrivateMessageDeletedData';
+import {
+    DomainNotificationPrivateMessageReadAllData,
+} from 'product-types/dist/notification/notification-data-types/private-message/DomainNotificationPrivateMessageReadAllData';
+import {
+    DomainNotificationPrivateDialogueCreateData,
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueCreateData';
+import {
+    DomainNotificationPrivateDialogueUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueUpdatedData';
+import {
+    DomainNotificationPrivateDialogueDeletedData,
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueDeletedData';
+import {
+    DomainNotificationPrivateDialogueArchiveData,
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPostCreateData,
+} from 'product-types/dist/notification/notification-data-types/post/DomainNotificationPostCreateData';
+import {
+    DomainNotificationPostUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/post/DomainNotificationPostUpdatedData';
+import {
+    DomainNotificationPostDeletedData,
+} from 'product-types/dist/notification/notification-data-types/post/DomainNotificationPostDeletedData';
+import {
+    DomainNotificationFileUploadedData,
+} from 'product-types/dist/notification/notification-data-types/file/DomainNotificationFileUploadedData';
+import {
+    DomainNotificationFileUpdatedData,
+} from 'product-types/dist/notification/notification-data-types/file/DomainNotificationFileUpdatedData';
+import {
+    DomainNotificationFileDeletedData,
+} from 'product-types/dist/notification/notification-data-types/file/DomainNotificationFileDeletedData';
+import {
+    DomainNotificationUserAvatarUpdateData,
+} from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserAvatarUpdateData';
+import {
+    DomainNotificationUserLoginUpdateData,
+} from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserLoginUpdateData';
+import {
+    DomainNotificationUserBackgroundUpdateData,
+} from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserBackgroundUpdateData';
+import {
+    DomainNotificationUserContactInfoUpdateData,
+} from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserContactInfoUpdateData';
+import {
+    DomainNotificationUserPermissionsUpdateData,
+} from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserPermissionsUpdateData';
 
 
 export type NotificationMap = {
+    [DomainNotificationType.PASSWORD_UPDATE]: void;
+    [DomainNotificationType.NOTIFICATIONS_STATE_UPDATE]: boolean;
+
+    [DomainNotificationType.USER_AVATAR_UPDATE_IN]: DomainNotificationUserAvatarUpdateData,
+    [DomainNotificationType.USER_AVATAR_UPDATE_OUT]: DomainNotificationUserAvatarUpdateData,
+    [DomainNotificationType.USER_LOGIN_UPDATE_IN]: DomainNotificationUserLoginUpdateData,
+    [DomainNotificationType.USER_LOGIN_UPDATE_OUT]: DomainNotificationUserLoginUpdateData,
+    [DomainNotificationType.USER_BACKGROUND_UPDATE_IN]: DomainNotificationUserBackgroundUpdateData,
+    [DomainNotificationType.USER_BACKGROUND_UPDATE_OUT]: DomainNotificationUserBackgroundUpdateData,
+    [DomainNotificationType.USER_CONTACTS_UPDATE_IN]: DomainNotificationUserContactInfoUpdateData,
+    [DomainNotificationType.USER_CONTACTS_UPDATE_OUT]: DomainNotificationUserContactInfoUpdateData,
+    [DomainNotificationType.USER_PERMISSIONS_UPDATE_IN]: DomainNotificationUserPermissionsUpdateData,
+    [DomainNotificationType.USER_PERMISSIONS_UPDATE_OUT]: DomainNotificationUserPermissionsUpdateData,
+
     [DomainNotificationType.FRIEND_REQUEST_IN]: DomainNotificationFriendRequestData,
     [DomainNotificationType.FRIEND_REQUEST_OUT]: DomainNotificationFriendRequestData,
     [DomainNotificationType.FRIEND_DELETED_IN]: DomainNotificationFriendDeletedData,

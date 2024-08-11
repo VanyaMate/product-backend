@@ -2,14 +2,14 @@ import {
     DomainMessageType,
 } from 'product-types/dist/message/DomainMessage';
 import {
-    DomainNotificationUserMessageData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageData';
+    DomainNotificationUserMessageDeletedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageDeletedData';
 import {
-    DomainNotificationUserMessageRedactedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageRedactedData';
+    DomainNotificationUserMessageData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageData';
 import {
-    DomainNotificationUserMessageDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageDeletedData';
+    DomainNotificationUserMessageRedactedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageRedactedData';
 
 
 export interface IMessageService {

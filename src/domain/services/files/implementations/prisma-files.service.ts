@@ -10,16 +10,16 @@ import {
 } from 'product-types/dist/search/DomainSearchItemOptions';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     prismaFileToDomain,
 } from '@/domain/services/files-upload/converters/prismaFileToDomain';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 
 
 export class PrismaFilesService implements IFilesService {

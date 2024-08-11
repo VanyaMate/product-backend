@@ -13,7 +13,7 @@ import {
 import { PrismaClient } from '@prisma/client';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
@@ -25,10 +25,10 @@ import {
 } from '@/domain/services/private-dialogue/converters/prismaPrivateDialogueWithUserToDomain';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 
 
 export class PrismaPrivateMessageService implements IPrivateMessageService {

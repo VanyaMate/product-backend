@@ -25,13 +25,13 @@ import {
 import { PrismaClient } from '@prisma/client';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import {
     prismaLanguageToDomain,
 } from '@/domain/services/language/converters/prismaLanguageToDomain';

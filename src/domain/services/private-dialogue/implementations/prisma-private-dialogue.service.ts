@@ -7,10 +7,10 @@ import {
 } from 'product-types/dist/user/DomainUserPermissions';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
     prismaPrivateDialogueToDomain,
@@ -30,7 +30,7 @@ import {
 } from '@/domain/services/message/converters/prismaPrivateMessageToDomain';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaPrivateDialogueService implements IPrivateDialogueService {

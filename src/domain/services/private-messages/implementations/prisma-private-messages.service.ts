@@ -8,7 +8,7 @@ import {
 } from 'product-types/dist/search/DomainSearchItemOptions';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     prismaPrivateMessageToDomain,
 } from '@/domain/services/message/converters/prismaPrivateMessageToDomain';
@@ -17,10 +17,10 @@ import {
 } from 'product-types/dist/search/DomainSearchCursorOptions';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaPrivateMessagesService implements IPrivateMessagesService {

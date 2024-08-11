@@ -8,20 +8,20 @@ import {
 } from 'product-types/dist/search/DomainSearchOptions';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     DomainSearchItemOptions,
 } from 'product-types/dist/search/DomainSearchItemOptions';
 import { DomainSearchItem } from 'product-types/dist/search/DomainSearchItem';
 import {
     prismaDomainUserWithPermissionsSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user-with-permissions.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user-with-permissions.selector';
 import {
     prismaToDomainFullUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-full-user.inculde';
+} from '@/domain/services/users/include/prisma/prisma-full-user.inculde';
 import {
     prismaUserToPermissionsDomain,
-} from '@/domain/services/user/converters/prismaUserToPermissionsDomain';
+} from '@/domain/services/users/converters/prismaUserToPermissionsDomain';
 
 
 export class PrismaSearchService implements ISearchService {

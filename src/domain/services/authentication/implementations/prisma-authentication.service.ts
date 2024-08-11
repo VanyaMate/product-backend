@@ -6,9 +6,6 @@ import {
     DomainFingerprint,
 } from 'product-types/dist/fingerprint/DomainFingerprint';
 import {
-    prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
-import {
     IAuthenticationService,
 } from '@/domain/services/authentication/authentication-service.interface';
 import { PrismaClient, User } from '@prisma/client';
@@ -26,6 +23,12 @@ import {
     assertDomainRegistrationData,
     DomainRegistrationData,
 } from 'product-types/dist/authorization/DomainRegistrationData';
+import {
+    prismaUserToFullDomain,
+} from '@/domain/services/users/converters/prismaUserToFullDomain';
+import {
+    prismaToDomainFullUserInclude,
+} from '@/domain/services/users/include/prisma/prisma-full-user.inculde';
 
 
 export class PrismaAuthenticationService implements IAuthenticationService {
@@ -41,7 +44,10 @@ export class PrismaAuthenticationService implements IAuthenticationService {
             assertDomainLoginData(loginData, 'loginData', 'DomainLoginData');
 
             const { login, password } = loginData;
-            const user: User          = await this._prisma.user.findFirst({ where: { login } });
+            const user                = await this._prisma.user.findFirst({
+                where  : { login },
+                include: prismaToDomainFullUserInclude,
+            });
 
             if (user) {
                 const isUserPassword = await this._hashService.compare(user.password, password);
@@ -49,7 +55,11 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                     const tokens = await this._tokensService.generateForUser(user.id, fingerprint);
                     return {
                         tokens,
-                        user: prismaUserToDomain({ ...user, connections: [] }),
+                        user: prismaUserToFullDomain({
+                            ...user,
+                            connections: [],
+                            permissions: user.permissions,
+                        }),
                     };
                 }
             }
@@ -64,7 +74,9 @@ export class PrismaAuthenticationService implements IAuthenticationService {
         try {
             assertDomainRegistrationData(registrationData, 'registrationData', 'DomainRegistrationData');
             const { login, password, email } = registrationData;
-            const user: User                 = await this._prisma.user.findFirst({ where: { login } });
+            const user                       = await this._prisma.user.findFirst({
+                where: { login },
+            });
 
             if (!user) {
                 const passwordHash  = await this._hashService.hash(password);
@@ -73,13 +85,17 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                 });
                 const tokens        = await this._tokensService.generateForUser(newUser.id, fingerprint);
 
-                await this._prisma.userPermissions.create({
+                const permissions = await this._prisma.userPermissions.create({
                     data: { userId: newUser.id },
                 });
 
                 return {
                     tokens,
-                    user: prismaUserToDomain({ ...newUser, connections: [] }),
+                    user: prismaUserToFullDomain({
+                        ...newUser,
+                        connections: [],
+                        permissions,
+                    }),
                 };
             } else {
                 throw new Error('This login is already taken');

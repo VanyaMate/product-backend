@@ -1,11 +1,11 @@
-import { IUserService } from '@/domain/services/user/users-service.interface';
+import { IUsersService } from '@/domain/services/users/users-service.interface';
 import { PrismaClient, User } from '@prisma/client';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import {
     prismaUserToFullDomain,
-} from '@/domain/services/user/converters/prismaUserToFullDomain';
+} from '@/domain/services/users/converters/prismaUserToFullDomain';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
     serviceErrorResponse,
@@ -13,13 +13,13 @@ import {
 import { DomainUserFull } from 'product-types/dist/user/DomainUserFull';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     prismaToDomainFullUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-full-user.inculde';
+} from '@/domain/services/users/include/prisma/prisma-full-user.inculde';
 
 
-export class PrismaUsersService implements IUserService {
+export class PrismaUsersService implements IUsersService {
     constructor (
         private readonly _prisma: PrismaClient,
     ) {
@@ -53,6 +53,18 @@ export class PrismaUsersService implements IUserService {
         try {
             const user = await this._prisma.user.findFirstOrThrow({
                 where  : { login },
+                include: prismaToDomainFullUserInclude,
+            });
+            return prismaUserToFullDomain(user);
+        } catch (e) {
+            throw serviceErrorResponse(e, 'PrismaUserService', 400, 'Bad request');
+        }
+    }
+
+    async getPrivateUserFullById (userId: string): Promise<DomainUserFull> {
+        try {
+            const user = await this._prisma.user.findFirstOrThrow({
+                where  : { id: userId },
                 include: prismaToDomainFullUserInclude,
             });
             return prismaUserToFullDomain(user);

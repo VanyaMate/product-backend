@@ -11,7 +11,7 @@ import {
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import {
     serviceErrorResponse,
 } from 'product-types/dist/_helpers/lib/serviceErrorResponse';
@@ -21,7 +21,7 @@ import {
 import { DomainFriends } from 'product-types/dist/friends/DomainFriends';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 
 
 export class PrismaFriendsService implements IFriendsService {

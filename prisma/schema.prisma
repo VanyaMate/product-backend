@@ -8,6 +8,29 @@ datasource db {
 }
 
 enum NotificationType {
+  // Обновление пароля
+  pas
+  // Обновление правил уведомления
+  not
+  // Обновление состояния уведомления об уведомлениях
+  not_s
+
+  // Обновление аватарки пользователя
+  u_ava_u_in
+  u_ava_u_out
+  // Обновление логина пользователя
+  u_log_u_in
+  u_log_u_out
+  // Обновление заднего фона пользователя
+  u_bac_u_in
+  u_bac_u_out
+  // Обновление контактной информации пользователя
+  u_con_u_in
+  u_con_u_out
+  // Обновление разрешений пользователя
+  u_per_u_in
+  u_per_u_out
+
   // Новое сообщение
   u_msg_in
   u_msg_out
@@ -169,6 +192,7 @@ model User {
   avatar       String?  @default("")
   firstName    String?  @default("")
   lastName     String?  @default("")
+  background   String?  @default("")
   creationDate DateTime @default(now())
 
   userRefreshToken         UserRefreshToken[]

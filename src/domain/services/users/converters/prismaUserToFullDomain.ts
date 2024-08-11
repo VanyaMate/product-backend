@@ -16,6 +16,7 @@ export const prismaUserToFullDomain = function (user: User & {
         login      : user.login,
         avatar     : user.avatar,
         online     : !!user.connections.length,
+        background : user.background,
         contacts   : {
             email      : user.email,
             phoneNumber: user.phoneNumber,

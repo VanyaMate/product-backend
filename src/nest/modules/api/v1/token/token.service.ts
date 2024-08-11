@@ -27,9 +27,9 @@ export class TokenService implements ITokensService {
         this._service = new PrismaTokensService(this._prisma, this._jwtService);
     }
 
-    generateForUser (login: string, fingerprint: DomainFingerprint): Promise<DomainTokens> {
+    generateForUser (userId: string, fingerprint: DomainFingerprint): Promise<DomainTokens> {
         try {
-            return this._service.generateForUser(login, fingerprint);
+            return this._service.generateForUser(userId, fingerprint);
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, 'TokenService', 400, 'Bad request'));
         }

@@ -6,7 +6,7 @@ import { IFileService } from '@/domain/services/file/file-service.interface';
 import { DomainFile } from 'product-types/dist/file/DomainFile';
 import {
     prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     prismaFileToDomain,
 } from '@/domain/services/files-upload/converters/prismaFileToDomain';
@@ -18,10 +18,10 @@ import {
 } from 'product-types/dist/notification/DomainNotification';
 import {
     prismaToDomainUserInclude,
-} from '@/domain/services/user/include/prisma/prisma-domain-user.include';
+} from '@/domain/services/users/include/prisma/prisma-domain-user.include';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 
 
 export class PrismaFileUploadService implements IFilesUploadService {

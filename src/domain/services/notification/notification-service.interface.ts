@@ -11,44 +11,44 @@ import {
     DomainNotificationTokensUpdateData,
 } from 'product-types/dist/notification/notification-data-types/DomainNotificationTokensUpdateData';
 import {
-    DomainNotificationUserMessageData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageData';
-import {
-    DomainNotificationUserMessageDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageDeletedData';
-import {
-    DomainNotificationUserMessageRedactedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageRedactedData';
-import {
-    DomainNotificationUserMessageReadData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageReadData';
-import {
-    DomainNotificationFriendRequestData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestData';
-import {
-    DomainNotificationFriendDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendDeletedData';
-import {
-    DomainNotificationFriendRequestAcceptedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestAcceptedData';
-import {
-    DomainNotificationFriendRequestCanceledData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationFriendRequestCanceledData';
-import {
-    DomainNotificationPrivateDialogueCreateData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueCreateData';
-import {
-    DomainNotificationPrivateDialogueDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueDeletedData';
-import {
-    DomainNotificationPrivateDialogueArchiveData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueArchiveData';
-import {
-    DomainNotificationPrivateDialogueUpdatedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationPrivateDialogueUpdatedData';
-import {
     NotificationServiceResponse,
 } from '@/domain/services/notification/types/NotificationServiceResponse';
+import {
+    DomainNotificationUserMessageData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageData';
+import {
+    DomainNotificationUserMessageDeletedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageDeletedData';
+import {
+    DomainNotificationUserMessageRedactedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageRedactedData';
+import {
+    DomainNotificationUserMessageReadData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageReadData';
+import {
+    DomainNotificationFriendRequestData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestData';
+import {
+    DomainNotificationFriendDeletedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendDeletedData';
+import {
+    DomainNotificationFriendRequestAcceptedData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestAcceptedData';
+import {
+    DomainNotificationFriendRequestCanceledData
+} from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestCanceledData';
+import {
+    DomainNotificationPrivateDialogueCreateData
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueCreateData';
+import {
+    DomainNotificationPrivateDialogueDeletedData
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueDeletedData';
+import {
+    DomainNotificationPrivateDialogueArchiveData
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueArchiveData';
+import {
+    DomainNotificationPrivateDialogueUpdatedData
+} from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueUpdatedData';
 
 
 export interface INotificationService {

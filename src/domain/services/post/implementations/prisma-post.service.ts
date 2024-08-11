@@ -17,7 +17,7 @@ import {
 } from '@/domain/services/post/converters/prismaPostToDomain';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 
 
 export class PrismaPostService implements IPostService {

@@ -11,20 +11,20 @@ import {
 } from '@/domain/services/message/implementations/prisma-message.service';
 import { DomainMessageType } from 'product-types/dist/message/DomainMessage';
 import {
-    DomainNotificationUserMessageData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageData';
-import {
-    DomainNotificationUserMessageDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageDeletedData';
-import {
-    DomainNotificationUserMessageRedactedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageRedactedData';
-import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
 import {
     globalExceptionServiceErrorResponse,
 } from '@/domain/types/lib/globalExceptionServiceErrorResponse';
+import {
+    DomainNotificationUserMessageRedactedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageRedactedData';
+import {
+    DomainNotificationUserMessageData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageData';
+import {
+    DomainNotificationUserMessageDeletedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageDeletedData';
 
 
 @Injectable()

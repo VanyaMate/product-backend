@@ -5,7 +5,7 @@ import {
 } from 'product-types/dist/message/DomainMessage';
 import {
     prismaUserToDomain,
-} from '@/domain/services/user/converters/prismaUserToDomain';
+} from '@/domain/services/users/converters/prismaUserToDomain';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 
 

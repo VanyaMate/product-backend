@@ -50,9 +50,11 @@ export class IsUserGuard implements CanActivate {
             if (!accessToken) {
                 throw new HttpException('No authorized user', HttpStatus.FORBIDDEN);
             }
-            const accessTokenPayload = this._jwtService.verify<DomainAccessTokenPayload>(accessToken);
+            const refreshToken: string = request.header(REQUEST_REFRESH_TOKEN_HEADER);
+            const accessTokenPayload   = this._jwtService.verify<DomainAccessTokenPayload>(accessToken);
             assertDomainAccessTokenPayload(accessTokenPayload, 'accessTokenPayload', 'DomainAccessTokenPayload');
-            request[REQUEST_USER_ID] = accessTokenPayload.userId;
+            request[REQUEST_USER_ID]              = accessTokenPayload.userId;
+            request[REQUEST_REFRESH_TOKEN_HEADER] = refreshToken;
 
             return true;
         } catch (e) {
@@ -74,12 +76,13 @@ export class IsUserGuard implements CanActivate {
                         const tokens: DomainTokens = await this._tokensService.refreshTokensByRefreshToken(refreshToken, getFingerprint(context));
 
                         // set params
-                        request[RESPONSE_ADDITIONAL_DATA] = {
+                        request[RESPONSE_ADDITIONAL_DATA]     = {
                             ...(request[RESPONSE_ADDITIONAL_DATA] ?? {}),
                             tokens,
                         };
-                        request[RESPONSE_UPDATED_TOKENS]  = tokens;
-                        request[REQUEST_USER_ID]          = accessTokenPayload.userId;
+                        request[RESPONSE_UPDATED_TOKENS]      = tokens;
+                        request[REQUEST_USER_ID]              = accessTokenPayload.userId;
+                        request[REQUEST_REFRESH_TOKEN_HEADER] = tokens[1];
 
                         return true;
                     }

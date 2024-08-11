@@ -26,6 +26,7 @@ import {
     REQUEST_ACCESS_TOKEN_HEADER,
     REQUEST_USER_ID,
 } from '@/domain/consts/request-response';
+import { UserId } from '@/nest/decorators/userid.decorator';
 
 
 @Controller('/api/v1/authentication')
@@ -39,9 +40,9 @@ export class AuthenticationController {
     @Get()
     @UseGuards(IsUserGuard)
     public authorizeByTokens (
-        @Req() req: Request,
+        @UserId() userId: string,
     ) {
-        return this._usersService.getUserById(req[REQUEST_USER_ID]);
+        return this._usersService.getPrivateUserFullById(userId);
     }
 
     @Post('/login')

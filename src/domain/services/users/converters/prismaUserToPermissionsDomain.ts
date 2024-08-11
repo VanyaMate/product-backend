@@ -8,6 +8,9 @@ import {
 import {
     DomainUserWithPermissions,
 } from 'product-types/dist/user/DomainUserWithPermissions';
+import {
+    prismaUserPermissionsToDomain,
+} from '@/domain/services/users/converters/prismaUserPermissionsToDomain';
 
 
 export const prismaUserToPermissionsDomain = function (user: User & {
@@ -19,11 +22,6 @@ export const prismaUserToPermissionsDomain = function (user: User & {
         login      : user.login,
         avatar     : user.avatar,
         online     : !!user.connections.length,
-        permissions: {
-            dialogue       : user.permissions.dialogue as DomainUserPermissionsDialogue,
-            friendRequest  : user.permissions.friendRequest as DomainUserPermissionsFriendRequest,
-            generalPage    : user.permissions.generalPage as DomainUserPermissionsGeneralPage,
-            privateDialogue: user.permissions.privateDialogue as DomainUserPermissionsPrivateDialogue,
-        },
+        permissions: prismaUserPermissionsToDomain(user.permissions),
     };
 };

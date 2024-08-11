@@ -1,23 +1,19 @@
 import {
     IMessageService,
 } from '@/domain/services/message/message-service.interface';
-import { MessageType, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import {
-    DomainMessage,
     DomainMessageType,
 } from 'product-types/dist/message/DomainMessage';
 import {
-    DomainNotificationUserMessageData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageData';
+    DomainNotificationUserMessageRedactedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageRedactedData';
 import {
-    DomainNotificationUserMessageRedactedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageRedactedData';
+    DomainNotificationUserMessageData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageData';
 import {
-    DomainNotificationUserMessageDeletedData,
-} from 'product-types/dist/notification/notification-data-types/DomainNotificationUserMessageDeletedData';
-import {
-    prismaDomainUserSelector,
-} from '@/domain/services/user/selectors/prisma/prisma-domain-user.selector';
+    DomainNotificationUserMessageDeletedData
+} from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageDeletedData';
 
 
 export class PrismaMessageService implements IMessageService {
