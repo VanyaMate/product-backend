@@ -37,6 +37,7 @@ import {
     LanguagesModule,
 } from '@/nest/modules/api/v1/languages/languages.module';
 import { UserModule } from '@/nest/modules/api/v1/user/user.module';
+import { CallModule } from '@/nest/modules/api/v1/call/call.module';
 
 
 @Module({
@@ -61,6 +62,7 @@ import { UserModule } from '@/nest/modules/api/v1/user/user.module';
         LanguageModule,
         LanguagesModule,
         UserModule,
+        CallModule,
     ],
 })
 export class ApiV1Module {

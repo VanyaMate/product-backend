@@ -101,6 +101,18 @@ import {
 import {
     DomainNotificationUserPermissionsUpdateData,
 } from 'product-types/dist/notification/notification-data-types/user/DomainNotificationUserPermissionsUpdateData';
+import {
+    DomainNotificationCallOfferData,
+} from 'product-types/dist/notification/notification-data-types/call/DomainNotificationCallOfferData';
+import {
+    DomainNotificationCallAnswerData,
+} from 'product-types/dist/notification/notification-data-types/call/DomainNotificationCallAnswerData';
+import {
+    DomainNotificationCallStartData,
+} from 'product-types/dist/notification/notification-data-types/call/DomainNotificationCallStartData';
+import {
+    DomainNotificationCallFinishData,
+} from 'product-types/dist/notification/notification-data-types/call/DomainNotificationCallFinishData';
 
 
 export type NotificationMap = {
@@ -194,4 +206,13 @@ export type NotificationMap = {
     [DomainNotificationType.LANGUAGE_WORD_UPDATED_OUT]: DomainNotificationLanguageWordUpdateData,
     [DomainNotificationType.LANGUAGE_WORD_DELETED_IN]: DomainNotificationLanguageWordDeletedData,
     [DomainNotificationType.LANGUAGE_WORD_DELETED_OUT]: DomainNotificationLanguageWordDeletedData,
+
+    [DomainNotificationType.CALL_OFFER_IN]: DomainNotificationCallOfferData,
+    [DomainNotificationType.CALL_OFFER_OUT]: DomainNotificationCallOfferData,
+    [DomainNotificationType.CALL_ANSWER_IN]: DomainNotificationCallAnswerData,
+    [DomainNotificationType.CALL_ANSWER_OUT]: DomainNotificationCallAnswerData,
+    [DomainNotificationType.CALL_START_IN]: DomainNotificationCallStartData,
+    [DomainNotificationType.CALL_START_OUT]: DomainNotificationCallStartData,
+    [DomainNotificationType.CALL_FINISH_IN]: DomainNotificationCallFinishData,
+    [DomainNotificationType.CALL_FINISH_OUT]: DomainNotificationCallFinishData,
 }

@@ -8,6 +8,9 @@ import {
     DomainNotification,
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
+import {
+    REQUEST_CONTEXT_ID,
+} from '@nestjs/core/router/request/request-constants';
 
 
 export type Connect = {
@@ -44,7 +47,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
         const userConnectionsMap            = this._connectionsMap.get(userId);
         const requestId: string | undefined = request.header(REQUEST_ID_HEADER);
         if (userConnectionsMap && requestId) {
-            return this._deleteConnection(userConnectionsMap, userId, requestId).then();
+            return this._deleteConnection(userConnectionsMap, userId, requestId, request).then();
         }
     }
 
@@ -81,7 +84,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
         const closeConnection = async () => {
             if (!closed) {
                 closed = true;
-                return this._deleteConnection(userConnectionsMap, userId, requestId);
+                return this._deleteConnection(userConnectionsMap, userId, requestId, request);
             }
         };
 
@@ -98,19 +101,23 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
                     data        : 'time',
                     viewed      : false,
                 } as DomainNotification) }\n\n`);
-                closeConnection().finally(() => response.end());
+                closeConnection().finally(() => {
+                    response.end();
+                });
             }, 1000 * 60 * 5),
         });
     }
 
-    private async _deleteConnection (userConnectionsMap: Map<string, Connect>, userId: string, requestId: string) {
-        clearTimeout(userConnectionsMap.get(requestId)?.$__timer);
-        userConnectionsMap.delete(requestId);
-        return this._prisma.connection.deleteMany({
-            where: {
-                userId      : userId,
-                connectionId: requestId,
-            },
-        });
+    private async _deleteConnection (userConnectionsMap: Map<string, Connect>, userId: string, requestId, request: Request) {
+        if (userConnectionsMap.get(requestId).request === request) {
+            clearTimeout(userConnectionsMap.get(requestId)?.$__timer);
+            userConnectionsMap.delete(requestId);
+            return this._prisma.connection.deleteMany({
+                where: {
+                    userId      : userId,
+                    connectionId: requestId,
+                },
+            });
+        }
     }
 }

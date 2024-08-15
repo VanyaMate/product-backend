@@ -16,9 +16,6 @@ import {
     REQUEST_USER_ID,
     RESPONSE_UPDATED_TOKENS,
 } from '@/domain/consts/request-response';
-import {
-    DomainNotificationType,
-} from 'product-types/dist/notification/DomainNotification';
 
 
 @Controller('/api/v1/notification')

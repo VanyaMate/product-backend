@@ -152,6 +152,19 @@ enum NotificationType {
   // Слово языка удалено
   lgw_d_in
   lgw_d_out
+
+  // Создан offer звонка
+  ca_o_in
+  ca_o_out
+  // Создан answer звонка
+  ca_a_in
+  ca_a_out
+  // Создан start звонка
+  ca_s_in
+  ca_s_out
+  // Создан finish звонка
+  ca_f_in
+  ca_f_out
 }
 
 enum MessageType {
