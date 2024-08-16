@@ -29,43 +29,43 @@ import {
     NotificationServiceResponse,
 } from '@/domain/services/notification/types/NotificationServiceResponse';
 import {
-    DomainNotificationUserMessageData
+    DomainNotificationUserMessageData,
 } from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageData';
 import {
-    notificationFactory
+    notificationFactory,
 } from '@/domain/services/notification/factory/notification-factory';
 import {
-    DomainNotificationUserMessageDeletedData
+    DomainNotificationUserMessageDeletedData,
 } from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageDeletedData';
 import {
-    DomainNotificationUserMessageRedactedData
+    DomainNotificationUserMessageRedactedData,
 } from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageRedactedData';
 import {
-    DomainNotificationUserMessageReadData
+    DomainNotificationUserMessageReadData,
 } from 'product-types/dist/notification/notification-data-types/message/DomainNotificationUserMessageReadData';
 import {
-    DomainNotificationFriendRequestData
+    DomainNotificationFriendRequestData,
 } from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestData';
 import {
-    DomainNotificationFriendDeletedData
+    DomainNotificationFriendDeletedData,
 } from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendDeletedData';
 import {
-    DomainNotificationFriendRequestAcceptedData
+    DomainNotificationFriendRequestAcceptedData,
 } from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestAcceptedData';
 import {
-    DomainNotificationFriendRequestCanceledData
+    DomainNotificationFriendRequestCanceledData,
 } from 'product-types/dist/notification/notification-data-types/friend/DomainNotificationFriendRequestCanceledData';
 import {
-    DomainNotificationPrivateDialogueCreateData
+    DomainNotificationPrivateDialogueCreateData,
 } from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueCreateData';
 import {
-    DomainNotificationPrivateDialogueDeletedData
+    DomainNotificationPrivateDialogueDeletedData,
 } from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueDeletedData';
 import {
-    DomainNotificationPrivateDialogueArchiveData
+    DomainNotificationPrivateDialogueArchiveData,
 } from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueArchiveData';
 import {
-    DomainNotificationPrivateDialogueUpdatedData
+    DomainNotificationPrivateDialogueUpdatedData,
 } from 'product-types/dist/notification/notification-data-types/private-dialogue/DomainNotificationPrivateDialogueUpdatedData';
 
 
@@ -89,7 +89,7 @@ export class PrismaNotificationService implements INotificationService {
                             if (data) {
                                 return this
                                     ._create({
-                                        data,
+                                        data  : JSON.parse(JSON.stringify(data)),
                                         type,
                                         userId: id,
                                     })
