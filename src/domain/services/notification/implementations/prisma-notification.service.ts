@@ -355,7 +355,7 @@ export class PrismaNotificationService implements INotificationService {
     private _notification (type: DomainNotificationType, data: unknown = ''): DomainNotification {
         return {
             id          : '',
-            creationDate: new Date().toUTCString(),
+            creationDate: Date.now(),
             viewed      : false,
             type,
             data,

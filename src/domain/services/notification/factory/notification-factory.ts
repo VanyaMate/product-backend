@@ -12,9 +12,9 @@ export const notificationFactory = function (notification: unknown): DomainNotif
             id          : notification.id,
             data        : notification.data,
             type        : notification.type,
-            creationDate: typeof notification.creationDate === 'string'
+            creationDate: typeof notification.creationDate === 'number'
                           ? notification.creationDate
-                          : (notification.creationDate as Date).toUTCString(),
+                          : (notification.creationDate as Date).getTime(),
             viewed      : notification.viewed,
         };
     }
@@ -22,7 +22,7 @@ export const notificationFactory = function (notification: unknown): DomainNotif
     return {
         id          : '',
         data        : notification,
-        creationDate: new Date().toUTCString(),
+        creationDate: Date.now(),
         type        : DomainNotificationType.UNKNOWN,
         viewed      : false,
     };

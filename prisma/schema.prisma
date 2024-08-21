@@ -225,6 +225,8 @@ model User {
   languages                Language[]
   languageFolders          LanguageFolder[]
   languageWords            LanguageWord[]
+  callsSend                Call[]             @relation("CallsSend")
+  callsReceived            Call[]             @relation("CallsReceived")
   permissions              UserPermissions?
 }
 
@@ -448,4 +450,19 @@ model LanguageWord {
   folder LanguageFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
 
   @@index([folderId])
+}
+
+model Call {
+  id                               String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId                       String  @db.ObjectId
+  toUserId                         String  @db.ObjectId
+  toUserNotificationConnectionId   String  @default("")
+  fromUserNotificationConnectionId String  @default("")
+  finished                         Boolean @default(false)
+
+  creationDate DateTime @default(now())
+  finishDate   DateTime @default(now())
+
+  fromUser User @relation(name: "CallsSend", fields: [fromUserId], references: [id])
+  toUser   User @relation(name: "CallsReceived", fields: [toUserId], references: [id])
 }

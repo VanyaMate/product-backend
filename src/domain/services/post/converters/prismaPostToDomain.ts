@@ -8,7 +8,7 @@ export const prismaPostToDomain = function (post: Post, author: DomainUser): Dom
         id          : post.id,
         redacted    : post.redacted,
         message     : post.message,
-        creationData: post.creationDate.toUTCString(),
+        creationData: post.creationDate.getTime(),
         author,
     };
 };

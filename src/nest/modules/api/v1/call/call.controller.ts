@@ -4,6 +4,7 @@ import { CallService } from '@/nest/modules/api/v1/call/call.service';
 import { UserId } from '@/nest/decorators/userid.decorator';
 import { DomainCallOffer } from 'product-types/dist/call/DomainCallOffer';
 import { DomainCallAnswer } from 'product-types/dist/call/DomainCallAnswer';
+import { ConnectionId } from '@/nest/decorators/connection-id.decorator';
 
 
 @Controller(`/api/v1/call`)
@@ -11,23 +12,43 @@ export class CallController {
     constructor (private readonly _service: CallService) {
     }
 
-    @Post(`/offer/:userId`)
+    @Post(`/offer/:callId`)
     @UseGuards(IsUserGuard)
     createOffer (
         @UserId() userId: string,
-        @Param('userId') toUserId: string,
+        @ConnectionId() connectionId: string,
+        @Param('callId') callId: string,
         @Body() offer: DomainCallOffer,
     ) {
-        return this._service.createOffer(userId, toUserId, offer);
+        return this._service.createOffer(userId, callId, offer, connectionId);
     }
 
-    @Post(`/answer/:userId`)
+    @Post(`/answer/:callId`)
     @UseGuards(IsUserGuard)
     createAnswer (
         @UserId() userId: string,
-        @Param('userId') toUserId: string,
+        @Param('callId') callId: string,
         @Body() answer: DomainCallAnswer,
     ) {
-        return this._service.createAnswer(userId, toUserId, answer);
+        return this._service.createAnswer(userId, callId, answer);
+    }
+
+    @Post(`/:userId`)
+    @UseGuards(IsUserGuard)
+    createCallRequest (
+        @UserId() userId: string,
+        @ConnectionId() connectionId: string,
+        @Param('userId') toUserId: string,
+    ) {
+        return this._service.createCallRequest(userId, toUserId, connectionId);
+    }
+
+    @Post(`/finish/:callId`)
+    @UseGuards(IsUserGuard)
+    finishCall (
+        @UserId() userId: string,
+        @Param('callId') callId: string,
+    ) {
+        return this._service.finishCall(userId, callId);
     }
 }

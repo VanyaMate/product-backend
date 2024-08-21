@@ -17,7 +17,7 @@ export const prismaPrivateMessageToDomain = function (message: PrivateMessage, a
         author      : author,
         redacted    : message.redacted,
         read        : message.read,
-        creationDate: message.creationDate.toUTCString(),
+        creationDate: message.creationDate.getTime(),
         dialogueId  : message.privateDialogueId,
     };
 };

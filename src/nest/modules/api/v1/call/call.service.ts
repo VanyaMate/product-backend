@@ -28,9 +28,9 @@ export class CallService {
         this._service = new PrismaCallService(this._prisma);
     }
 
-    async createOffer (userId: string, toUserId: string, offer: DomainCallOffer) {
+    async createOffer (userId: string, callId: string, offer: DomainCallOffer, connectionId: string) {
         try {
-            const [ active, passive ] = await this._service.offer(userId, toUserId, offer);
+            const [ active, passive ] = await this._service.offer(userId, callId, offer, connectionId);
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
@@ -38,13 +38,33 @@ export class CallService {
         }
     }
 
-    async createAnswer (userId: string, toUserId: string, answer: DomainCallAnswer) {
+    async createAnswer (userId: string, callId: string, answer: DomainCallAnswer) {
         try {
-            const [ active, passive ] = await this._service.answer(userId, toUserId, answer);
+            const [ active, passive ] = await this._service.answer(userId, callId, answer);
             this._notificationService.send([ active, passive ]);
             return active[2];
         } catch (e) {
             return new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, CallService.name, 400, 'Cant create call answer'));
+        }
+    }
+
+    async createCallRequest (userId: string, toUserId: string, connectionId: string) {
+        try {
+            const [ active, passive ] = await this._service.start(userId, toUserId, connectionId);
+            this._notificationService.send([ active, passive ]);
+            return active[2];
+        } catch (e) {
+            return new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, CallService.name, 400, 'Cant create call request'));
+        }
+    }
+
+    async finishCall (userId: string, callId: string) {
+        try {
+            const [ active, passive ] = await this._service.finish(userId, callId);
+            this._notificationService.send([ active, passive ]);
+            return active[2];
+        } catch (e) {
+            return new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, CallService.name, 400, 'Cant finish call'));
         }
     }
 }

@@ -14,52 +14,109 @@ import {
 import {
     prismaUserToDomain,
 } from '@/domain/services/users/converters/prismaUserToDomain';
+import {
+    prismaCallToDomain,
+} from '@/domain/services/call/converters/prismaCallToDomain';
 
 
 export class PrismaCallService implements ICallService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
-    async offer (userId: string, toUserId: string, offer: DomainCallOffer): Promise<NotificationServiceResponse[]> {
+    async offer (userId: string, callId: string, offer: DomainCallOffer, connectionId: string): Promise<NotificationServiceResponse[]> {
         // check if toUserId exist
-        const [ user, toUser ] = await this._prisma.$transaction([
-            this._prisma.user.findFirst({
-                where  : { id: userId },
-                include: prismaToDomainUserInclude,
-            }),
-            this._prisma.user.findFirstOrThrow({
-                where  : { id: toUserId },
-                include: prismaToDomainUserInclude,
-            }),
-        ]);
+        const call = await this._prisma.call.update({
+            where  : {
+                id                            : callId,
+                toUserId                      : userId,
+                toUserNotificationConnectionId: '',
+                finished                      : false,
+            },
+            data   : {
+                toUserNotificationConnectionId: connectionId,
+            },
+            include: {
+                toUser  : { include: prismaToDomainUserInclude },
+                fromUser: { include: prismaToDomainUserInclude },
+            },
+        });
 
-        if (user && toUser) {
+        if (call) {
+            const domainFromUser = prismaUserToDomain(call.fromUser);
+            const domainUser     = prismaUserToDomain(call.toUser);
+
             return [
                 [
                     [ userId ],
                     DomainNotificationType.CALL_OFFER_IN,
                     {
-                        user: prismaUserToDomain(toUser),
-                        offer,
+                        call: prismaCallToDomain(call, domainFromUser, connectionId),
                     },
                 ],
                 [
-                    [ toUserId ],
+                    [ domainFromUser.id ],
                     DomainNotificationType.CALL_OFFER_OUT,
                     {
-                        user: prismaUserToDomain(user),
+                        call: prismaCallToDomain(call, domainUser, call.fromUserNotificationConnectionId),
                         offer,
                     },
                 ],
             ];
         }
 
-        throw 'Users not exist';
+        throw 'Call not exist';
     }
 
-    async answer (userId: string, toUserId: string, answer: DomainCallAnswer): Promise<NotificationServiceResponse[]> {
+    async answer (userId: string, callId: string, answer: DomainCallAnswer): Promise<NotificationServiceResponse[]> {
         // check if toUserId exist
-        const [ user, toUser ] = await this._prisma.$transaction([
+        const call = await this._prisma.call.findFirst({
+            where  : {
+                id      : callId,
+                finished: false,
+            },
+            include: {
+                toUser  : { include: prismaToDomainUserInclude },
+                fromUser: { include: prismaToDomainUserInclude },
+            },
+        });
+
+        if (call) {
+            const domainUser   = prismaUserToDomain(call.fromUser);
+            const domainToUser = prismaUserToDomain(call.toUser);
+
+            return [
+                [
+                    [ userId ],
+                    DomainNotificationType.CALL_ANSWER_IN,
+                    {
+                        call: prismaCallToDomain(call, domainToUser, call.fromUserNotificationConnectionId),
+                    },
+                ],
+                [
+                    [ call.toUser.id ],
+                    DomainNotificationType.CALL_ANSWER_OUT,
+                    {
+                        call: prismaCallToDomain(call, domainUser, call.toUserNotificationConnectionId),
+                        answer,
+                    },
+                ],
+            ];
+        }
+
+        throw 'Call not exist';
+    }
+
+    async start (userId: string, toUserId: string, connectionId: string): Promise<NotificationServiceResponse[]> {
+        const [ call, user, toUser ] = await this._prisma.$transaction([
+            this._prisma.call.findFirst({
+                where: {
+                    OR      : [
+                        { fromUserId: userId, toUserId: toUserId },
+                        { toUserId: userId, fromUserId: toUserId },
+                    ],
+                    finished: false,
+                },
+            }),
             this._prisma.user.findFirst({
                 where  : { id: userId },
                 include: prismaToDomainUserInclude,
@@ -70,22 +127,34 @@ export class PrismaCallService implements ICallService {
             }),
         ]);
 
+        if (call) {
+            throw 'Call exist';
+        }
+
         if (user && toUser) {
+            // TODO: Check permissions
+
+            const call = await this._prisma.call.create({
+                data: {
+                    fromUserId                      : userId,
+                    toUserId                        : toUserId,
+                    fromUserNotificationConnectionId: connectionId,
+                },
+            });
+
             return [
                 [
                     [ userId ],
-                    DomainNotificationType.CALL_ANSWER_IN,
+                    DomainNotificationType.CALL_START_IN,
                     {
-                        user: prismaUserToDomain(toUser),
-                        answer,
+                        call: prismaCallToDomain(call, prismaUserToDomain(toUser), connectionId),
                     },
                 ],
                 [
                     [ toUserId ],
-                    DomainNotificationType.CALL_ANSWER_OUT,
+                    DomainNotificationType.CALL_START_OUT,
                     {
-                        user: prismaUserToDomain(user),
-                        answer,
+                        call: prismaCallToDomain(call, prismaUserToDomain(user), ''),
                     },
                 ],
             ];
@@ -94,11 +163,48 @@ export class PrismaCallService implements ICallService {
         throw 'Users not exist';
     }
 
-    async start (userId: string, toUserId: string): Promise<NotificationServiceResponse[]> {
-        throw new Error('Method not implemented.');
-    }
+    async finish (userId: string, callId: string): Promise<NotificationServiceResponse[]> {
+        // End / Cancel
+        const call = await this._prisma.call.update({
+            where  : {
+                OR      : [
+                    { fromUserId: userId },
+                    { toUserId: userId },
+                ],
+                id      : callId,
+                finished: false,
+            },
+            data   : {
+                finished: true,
+            },
+            include: {
+                toUser  : { include: prismaToDomainUserInclude },
+                fromUser: { include: prismaToDomainUserInclude },
+            },
+        });
 
-    async finish (userId: string, toUserId: string): Promise<NotificationServiceResponse[]> {
-        throw new Error('Method not implemented.');
-    }
+        if (call) {
+            const domainUser   = prismaUserToDomain(call.fromUser);
+            const domainToUser = prismaUserToDomain(call.toUser);
+
+            return [
+                [
+                    [ userId ],
+                    DomainNotificationType.CALL_FINISH_IN,
+                    {
+                        call: prismaCallToDomain(call, domainToUser, call.fromUserNotificationConnectionId),
+                    },
+                ],
+                [
+                    [ call.toUser.id ],
+                    DomainNotificationType.CALL_FINISH_OUT,
+                    {
+                        call: prismaCallToDomain(call, domainUser, call.toUserNotificationConnectionId),
+                    },
+                ],
+            ];
+        }
+
+        throw 'Call not exist';
+    };
 }

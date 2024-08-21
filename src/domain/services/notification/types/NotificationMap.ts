@@ -207,9 +207,9 @@ export type NotificationMap = {
     [DomainNotificationType.LANGUAGE_WORD_DELETED_IN]: DomainNotificationLanguageWordDeletedData,
     [DomainNotificationType.LANGUAGE_WORD_DELETED_OUT]: DomainNotificationLanguageWordDeletedData,
 
-    [DomainNotificationType.CALL_OFFER_IN]: DomainNotificationCallOfferData,
+    [DomainNotificationType.CALL_OFFER_IN]: DomainNotificationCallStartData,
     [DomainNotificationType.CALL_OFFER_OUT]: DomainNotificationCallOfferData,
-    [DomainNotificationType.CALL_ANSWER_IN]: DomainNotificationCallAnswerData,
+    [DomainNotificationType.CALL_ANSWER_IN]: DomainNotificationCallStartData,
     [DomainNotificationType.CALL_ANSWER_OUT]: DomainNotificationCallAnswerData,
     [DomainNotificationType.CALL_START_IN]: DomainNotificationCallStartData,
     [DomainNotificationType.CALL_START_OUT]: DomainNotificationCallStartData,

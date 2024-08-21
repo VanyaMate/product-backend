@@ -107,7 +107,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                             {
                                 dialogue: {
                                     ...prismaPrivateDialogueToDomain(createdDialogue),
-                                    createdDate      : createdDialogue.creationDate.toUTCString(),
+                                    createdDate      : createdDialogue.creationDate.getTime(),
                                     meArchived       : createdDialogue.userInArchived,
                                     meDeleted        : createdDialogue.userInDeleted,
                                     companionArchived: createdDialogue.userOutArchived,
@@ -140,7 +140,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                             {
                                 dialogue: {
                                     ...prismaPrivateDialogueToDomain(createdDialogue),
-                                    createdDate      : createdDialogue.creationDate.toUTCString(),
+                                    createdDate      : createdDialogue.creationDate.getTime(),
                                     meArchived       : createdDialogue.userInArchived,
                                     meDeleted        : createdDialogue.userInDeleted,
                                     companionArchived: createdDialogue.userOutArchived,
@@ -424,7 +424,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                         id               : conversation.id,
                         avatar           : conversation.avatar,
                         title            : conversation.title,
-                        createdDate      : conversation.creationDate.toUTCString(),
+                        createdDate      : conversation.creationDate.getTime(),
                         meArchived       : conversation.userInArchived,
                         meDeleted        : conversation.userInDeleted,
                         companionArchived: conversation.userOutArchived,
@@ -442,7 +442,7 @@ export class PrismaPrivateDialogueService implements IPrivateDialogueService {
                         id               : conversation.id,
                         avatar           : conversation.avatar,
                         title            : conversation.title,
-                        createdDate      : conversation.creationDate.toUTCString(),
+                        createdDate      : conversation.creationDate.getTime(),
                         meArchived       : conversation.userOutArchived,
                         meDeleted        : conversation.userOutDeleted,
                         companionArchived: conversation.userInArchived,

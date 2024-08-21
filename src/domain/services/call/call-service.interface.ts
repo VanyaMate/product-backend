@@ -6,11 +6,11 @@ import { DomainCallAnswer } from 'product-types/dist/call/DomainCallAnswer';
 
 
 export interface ICallService {
-    offer (userId: string, toUserId: string, offer: DomainCallOffer): Promise<Array<NotificationServiceResponse>>;
+    offer (userId: string, callId: string, offer: DomainCallOffer, connectionId: string): Promise<Array<NotificationServiceResponse>>;
 
-    answer (userId: string, toUserId: string, answer: DomainCallAnswer): Promise<Array<NotificationServiceResponse>>;
+    answer (userId: string, callId: string, answer: DomainCallAnswer): Promise<Array<NotificationServiceResponse>>;
 
-    start (userId: string, toUserId: string): Promise<Array<NotificationServiceResponse>>;
+    start (userId: string, toUserId: string, connectionId: string): Promise<Array<NotificationServiceResponse>>;
 
-    finish (userId: string, toUserId: string): Promise<Array<NotificationServiceResponse>>;
+    finish (userId: string, callId: string): Promise<Array<NotificationServiceResponse>>;
 }

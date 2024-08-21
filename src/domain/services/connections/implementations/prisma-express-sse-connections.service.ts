@@ -8,9 +8,6 @@ import {
     DomainNotification,
     DomainNotificationType,
 } from 'product-types/dist/notification/DomainNotification';
-import {
-    REQUEST_CONTEXT_ID,
-} from '@nestjs/core/router/request/request-constants';
 
 
 export type Connect = {
@@ -97,7 +94,7 @@ export class PrismaExpressSseConnectionsService implements IConnectionsService<R
                 response.write(`data ${ JSON.stringify({
                     id          : '',
                     type        : DomainNotificationType.DISCONNECTED,
-                    creationDate: new Date().toUTCString(),
+                    creationDate: Date.now(),
                     data        : 'time',
                     viewed      : false,
                 } as DomainNotification) }\n\n`);
