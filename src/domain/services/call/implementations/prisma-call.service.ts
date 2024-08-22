@@ -184,8 +184,15 @@ export class PrismaCallService implements ICallService {
         });
 
         if (call) {
-            const domainUser   = prismaUserToDomain(call.fromUser);
-            const domainToUser = prismaUserToDomain(call.toUser);
+            const domainUser   = prismaUserToDomain(
+                call.fromUser.id === userId
+                ? call.fromUser
+                : call.toUser);
+            const domainToUser = prismaUserToDomain(
+                call.fromUser.id === userId
+                ? call.toUser
+                : call.fromUser,
+            );
 
             return [
                 [
@@ -196,7 +203,7 @@ export class PrismaCallService implements ICallService {
                     },
                 ],
                 [
-                    [ call.toUser.id ],
+                    [ domainToUser.id ],
                     DomainNotificationType.CALL_FINISH_OUT,
                     {
                         call: prismaCallToDomain(call, domainUser, call.toUserNotificationConnectionId),

@@ -95,7 +95,7 @@ export class PrismaNotificationService implements INotificationService {
                                     })
                                     .then((notification) => ({
                                         ...notification,
-                                        creationDate: notification.creationDate.toUTCString(),
+                                        creationDate: notification.creationDate.getTime(),
                                     }))
                                     .then((notification) => this._notify(id, notificationFactory(notification)));
                             }
