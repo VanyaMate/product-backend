@@ -466,3 +466,11 @@ model Call {
   fromUser User @relation(name: "CallsSend", fields: [fromUserId], references: [id])
   toUser   User @relation(name: "CallsReceived", fields: [toUserId], references: [id])
 }
+
+model AnalyticsResponseTime {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  url          String
+  responseTime Int
+  rejected     Boolean
+  responseDate DateTime @default(now())
+}
