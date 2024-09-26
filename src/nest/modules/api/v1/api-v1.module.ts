@@ -39,6 +39,9 @@ import {
 import { UserModule } from '@/nest/modules/api/v1/user/user.module';
 import { CallModule } from '@/nest/modules/api/v1/call/call.module';
 import { CallsModule } from '@/nest/modules/api/v1/calls/calls.module';
+import {
+    ExcelSplitterModule,
+} from '@/nest/modules/api/v1/excel-splitter/excel-splitter.module';
 
 
 @Module({
@@ -65,6 +68,7 @@ import { CallsModule } from '@/nest/modules/api/v1/calls/calls.module';
         UserModule,
         CallModule,
         CallsModule,
+        ExcelSplitterModule,
     ],
 })
 export class ApiV1Module {

@@ -11,9 +11,6 @@ import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
 import {
-    serviceErrorResponse,
-} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
-import {
     NotificationService,
 } from '@/nest/modules/api/v1/notification/notification.service';
 import {
