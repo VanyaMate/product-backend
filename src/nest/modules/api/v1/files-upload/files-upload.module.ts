@@ -13,16 +13,19 @@ import {
 
 
 @Module({
-    providers: [
+    providers  : [
         FilesUploadService,
     ],
     controllers: [
         FilesUploadController,
     ],
-    imports: [
+    imports    : [
         TokenModule,
         ServicesModule,
         NotificationModule,
+    ],
+    exports    : [
+        FilesUploadService,
     ],
 })
 export class FilesUploadModule {

@@ -9,14 +9,19 @@ import {
 export class FileService implements IFileService {
     private readonly _service: IFileService = new MulterFileService(`./static/uploads`);
 
-    async saveTo<T> (
+    async saveTo (
         filePath: string,
-        file: T extends Express.Multer.File ? T : never,
+        fileName: string,
+        fileBuffer: Buffer,
     ): Promise<string> {
-        return this._service.saveTo(filePath, file);
+        return this._service.saveTo(filePath, fileName, fileBuffer);
     }
 
     async remove (fullFilePath: string) {
         return this._service.remove(fullFilePath);
+    }
+
+    async getFileBuffer (filePath: string): Promise<Buffer> {
+        return this._service.getFileBuffer(filePath);
     }
 }

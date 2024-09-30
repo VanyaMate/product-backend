@@ -31,19 +31,22 @@ export class PrismaFileUploadService implements IFilesUploadService {
     ) {
     }
 
-    async save<T> (
+    async save (
         userId: string,
-        file: T extends Express.Multer.File ? T : never,
+        fileName: string,
+        fileMimetype: string,
+        fileSize: number,
+        fileBuffer: Buffer,
     ): Promise<NotificationServiceResponse[]> {
-        const filePath: string = await this._files.saveTo(file.mimetype, file);
+        const filePath: string = await this._files.saveTo(fileMimetype, fileName, fileBuffer);
         const fileData         = await this._prisma.file.create({
             data   : {
                 ownerId         : userId,
                 filePath        : filePath,
-                fileOriginalName: file.originalname,
-                fileName        : file.originalname,
-                fileWeight      : file.size,
-                fileType        : file.mimetype,
+                fileOriginalName: fileName,
+                fileName        : fileName,
+                fileWeight      : fileSize,
+                fileType        : fileMimetype,
             },
             include: {
                 owner: {

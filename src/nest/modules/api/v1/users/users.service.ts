@@ -8,9 +8,6 @@ import {
     PrismaUsersService,
 } from '@/domain/services/users/implementations/prisma-users.service';
 import {
-    serviceErrorResponse,
-} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
-import {
     globalExceptionServiceErrorResponse,
 } from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 

@@ -4,7 +4,13 @@ import {
 
 
 export interface IFilesUploadService {
-    save<T> (userId: string, file: T): Promise<NotificationServiceResponse[]>;
+    save (
+        userId: string,
+        fileName: string,
+        fileMimetype: string,
+        fileSize: number,
+        fileBuffer: Buffer,
+    ): Promise<NotificationServiceResponse[]>;
 
     remove (userId: string, fileId: string): Promise<NotificationServiceResponse[]>;
 

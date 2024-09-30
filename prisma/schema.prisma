@@ -227,6 +227,7 @@ model User {
   languageWords            LanguageWord[]
   callsSend                Call[]             @relation("CallsSend")
   callsReceived            Call[]             @relation("CallsReceived")
+  splitFile                ExcelSplitFile?
   permissions              UserPermissions?
 }
 
@@ -410,6 +411,10 @@ model File {
 
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
+  // ExcelSplit
+  splitFiles     ExcelSplitFile?
+  splitResponses ExcelSplitResponse?
+
   @@index([ownerId])
 }
 
@@ -473,4 +478,27 @@ model AnalyticsResponseTime {
   responseTime Int
   rejected     Boolean
   responseDate DateTime @default(now())
+}
+
+model ExcelSplitFile {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique @db.ObjectId
+  fileId String @unique @db.ObjectId
+  meta   String
+
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  file      File                 @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  responses ExcelSplitResponse[]
+}
+
+model ExcelSplitResponse {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  splitFileId     String   @unique @db.ObjectId
+  fileId          String   @unique @db.ObjectId
+  selectedSheet   String
+  selectedColumns String[]
+  rowsPerFile     Int
+
+  splitFile ExcelSplitFile @relation(fields: [splitFileId], references: [id], onDelete: Cascade)
+  file      File           @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }

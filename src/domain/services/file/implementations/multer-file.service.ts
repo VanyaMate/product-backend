@@ -7,12 +7,13 @@ export class MulterFileService implements IFileService {
     constructor (private readonly _baseDir: string) {
     }
 
-    async saveTo<T> (
+    async saveTo (
         filePath: string,
-        file: T extends Express.Multer.File ? T : never,
+        fileName: string,
+        fileBuffer: Buffer,
     ): Promise<string> {
         const randomString     = Array(32).fill(null).map(() => (Math.round(Math.random() * 30)).toString(30)).join('');
-        const randomFileName   = `${ randomString }${ path.extname(file.originalname) }`;
+        const randomFileName   = `${ randomString }${ path.extname(fileName) }`;
         const fullPath: string = path.join(this._baseDir, filePath, randomFileName);
         const dirName: string  = path.dirname(fullPath);
 
@@ -20,12 +21,16 @@ export class MulterFileService implements IFileService {
             await fs.promises.mkdir(dirName, { recursive: true });
         }
 
-        await fs.promises.writeFile(fullPath, file.buffer);
+        await fs.promises.writeFile(fullPath, fileBuffer);
         return fullPath.replace(/\\\\/gi, '/');
     }
 
     async remove (fullFilePath: string) {
         await fs.promises.unlink(fullFilePath);
         return true;
+    }
+
+    async getFileBuffer (fullFilePath: string): Promise<Buffer> {
+        return fs.promises.readFile(fullFilePath);
     }
 }

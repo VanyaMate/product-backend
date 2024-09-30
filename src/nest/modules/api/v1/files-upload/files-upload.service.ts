@@ -32,7 +32,7 @@ export class FilesUploadService {
 
     async save (userId: string, file: Express.Multer.File) {
         try {
-            const [ active ] = await this._service.save(userId, file);
+            const [ active ] = await this._service.save(userId, file.originalname, file.mimetype, file.size, file.buffer);
             this._notificationService.send([ active ]);
             return active[2];
         } catch (e) {
