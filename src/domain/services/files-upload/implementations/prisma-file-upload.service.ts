@@ -3,10 +3,6 @@ import {
 } from '@/domain/services/files-upload/files-upload-service.interface';
 import { PrismaClient } from '@prisma/client';
 import { IFileService } from '@/domain/services/file/file-service.interface';
-import { DomainFile } from 'product-types/dist/file/DomainFile';
-import {
-    prismaDomainUserSelector,
-} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 import {
     prismaFileToDomain,
 } from '@/domain/services/files-upload/converters/prismaFileToDomain';
@@ -38,13 +34,14 @@ export class PrismaFileUploadService implements IFilesUploadService {
         fileSize: number,
         fileBuffer: Buffer,
     ): Promise<NotificationServiceResponse[]> {
-        const filePath: string = await this._files.saveTo(fileMimetype, fileName, fileBuffer);
+        const fileNameUtf8     = this._getValidFileName(fileName);
+        const filePath: string = await this._files.saveTo(fileMimetype, fileNameUtf8, fileBuffer);
         const fileData         = await this._prisma.file.create({
             data   : {
                 ownerId         : userId,
                 filePath        : filePath,
-                fileOriginalName: fileName,
-                fileName        : fileName,
+                fileOriginalName: fileNameUtf8,
+                fileName        : fileNameUtf8,
                 fileWeight      : fileSize,
                 fileType        : fileMimetype,
             },
@@ -124,5 +121,9 @@ export class PrismaFileUploadService implements IFilesUploadService {
                 },
             ],
         ];
+    }
+
+    private _getValidFileName (fileName: string): string {
+        return Buffer.from(fileName, 'latin1').toString('utf8');
     }
 }

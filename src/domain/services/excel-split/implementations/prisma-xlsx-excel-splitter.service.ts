@@ -45,6 +45,7 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
         const data: DomainExcelFileData = {
             sheets   : {},
             responses: [],
+            fileName : '',
         };
 
         // Прохожу по всем таблицам
@@ -64,11 +65,12 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
         const uploadData    = active[2] as DomainNotificationFileUploadedData;
         await this._prisma.excelSplitFile.create({
             data: {
-                meta  : JSON.stringify(data),
+                meta  : JSON.stringify(data.sheets),
                 userId: userId,
                 fileId: uploadData.file.id,
             },
         });
+        data.fileName = uploadData.file.fileOriginalName;
 
         return data;
     }
@@ -96,7 +98,7 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
         const meta           = JSON.parse(excelSplitFile.meta);
 
         if (sheet) {
-            const sheetMeta: DomainExcelFileSheetData = meta['sheets']?.[splitData.selectedSheet];
+            const sheetMeta: DomainExcelFileSheetData = meta[splitData.selectedSheet];
 
             if (sheetMeta) {
                 const data           = XLSX.utils.sheet_to_json(sheet);
@@ -139,7 +141,7 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
                 const buffer        = zip.toBuffer();
                 const { 0: active } = await this._fileUploadService.save(
                     userId,
-                    `${ excelSplitFile.file.fileOriginalName }-split.zip`,
+                    `${ Buffer.from(`${ excelSplitFile.file.fileOriginalName }-${ splitData.selectedSheet }-${ splitData.rowsPerFile }`).toString('latin1') }-split.zip`,
                     `application/zip`,
                     Buffer.byteLength(buffer),
                     buffer,
@@ -156,8 +158,10 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
                 });
 
                 return {
-                    options: splitData,
-                    path   : uploadData.file.filePath,
+                    options : splitData,
+                    path    : uploadData.file.filePath,
+                    fileSize: uploadData.file.fileWeight,
+                    fileName: uploadData.file.fileOriginalName,
                 };
             }
 
@@ -203,7 +207,9 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
                     include: {
                         file: {
                             select: {
-                                filePath: true,
+                                filePath        : true,
+                                fileWeight      : true,
+                                fileOriginalName: true,
                             },
                         },
                     },
@@ -213,15 +219,18 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
 
         if (file) {
             return {
-                ...JSON.parse(file.meta),
+                sheets   : JSON.parse(file.meta),
                 responses: file.responses.map((response) => ({
-                    options: {
+                    options : {
                         rowsPerFile    : response.rowsPerFile,
                         selectedSheet  : response.selectedSheet,
                         selectedColumns: response.selectedColumns,
                     },
-                    path   : response.file.filePath,
+                    path    : response.file.filePath,
+                    fileSize: response.file.fileWeight,
+                    fileName: response.file.fileOriginalName,
                 })),
+                fileName : file.file.fileOriginalName,
             };
         }
 
