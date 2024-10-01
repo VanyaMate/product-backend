@@ -12,8 +12,8 @@ export class MulterFileService implements IFileService {
         fileName: string,
         fileBuffer: Buffer,
     ): Promise<string> {
-        const randomString     = Array(32).fill(null).map(() => (Math.round(Math.random() * 30)).toString(30)).join('');
-        const randomFileName   = `${ randomString }${ path.extname(fileName) }`;
+        const randomString     = Array(12).fill(null).map(() => (Math.round(Math.random() * 30)).toString(30)).join('');
+        const randomFileName   = `${ path.basename(fileName) }-${ randomString }${ path.extname(fileName) }`;
         const fullPath: string = path.join(this._baseDir, filePath, randomFileName);
         const dirName: string  = path.dirname(fullPath);
 
