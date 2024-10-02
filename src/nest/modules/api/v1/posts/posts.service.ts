@@ -11,9 +11,6 @@ import {
 import {
     DomainServiceErrorException,
 } from '@/nest/exceptions/domain-service-error.exception';
-import {
-    serviceErrorResponse,
-} from 'product-types/dist/_helpers/lib/serviceErrorResponse';
 import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
 import {
     PrismaPostsService,

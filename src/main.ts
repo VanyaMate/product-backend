@@ -19,6 +19,12 @@ import { PrismaService } from '@/nest/modules/services/prisma/prisma.service';
 import {
     ResponseTimeInterceptor,
 } from '@/nest/interceptors/response-time.interceptor';
+import * as _cluster from 'cluster';
+import * as process from 'process';
+import { availableParallelism } from 'node:os';
+
+
+const cluster = _cluster as unknown as _cluster.Cluster;
 
 
 async function bootstrap () {
@@ -58,4 +64,22 @@ async function bootstrap () {
     }
 }
 
-bootstrap();
+
+const numCPUs = availableParallelism();
+//bootstrap();
+
+if (cluster.isPrimary) {
+    console.log(`Primary server (${ process.pid }) is running`);
+
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker (${ worker.process.pid }) died with code (${ code })`);
+    });
+} else {
+    bootstrap().then(() => {
+        console.log(`Worker (${ process.pid }) started`);
+    });
+}

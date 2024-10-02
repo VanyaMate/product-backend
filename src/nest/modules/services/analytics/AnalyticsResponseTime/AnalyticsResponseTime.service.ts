@@ -6,6 +6,7 @@ import {
     PrismaResponseTimeService,
 } from '@/domain/analytics-services/response-time/implementations/prisma/prisma-response-time.service';
 
+// TODO: Add interface
 
 export class AnalyticsResponseTimeService {
     private readonly _service: IResponseTimeService;

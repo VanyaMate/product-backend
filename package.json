@@ -10,7 +10,8 @@
         "start": "nest start",
         "start:dev": "cross-env NODE_ENV=dev nest start --watch",
         "start:debug": "cross-env NODE_ENV=dev nest start --debug --watch",
-        "start:prod": "cross-env NODE_ENV=prod node dist/main"
+        "start:prod": "cross-env NODE_ENV=prod node dist/main",
+        "ac-post": "npx autocannon -c 1000 -d 5 -m POST -H Authorization=$TOKEN http://localhost:3000/api/v1/post"
     },
     "dependencies": {
         "@nestjs/common": "^10.0.0",
@@ -45,6 +46,7 @@
         "@types/xlsx": "^0.0.35",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
+        "autocannon": "^7.15.0",
         "cross-env": "^7.0.3",
         "eslint": "^8.42.0",
         "eslint-config-prettier": "^9.0.0",
