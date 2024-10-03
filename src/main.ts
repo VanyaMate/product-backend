@@ -20,7 +20,6 @@ import {
     ResponseTimeInterceptor,
 } from '@/nest/interceptors/response-time.interceptor';
 import * as _cluster from 'cluster';
-import * as process from 'process';
 import { availableParallelism } from 'node:os';
 
 
@@ -65,21 +64,24 @@ async function bootstrap () {
 }
 
 
-const numCPUs = availableParallelism();
-//bootstrap();
+bootstrap();
 
-if (cluster.isPrimary) {
-    console.log(`Primary server (${ process.pid }) is running`);
+/*const numCPUs = availableParallelism();
+ if (cluster.isPrimary) {
+ console.log(`Primary (${ process.pid }) is running`);
 
-    for (let i = 0; i < numCPUs; i++) {
-        cluster.fork();
-    }
+ for (let i = 0; i < numCPUs - 1; i++) {
+ const worker = cluster.fork();
+ worker.on('exit', () => {
+ cluster.fork();
+ });
+ }
 
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker (${ worker.process.pid }) died with code (${ code })`);
-    });
-} else {
-    bootstrap().then(() => {
-        console.log(`Worker (${ process.pid }) started`);
-    });
-}
+ cluster.on('exit', (worker, code, signal) => {
+ console.log(`Worker (${ worker.process.pid }) died with code (${ code })`);
+ });
+ } else {
+ bootstrap().then(() => {
+ console.log(`Worker (${ process.pid }) started`);
+ });
+ }*/
