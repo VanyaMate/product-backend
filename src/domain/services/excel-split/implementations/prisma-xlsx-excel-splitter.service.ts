@@ -91,6 +91,10 @@ export class PrismaXlsxExcelSplitterService implements IExcelFileSplitService {
             },
         });
 
+        if (!excelSplitFile) {
+            throw new Error('File not exist');
+        }
+
         const xlsxFileBuffer = await this._fileManager.getFileBuffer(excelSplitFile.file.filePath);
         const xlsxFile       = XLSX.read(xlsxFileBuffer, { type: 'buffer' });
         const sheet          = xlsxFile.Sheets[splitData.selectedSheet];
