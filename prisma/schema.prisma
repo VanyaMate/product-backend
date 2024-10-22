@@ -221,6 +221,9 @@ model User {
   connectedPrivateDialogue PrivateDialogue[]  @relation("ConnectedPrivateDialogues")
   privateMessage           PrivateMessage[]
   posts                    Post[]
+  postLikes                PostLike[]
+  postCommentsLikes        PostCommentLike[]
+  postComments             PostComment[]
   files                    File[]
   languages                Language[]
   languageFolders          LanguageFolder[]
@@ -387,13 +390,18 @@ model PrivateMessage {
 }
 
 model Post {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  authorId     String   @db.ObjectId
-  message      String
-  redacted     Boolean  @default(false)
-  creationDate DateTime @default(now())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  authorId       String   @db.ObjectId
+  message        String
+  redacted       Boolean  @default(false)
+  creationDate   DateTime @default(now())
+  likesAmount    Int      @default(0)
+  repliesAmount  Int      @default(0)
+  forwardsAmount Int      @default(0)
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author   User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments PostComment[]
+  likes    PostLike[]
 
   @@index([authorId])
 }
@@ -439,6 +447,7 @@ model LanguageFolder {
   language Language       @relation(fields: [languageId], references: [id], onDelete: Cascade)
   words    LanguageWord[]
 
+  @@index([ownerId])
   @@index([languageId])
 }
 
@@ -454,6 +463,7 @@ model LanguageWord {
   owner  User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   folder LanguageFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
 
+  @@index([ownerId])
   @@index([folderId])
 }
 
@@ -470,6 +480,9 @@ model Call {
 
   fromUser User @relation(name: "CallsSend", fields: [fromUserId], references: [id])
   toUser   User @relation(name: "CallsReceived", fields: [toUserId], references: [id])
+
+  @@index([fromUserId])
+  @@index([toUserId])
 }
 
 model AnalyticsResponseTime {
@@ -501,4 +514,51 @@ model ExcelSplitResponse {
 
   splitFile ExcelSplitFile @relation(fields: [splitFileId], references: [id], onDelete: Cascade)
   file      File           @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+model PostLike {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  postId   String @db.ObjectId
+  authorId String @db.ObjectId
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([postId])
+}
+
+model PostComment {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId         String   @db.ObjectId
+  replyId        String?  @db.ObjectId
+  authorId       String   @db.ObjectId
+  comment        String
+  redacted       Boolean  @default(false)
+  creationDate   DateTime @default(now())
+  likesAmount    Int      @default(0)
+  repliesAmount  Int      @default(0)
+  forwardsAmount Int      @default(0)
+
+  post     Post              @relation(fields: [postId], references: [id])
+  author   User              @relation(fields: [authorId], references: [id])
+  replies  PostComment[]     @relation(name: "ReplyFor")
+  likes    PostCommentLike[]
+  replyFor PostComment?      @relation(name: "ReplyFor", fields: [replyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([postId])
+  @@index([replyId])
+  @@index([authorId])
+}
+
+model PostCommentLike {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  postCommentId String @db.ObjectId
+  authorId      String @db.ObjectId
+
+  comment PostComment @relation(fields: [postCommentId], references: [id], onDelete: Cascade)
+  author  User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postCommentId])
+  @@index([authorId])
 }
