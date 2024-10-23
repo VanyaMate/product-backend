@@ -13,5 +13,5 @@ export interface IPostsService {
 
     getByUserIdWithCursor (userId: string, options: DomainSearchCursorOptions): Promise<DomainSearchItem>;
 
-    getById (postId: string): Promise<DomainPost>;
+    getById (userId: string, postId: string): Promise<DomainPost>;
 }

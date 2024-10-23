@@ -42,6 +42,9 @@ import { CallsModule } from '@/nest/modules/api/v1/calls/calls.module';
 import {
     ExcelModule,
 } from '@/nest/modules/api/v1/excel-split/excel.module';
+import {
+    PostCommentModule,
+} from '@/nest/modules/api/v1/post-comment/post-comment.module';
 
 
 @Module({
@@ -69,6 +72,7 @@ import {
         CallModule,
         CallsModule,
         ExcelModule,
+        PostCommentModule,
     ],
 })
 export class ApiV1Module {

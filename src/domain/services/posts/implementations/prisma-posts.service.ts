@@ -9,14 +9,14 @@ import {
     DomainSearchItemOptions,
 } from 'product-types/dist/search/DomainSearchItemOptions';
 import {
-    prismaDomainUserSelector,
-} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
-import {
     prismaPostToDomain,
 } from '@/domain/services/post/converters/prismaPostToDomain';
 import {
     prismaToDomainUserInclude,
 } from '@/domain/services/users/include/prisma/prisma-domain-user.include';
+import {
+    prismaPostCommentToDomain,
+} from '@/domain/services/post-comment/implementations/prisma/converters/prismaPostCommentToDomain';
 import {
     prismaUserToDomain,
 } from '@/domain/services/users/converters/prismaUserToDomain';
@@ -39,8 +39,25 @@ export class PrismaPostsService implements IPostsService {
                 take   : options.limit,
                 orderBy: { id: 'desc' },
                 include: {
-                    author: {
+                    author  : {
                         include: prismaToDomainUserInclude,
+                    },
+                    comments: {
+                        include: {
+                            likes : {
+                                where: {
+                                    authorId: userId,
+                                },
+                            },
+                            author: {
+                                include: prismaToDomainUserInclude,
+                            },
+                        },
+                    },
+                    likes   : {
+                        where: {
+                            authorId: userId,
+                        },
                     },
                 },
             }),
@@ -55,7 +72,11 @@ export class PrismaPostsService implements IPostsService {
         ]);
 
         return {
-            list: posts.map((post) => prismaPostToDomain(post, prismaUserToDomain(post.author))),
+            list: posts.map((post) => prismaPostToDomain(
+                post,
+                prismaUserToDomain(post.author),
+                post.comments.map((comment) => prismaPostCommentToDomain(comment, prismaUserToDomain(comment.author))),
+            )),
             count,
         };
     }
@@ -75,8 +96,25 @@ export class PrismaPostsService implements IPostsService {
                 orderBy: { id: 'desc' },
                 take   : options.limit,
                 include: {
-                    author: {
+                    author  : {
                         include: prismaToDomainUserInclude,
+                    },
+                    comments: {
+                        include: {
+                            likes : {
+                                where: {
+                                    authorId: userId,
+                                },
+                            },
+                            author: {
+                                include: prismaToDomainUserInclude,
+                            },
+                        },
+                    },
+                    likes   : {
+                        where: {
+                            authorId: userId,
+                        },
                     },
                 },
             }),
@@ -91,24 +129,49 @@ export class PrismaPostsService implements IPostsService {
         ]);
 
         return {
-            list: posts.map((post) => prismaPostToDomain(post, prismaUserToDomain(post.author))),
+            list: posts.map((post) => prismaPostToDomain(
+                post,
+                prismaUserToDomain(post.author),
+                post.comments.map((comment) => prismaPostCommentToDomain(comment, prismaUserToDomain(comment.author))),
+            )),
             count,
         };
     }
 
-    async getById (postId: string): Promise<DomainPost> {
+    async getById (userId: string, postId: string): Promise<DomainPost> {
         const post = await this._prisma.post.findFirst({
             where  : {
                 id: postId,
             },
             include: {
-                author: {
+                author  : {
                     include: prismaToDomainUserInclude,
+                },
+                comments: {
+                    include: {
+                        likes : {
+                            where: {
+                                authorId: userId,
+                            },
+                        },
+                        author: {
+                            include: prismaToDomainUserInclude,
+                        },
+                    },
+                },
+                likes   : {
+                    where: {
+                        authorId: userId,
+                    },
                 },
             },
         });
 
-        return prismaPostToDomain(post, prismaUserToDomain(post.author));
+        return prismaPostToDomain(
+            post,
+            prismaUserToDomain(post.author),
+            post.comments.map((comment) => prismaPostCommentToDomain(comment, prismaUserToDomain(comment.author))),
+        );
     }
 
 }

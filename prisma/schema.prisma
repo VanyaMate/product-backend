@@ -396,7 +396,7 @@ model Post {
   redacted       Boolean  @default(false)
   creationDate   DateTime @default(now())
   likesAmount    Int      @default(0)
-  repliesAmount  Int      @default(0)
+  commentsAmount Int      @default(0)
   forwardsAmount Int      @default(0)
 
   author   User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -524,6 +524,7 @@ model PostLike {
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  @@unique([postId, authorId])
   @@index([authorId])
   @@index([postId])
 }
@@ -559,6 +560,7 @@ model PostCommentLike {
   comment PostComment @relation(fields: [postCommentId], references: [id], onDelete: Cascade)
   author  User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  @@unique([postCommentId, authorId])
   @@index([postCommentId])
   @@index([authorId])
 }

@@ -25,7 +25,7 @@ export interface IPostCommentService {
 
     dislikeComment (userId: string, commentId: string): Promise<DomainComment>;
 
-    replyCommentIncrement (commentId: string): Promise<DomainComment>;
+    replyCommentIncrement (userId: string, commentId: string): Promise<DomainComment>;
 
-    forwardCommentIncrement (commentId: string): Promise<DomainComment>;
+    forwardCommentIncrement (userId: string, commentId: string): Promise<DomainComment>;
 }

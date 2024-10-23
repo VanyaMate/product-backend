@@ -7,6 +7,7 @@ import { PostsService } from '@/nest/modules/api/v1/posts/posts.service';
 import {
     PostsSearchCursorDto,
 } from '@/nest/modules/api/v1/posts/dto/posts-search-cursor.dto';
+import { UserId } from '@/nest/decorators/userid.decorator';
 
 
 @Controller(`/api/v1/posts`)
@@ -35,8 +36,9 @@ export class PostsController {
     @Get('/:id')
     @UseGuards(IsUserGuard)
     getById (
+        @UserId() userId: string,
         @Param('id') id: string,
     ) {
-        return this._service.getById(id);
+        return this._service.getById(userId, id);
     }
 }

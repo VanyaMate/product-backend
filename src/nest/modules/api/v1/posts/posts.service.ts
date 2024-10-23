@@ -16,7 +16,7 @@ import {
     PrismaPostsService,
 } from '@/domain/services/posts/implementations/prisma-posts.service';
 import {
-    globalExceptionServiceErrorResponse
+    globalExceptionServiceErrorResponse,
 } from '@/domain/types/lib/globalExceptionServiceErrorResponse';
 
 
@@ -44,9 +44,9 @@ export class PostsService {
         }
     }
 
-    async getById (postId: string): Promise<DomainPost> {
+    async getById (userId: string, postId: string): Promise<DomainPost> {
         try {
-            return await this._service.getById(postId);
+            return await this._service.getById(userId, postId);
         } catch (e) {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostsService.name, 400, 'Cant get post'));
         }

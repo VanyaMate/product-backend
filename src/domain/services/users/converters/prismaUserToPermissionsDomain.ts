@@ -15,7 +15,7 @@ import {
 
 export const prismaUserToPermissionsDomain = function (user: User & {
     permissions: UserPermissions,
-    connections: Connection[]
+    connections: Connection[],
 }): DomainUserWithPermissions {
     return {
         id         : user.id,

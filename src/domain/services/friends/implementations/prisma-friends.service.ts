@@ -2,11 +2,7 @@ import {
     IFriendsService,
 } from '@/domain/services/friends/friends-service.interface';
 import {
-    Friend,
-    FriendRequest,
-    Prisma,
     PrismaClient,
-    PrismaPromise,
 } from '@prisma/client';
 import { DomainUser } from 'product-types/dist/user/DomainUser';
 import {
@@ -22,6 +18,9 @@ import { DomainFriends } from 'product-types/dist/friends/DomainFriends';
 import {
     prismaToDomainUserInclude,
 } from '@/domain/services/users/include/prisma/prisma-domain-user.include';
+import {
+    prismaDomainUserSelector,
+} from '@/domain/services/users/selectors/prisma/prisma-domain-user.selector';
 
 
 export class PrismaFriendsService implements IFriendsService {
