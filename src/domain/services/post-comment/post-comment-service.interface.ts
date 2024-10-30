@@ -5,9 +5,6 @@ import {
     DomainCommentUpdateData,
 } from 'product-types/dist/comment/DomainCommentUpdateData';
 import { DomainComment } from 'product-types/dist/comment/DomainComment';
-import {
-    NotificationServiceResponse,
-} from '@/domain/services/notification/types/NotificationServiceResponse';
 
 
 export interface IPostCommentService {

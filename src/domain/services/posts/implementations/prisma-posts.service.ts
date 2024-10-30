@@ -43,14 +43,43 @@ export class PrismaPostsService implements IPostsService {
                         include: prismaToDomainUserInclude,
                     },
                     comments: {
+                        where  : {
+                            replyId: {
+                                isSet: false,
+                            },
+                        },
                         include: {
-                            likes : {
+                            likes  : {
                                 where: {
                                     authorId: userId,
                                 },
                             },
-                            author: {
+                            replies: {
+                                include: {
+                                    likes : {
+                                        where: {
+                                            authorId: userId,
+                                        },
+                                    },
+                                    author: {
+                                        include: prismaToDomainUserInclude,
+                                    },
+                                },
+                                take   : 3,
+                                orderBy: {
+                                    likes: {
+                                        _count: 'desc',
+                                    },
+                                },
+                            },
+                            author : {
                                 include: prismaToDomainUserInclude,
+                            },
+                        },
+                        take   : 3,
+                        orderBy: {
+                            likes: {
+                                _count: 'desc',
                             },
                         },
                     },
@@ -75,7 +104,16 @@ export class PrismaPostsService implements IPostsService {
             list: posts.map((post) => prismaPostToDomain(
                 post,
                 prismaUserToDomain(post.author),
-                post.comments.map((comment) => prismaPostCommentToDomain(comment, prismaUserToDomain(comment.author))),
+                post.comments.map(
+                    (comment) => prismaPostCommentToDomain(
+                        comment,
+                        prismaUserToDomain(comment.author),
+                        comment.replies.map((reply) => prismaPostCommentToDomain(
+                            reply,
+                            prismaUserToDomain(reply.author),
+                        )),
+                    ),
+                ),
             )),
             count,
         };
@@ -100,14 +138,43 @@ export class PrismaPostsService implements IPostsService {
                         include: prismaToDomainUserInclude,
                     },
                     comments: {
+                        where  : {
+                            replyId: {
+                                isSet: false,
+                            },
+                        },
                         include: {
-                            likes : {
+                            likes  : {
                                 where: {
                                     authorId: userId,
                                 },
                             },
-                            author: {
+                            replies: {
+                                include: {
+                                    likes : {
+                                        where: {
+                                            authorId: userId,
+                                        },
+                                    },
+                                    author: {
+                                        include: prismaToDomainUserInclude,
+                                    },
+                                },
+                                take   : 3,
+                                orderBy: {
+                                    likes: {
+                                        _count: 'desc',
+                                    },
+                                },
+                            },
+                            author : {
                                 include: prismaToDomainUserInclude,
+                            },
+                        },
+                        take   : 3,
+                        orderBy: {
+                            likes: {
+                                _count: 'desc',
                             },
                         },
                     },
@@ -148,14 +215,43 @@ export class PrismaPostsService implements IPostsService {
                     include: prismaToDomainUserInclude,
                 },
                 comments: {
+                    where  : {
+                        replyId: {
+                            isSet: false,
+                        },
+                    },
                     include: {
-                        likes : {
+                        likes  : {
                             where: {
                                 authorId: userId,
                             },
                         },
-                        author: {
+                        replies: {
+                            include: {
+                                likes : {
+                                    where: {
+                                        authorId: userId,
+                                    },
+                                },
+                                author: {
+                                    include: prismaToDomainUserInclude,
+                                },
+                            },
+                            take   : 3,
+                            orderBy: {
+                                likes: {
+                                    _count: 'desc',
+                                },
+                            },
+                        },
+                        author : {
                             include: prismaToDomainUserInclude,
+                        },
+                    },
+                    take   : 3,
+                    orderBy: {
+                        likes: {
+                            _count: 'desc',
                         },
                     },
                 },

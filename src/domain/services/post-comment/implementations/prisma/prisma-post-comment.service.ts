@@ -124,6 +124,12 @@ export class PrismaPostCommentService implements IPostCommentService {
                             },
                         },
                     },
+                    take   : 3,
+                    orderBy: {
+                        likes: {
+                            _count: 'desc',
+                        },
+                    },
                 },
                 likes  : {
                     where: {
@@ -158,6 +164,7 @@ export class PrismaPostCommentService implements IPostCommentService {
                 },
             },
         });
+        this.replyCommentIncrement(userId, commentId);
 
         return prismaPostCommentToDomain(
             Object.assign(comment, { likes: [] }),

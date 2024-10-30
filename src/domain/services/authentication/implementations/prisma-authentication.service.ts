@@ -57,7 +57,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                         tokens,
                         user: prismaUserToFullDomain({
                             ...user,
-                            connections: [],
+                            connections: [null], // null чтобы online-true стал
                             permissions: user.permissions,
                         }),
                     };
@@ -93,7 +93,7 @@ export class PrismaAuthenticationService implements IAuthenticationService {
                     tokens,
                     user: prismaUserToFullDomain({
                         ...newUser,
-                        connections: [],
+                        connections: [null],  // null чтобы online-true стал
                         permissions,
                     }),
                 };

@@ -18,64 +18,82 @@ import {
 } from '@/nest/modules/api/v1/post-comment/post-comment.service';
 
 
+/**
+ * Если вдруг я захочу это поменять на просто comment.
+ *
+ * Так сделано чтобы разделить комменатрии по "типам". Да, они будут похожи,
+ * но зато это разные сущности и бд.
+ */
+
 @Controller('api/v1/post-comment')
 export class PostCommentController {
     constructor (private readonly _service: PostCommentService) {
     }
 
-    @Post(':id')
+    @Post(':postId')
     @UseGuards(IsUserGuard)
     create (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('postId') postId: string,
         @Body() createData: PostCommentCreateDataDto,
     ) {
-        return this._service.createComment(userId, id, createData);
+        return this._service.createComment(userId, postId, createData);
     }
 
-    @Patch(':id')
+    @Patch(':commentId')
     @UseGuards(IsUserGuard)
     update (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('commentId') commentId: string,
         @Body() updateData: PostCommentCreateDataDto,
     ) {
-        return this._service.updateComment(userId, id, updateData);
+        return this._service.updateComment(userId, commentId, updateData);
     }
 
-    @Delete(':id')
+    @Delete(':commentId')
     @UseGuards(IsUserGuard)
     remove (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('commentId') commentId: string,
     ) {
-        return this._service.removeComment(userId, id);
+        return this._service.removeComment(userId, commentId);
     }
 
-    @Get(':id')
+    @Post('/reply/:postId/:commentId')
+    @UseGuards(IsUserGuard)
+    createReplyOnComment (
+        @UserId() userId: string,
+        @Param('postId') postId: string,
+        @Param('commentId') commentId: string,
+        @Body() createData: PostCommentCreateDataDto,
+    ) {
+        return this._service.replyOnComment(userId, postId, commentId, createData);
+    }
+
+    @Get(':commentId')
     @UseGuards(IsUserGuard)
     getById (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('commentId') commentId: string,
     ) {
-        return this._service.getComment(userId, id);
+        return this._service.getComment(userId, commentId);
     }
 
-    @Post('/like/:id')
+    @Post('/like/:commentId')
     @UseGuards(IsUserGuard)
     like (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('commentId') commentId: string,
     ) {
-        return this._service.likeComment(userId, id);
+        return this._service.likeComment(userId, commentId);
     }
 
-    @Post('/unlike/:id')
+    @Post('/unlike/:commentId')
     @UseGuards(IsUserGuard)
     unlike (
         @UserId() userId: string,
-        @Param('id') id: string,
+        @Param('commentId') commentId: string,
     ) {
-        return this._service.dislikeComment(userId, id);
+        return this._service.dislikeComment(userId, commentId);
     }
 }
