@@ -45,6 +45,9 @@ import {
 import {
     PostCommentModule,
 } from '@/nest/modules/api/v1/post-comment/post-comment.module';
+import {
+    PostCommentsModule,
+} from '@/nest/modules/api/v1/post-comments/post-comments.module';
 
 
 @Module({
@@ -73,6 +76,7 @@ import {
         CallsModule,
         ExcelModule,
         PostCommentModule,
+        PostCommentsModule,
     ],
 })
 export class ApiV1Module {

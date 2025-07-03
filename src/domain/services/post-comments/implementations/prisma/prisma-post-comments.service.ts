@@ -24,29 +24,29 @@ export class PrismaPostCommentsService implements IPostCommentsService {
                 replyId: commentId,
             },
             include: {
-                author : {
+                author: {
                     include: prismaToDomainUserInclude,
                 },
-                replies: {
-                    include: {
-                        author: {
-                            include: prismaToDomainUserInclude,
-                        },
-                        likes : {
-                            where: {
-                                authorId: userId,
-                            },
-                        },
-                    },
-                    take   : 1,
-                    skip   : 0,
-                    orderBy: {
-                        likes: {
-                            _count: 'desc',
-                        },
-                    },
-                },
-                likes  : {
+                /*replies: {
+                 include: {
+                 author: {
+                 include: prismaToDomainUserInclude,
+                 },
+                 likes : {
+                 where: {
+                 authorId: userId,
+                 },
+                 },
+                 },
+                 take   : 1,
+                 skip   : 0,
+                 orderBy: {
+                 likes: {
+                 _count: 'desc',
+                 },
+                 },
+                 },*/
+                likes: {
                     where: {
                         authorId: userId,
                     },
@@ -65,46 +65,47 @@ export class PrismaPostCommentsService implements IPostCommentsService {
             return prismaPostCommentToDomain(
                 comment,
                 prismaUserToDomain(comment.author),
-                comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),
+                /*comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),*/
             );
         });
     }
 
-    async getCommentRepliesByCursor (userId: string, commentId: string, cursor: string, take: number): Promise<DomainComment[]> {
+    async getCommentRepliesByCursor (userId: string, commentId: string, cursor: string, take: number = 3): Promise<DomainComment[]> {
         const comments = await this._prisma.postComment.findMany({
             where  : {
                 replyId: commentId,
             },
             include: {
-                author : {
+                author: {
                     include: prismaToDomainUserInclude,
                 },
-                replies: {
-                    include: {
-                        author: {
-                            include: prismaToDomainUserInclude,
-                        },
-                        likes : {
-                            where: {
-                                authorId: userId,
-                            },
-                        },
-                    },
-                    take   : 1,
-                    skip   : 0,
-                    orderBy: {
-                        likes: {
-                            _count: 'desc',
-                        },
-                    },
-                },
-                likes  : {
+                /*                replies: {
+                 include: {
+                 author: {
+                 include: prismaToDomainUserInclude,
+                 },
+                 likes : {
+                 where: {
+                 authorId: userId,
+                 },
+                 },
+                 },
+                 take   : 1,
+                 skip   : 0,
+                 orderBy: {
+                 likes: {
+                 _count: 'desc',
+                 },
+                 },
+                 },*/
+                likes: {
                     where: {
                         authorId: userId,
                     },
                 },
             },
             take   : take,
+            skip   : 1,
             cursor : {
                 id: cursor,
             },
@@ -119,7 +120,7 @@ export class PrismaPostCommentsService implements IPostCommentsService {
             return prismaPostCommentToDomain(
                 comment,
                 prismaUserToDomain(comment.author),
-                comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),
+                /*comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),*/
             );
         });
     }
