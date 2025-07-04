@@ -25,18 +25,28 @@ export class PrismaPostCommentService implements IPostCommentService {
     }
 
     async createComment (userId: string, postId: string, createData: DomainCommentCreateData): Promise<DomainComment> {
-        const comment = await this._prisma.postComment.create({
-            data   : {
-                authorId: userId,
-                postId  : postId,
-                comment : createData.comment,
-            },
-            include: {
-                author: {
-                    include: prismaToDomainUserInclude,
+        const [ comment ] = await this._prisma.$transaction([
+            this._prisma.postComment.create({
+                data   : {
+                    authorId: userId,
+                    postId  : postId,
+                    comment : createData.comment,
                 },
-            },
-        });
+                include: {
+                    author: {
+                        include: prismaToDomainUserInclude,
+                    },
+                },
+            }),
+            this._prisma.post.update({
+                where: { id: postId },
+                data : {
+                    commentsAmount: {
+                        increment: 1,
+                    },
+                },
+            }),
+        ]);
 
         return prismaPostCommentToDomain(
             Object.assign(comment, { likes: [] }),
@@ -87,21 +97,35 @@ export class PrismaPostCommentService implements IPostCommentService {
     }
 
     async removeComment (userId: string, commentId: string): Promise<DomainComment> {
-        const comment = await this._prisma.postComment.delete({
-            where  : {
-                id: commentId,
-            },
-            include: {
-                author: {
-                    include: prismaToDomainUserInclude,
+        return this._prisma.$transaction(async (tx) => {
+            const deletedComment = await tx.postComment.delete({
+                where  : {
+                    authorId: userId,
+                    id      : commentId,
                 },
-            },
-        });
+                include: {
+                    author: {
+                        include: prismaToDomainUserInclude,
+                    },
+                },
+            });
 
-        return prismaPostCommentToDomain(
-            Object.assign(comment, { likes: [] }),
-            prismaUserToDomain(comment.author),
-        );
+            await tx.post.update({
+                where: {
+                    id: deletedComment.postId,
+                },
+                data : {
+                    commentsAmount: {
+                        decrement: 1,
+                    },
+                },
+            });
+
+            return prismaPostCommentToDomain(
+                Object.assign(deletedComment, { likes: [] }),
+                prismaUserToDomain(deletedComment.author),
+            );
+        });
     }
 
     async getComment (userId: string, commentId: string): Promise<DomainComment> {
@@ -151,20 +175,31 @@ export class PrismaPostCommentService implements IPostCommentService {
     }
 
     async replyOnComment (userId: string, postId: string, commentId: string, createData: DomainCommentCreateData): Promise<DomainComment> {
-        const comment = await this._prisma.postComment.create({
-            data   : {
-                authorId: userId,
-                replyId : commentId,
-                postId  : postId,
-                comment : createData.comment,
-            },
-            include: {
-                author: {
-                    include: prismaToDomainUserInclude,
+        const [ comment ] = await this._prisma.$transaction([
+            this._prisma.postComment.create({
+                data   : {
+                    authorId: userId,
+                    replyId : commentId,
+                    postId  : postId,
+                    comment : createData.comment,
                 },
-            },
-        });
-        this.replyCommentIncrement(userId, commentId);
+                include: {
+                    author: {
+                        include: prismaToDomainUserInclude,
+                    },
+                },
+            }),
+            this._prisma.postComment.update({
+                where: {
+                    id: commentId,
+                },
+                data : {
+                    repliesAmount: {
+                        increment: 1,
+                    },
+                },
+            }),
+        ]);
 
         return prismaPostCommentToDomain(
             Object.assign(comment, { likes: [] }),
@@ -207,6 +242,8 @@ export class PrismaPostCommentService implements IPostCommentService {
          * и если длина >0 -> считается, как liked
          *
          * Да, костыль. Увы.
+         *
+         * upd. а нафига я так сделал? о.О
          */
         return prismaPostCommentToDomain(
             Object.assign(comment, { likes: [ null ] }),
@@ -243,52 +280,6 @@ export class PrismaPostCommentService implements IPostCommentService {
                 },
             }),
         ]);
-
-        return prismaPostCommentToDomain(
-            Object.assign(comment, { likes: [] }),
-            prismaUserToDomain(comment.author),
-        );
-    }
-
-    async replyCommentIncrement (userId: string, commentId: string): Promise<DomainComment> {
-        const comment = await this._prisma.postComment.update({
-            where  : {
-                id: commentId,
-            },
-            data   : {
-                repliesAmount: {
-                    increment: 1,
-                },
-            },
-            include: {
-                author: {
-                    include: prismaToDomainUserInclude,
-                },
-            },
-        });
-
-        return prismaPostCommentToDomain(
-            Object.assign(comment, { likes: [] }),
-            prismaUserToDomain(comment.author),
-        );
-    }
-
-    async forwardCommentIncrement (userId: string, commentId: string): Promise<DomainComment> {
-        const comment = await this._prisma.postComment.update({
-            where  : {
-                id: commentId,
-            },
-            data   : {
-                forwardsAmount: {
-                    increment: 1,
-                },
-            },
-            include: {
-                author: {
-                    include: prismaToDomainUserInclude,
-                },
-            },
-        });
 
         return prismaPostCommentToDomain(
             Object.assign(comment, { likes: [] }),

@@ -11,7 +11,7 @@ export class PostCommentsController {
     constructor (private readonly _service: PostCommentsService) {
     }
 
-    @Get('/comment/replies/:commentId')
+    @Get('/replies/:commentId')
     @UseGuards(IsUserGuard)
     getRepliedComment (
         @Param('commentId') commentId: string,
@@ -27,7 +27,7 @@ export class PostCommentsController {
         );
     }
 
-    @Get('/comment/replies/:commentId/:cursorId')
+    @Get('/replies/:commentId/:cursorId')
     @UseGuards(IsUserGuard)
     getRepliedCommentByCursor (
         @Param('commentId') commentId: string,

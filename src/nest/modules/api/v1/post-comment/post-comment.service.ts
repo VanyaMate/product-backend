@@ -84,20 +84,4 @@ export class PostCommentService {
             throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostCommentService.name, 400, 'Cant unlike comment'));
         }
     }
-
-    async replyCommentIncrement (userId: string, commentId: string): Promise<DomainComment> {
-        try {
-            return await this._service.replyCommentIncrement(userId, commentId);
-        } catch (e) {
-            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostCommentService.name, 400, 'Cant reply increment of comment'));
-        }
-    }
-
-    async forwardCommentIncrement (userId: string, commentId: string): Promise<DomainComment> {
-        try {
-            return await this._service.forwardCommentIncrement(userId, commentId);
-        } catch (e) {
-            throw new DomainServiceErrorException(globalExceptionServiceErrorResponse(e, PostCommentService.name, 400, 'Cant forward increment of comment'));
-        }
-    }
 }

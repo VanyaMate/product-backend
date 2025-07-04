@@ -18,6 +18,74 @@ export class PrismaPostCommentsService implements IPostCommentsService {
     constructor (private readonly _prisma: PrismaClient) {
     }
 
+    async getComments (userId: string, postId: string, take: number, skip: number): Promise<DomainComment[]> {
+        const comments = await this._prisma.postComment.findMany({
+            where  : {
+                postId,
+            },
+            take,
+            skip,
+            include: {
+                author: {
+                    include: prismaToDomainUserInclude,
+                },
+                likes : {
+                    where: {
+                        authorId: userId,
+                    },
+                },
+            },
+            orderBy: {
+                likes: {
+                    _count: 'desc',
+                },
+            },
+        });
+
+        return comments.map((comment) => {
+            return prismaPostCommentToDomain(
+                comment,
+                prismaUserToDomain(comment.author),
+                /*comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),*/
+            );
+        });
+    }
+
+    async getCommentsByCursor (userId: string, postId: string, cursor: string, take: number): Promise<DomainComment[]> {
+        const comments = await this._prisma.postComment.findMany({
+            where  : {
+                postId,
+            },
+            take,
+            cursor : {
+                id: cursor,
+            },
+            include: {
+                author: {
+                    include: prismaToDomainUserInclude,
+                },
+                likes : {
+                    where: {
+                        authorId: userId,
+                    },
+                },
+            },
+            orderBy: {
+                likes: {
+                    _count: 'desc',
+                },
+            },
+        });
+
+        return comments.map((comment) => {
+            return prismaPostCommentToDomain(
+                comment,
+                prismaUserToDomain(comment.author),
+                /*comment.replies.map((reply) => prismaPostCommentToDomain(reply, prismaUserToDomain(reply.author))),*/
+            );
+        });
+    }
+
     async getCommentReplies (userId: string, commentId: string, take: number = 3, skip: number = 0): Promise<DomainComment[]> {
         const comments = await this._prisma.postComment.findMany({
             where  : {
